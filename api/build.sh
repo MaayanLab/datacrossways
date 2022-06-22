@@ -5,7 +5,7 @@ docker rm $(docker ps -q -f status=exited)
 docker kill datacrosswayapi
 docker rm datacrosswayapi
 
-docker build -f DockerfileCamel -t maayanlab/datacrosswayapi .
+docker build -f Dockerfile -t maayanlab/datacrosswayapi:0.0.1 .
 
 docker push maayanlab/datacrosswayapi:0.0.1
 
