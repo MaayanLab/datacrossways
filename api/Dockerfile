@@ -20,4 +20,4 @@ EXPOSE 5000
 WORKDIR /apilock
 
 RUN chmod -R 777 /apilock
-ENTRYPOINT FLASK_APP=/apilock/app.py flask run --host=0.0.0.0
+ENTRYPOINT FLASK_APP=/apilock/app.py flask run --host=172.19.187.178 --port 5000
