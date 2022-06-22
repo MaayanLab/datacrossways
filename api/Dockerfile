@@ -7,3 +7,6 @@ RUN apk add curl
 RUN apk add git
 
 RUN git clone https://github.com/MaayanLab/apilock.git
+
+RUN pip install -r /apilock/requirements.txt
+
