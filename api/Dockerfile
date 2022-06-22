@@ -5,7 +5,10 @@ RUN apk update && apk add vim curl git
 
 RUN apk add python3-dev \
         gcc \
-        libc-dev
+        libc-dev \
+        libffi-dev \
+        openssl-dev \
+        musl-dev
 
 RUN git clone https://github.com/MaayanLab/apilock.git
 
