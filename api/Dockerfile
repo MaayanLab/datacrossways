@@ -3,6 +3,7 @@ FROM python:3.10.5-alpine3.16
 RUN apk update && apk add vim curl git
 
 
+
 RUN apk --no-cache add python3-dev \
         gcc \
         libc-dev \
