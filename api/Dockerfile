@@ -1,4 +1,4 @@
-FROM python:3.8.0-alpine3.16
+FROM python:3.10.5-alpine3.16
 
 RUN apk update && apk add vim curl git
 
