@@ -7,7 +7,7 @@ RUN git clone https://github.com/MaayanLab/nextjatest.git
 RUN npm install -g npm@8.13.0
 
 WORKDIR /nextjatest/test
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 EXPOSE 3000
 
