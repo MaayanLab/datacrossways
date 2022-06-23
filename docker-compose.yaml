@@ -1,20 +1,14 @@
 version: "3.8"
 services:
   frontend:
+    container_name: datacrossways_frontend
     build: ./frontend
     ports:
       - 3000:3000
   api:
+    container_name: datacrossways_api
     build: ./api
     ports:
       - 5000:5000
     volumes:
       - ./api/secrets:/apilock/secrets
-  reverse-proxy: # Routes requests to frontend/backend
-      image: nginx
-      ports:
-        - "80:80"
-        - "443:443"
-      depends_on:
-        - api
-        - frontend
