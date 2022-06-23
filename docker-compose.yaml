@@ -10,3 +10,11 @@ services:
       - 5000:5000
     volumes:
       - ./api/secrets:/apilock/secrets
+  reverse-proxy: # Routes requests to frontend/backend
+      image: nginx
+      ports:
+        - "80:80"
+        - "443:443"
+      depends_on:
+        - api
+        - frontend
