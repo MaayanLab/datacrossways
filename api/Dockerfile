@@ -12,7 +12,7 @@ RUN apk --no-cache add python3-dev \
 RUN pip install --upgrade pip
 RUN pip install install cffi
 
-RUN git clone https://github.com/MaayanLab/apilock.git
+RUN git clone https://github.com/MaayanLab/datacrossways_api.git
 
 RUN pip install -r /apilock/requirements.txt
 
