@@ -4,13 +4,13 @@ RUN apk update && apk add vim curl git
 
 RUN git clone https://github.com/MaayanLab/nextjatest.git
 
-RUN npm install -g npm@8.13.0
+#RUN npm install -g npm@8.13.0
 
 WORKDIR /nextjatest/test
 RUN npm install --legacy-peer-deps
 
 EXPOSE 3000
 
-RUN npm build
+RUN npm run build
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
