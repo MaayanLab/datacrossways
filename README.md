@@ -18,7 +18,7 @@ git clone https://github.com/MaayanLab/datacrossways_api
 ```
 Then navigate to the `datacorssways_api` folder. The API requires a config file `secrets/conf.json`. The format of the file should contain information about the database, OAuth credentials, and AWS credentials.
 
-Example
+#### secrets/conf.json
 ```
 {
     "api":{
