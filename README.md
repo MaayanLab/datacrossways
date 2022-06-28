@@ -60,4 +60,14 @@ Then navigate to the `datacorssways_api` folder. The API requires a config file 
 }
 ```
 
-The API is a flask application and can be started using the command `flask run`. 
+The API is a flask application and can be started using the command `flask run`.
+
+## Run frontend locally
+
+The React frontend depends on the API, so it should be set up first. Then get the frontend using git with:
+
+```
+git clone https://github.com/MaayanLab/datacrossways_frontend
+```
+Navigate into the project folder and run `npm install --legacy-peer-deps`. To start the frontend run `npm run dev`. The fronend is currently accessed via the API port at `http://localhost:5000`.
+
