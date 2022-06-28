@@ -14,10 +14,10 @@ RUN pip install install cffi
 
 RUN git clone https://github.com/MaayanLab/datacrossways_api.git
 
-RUN pip install -r /apilock/requirements.txt
+RUN pip install -r /datacrossways_api/requirements.txt
 
 EXPOSE 5000
 WORKDIR /apilock
 
-RUN chmod -R 777 /apilock
-ENTRYPOINT FLASK_APP=/apilock/app.py flask run --host=0.0.0.0 --port 5000
+RUN chmod -R 777 /datacrossways_api
+ENTRYPOINT FLASK_APP=/datacrossways_api/app.py flask run --host=0.0.0.0 --port 5000
