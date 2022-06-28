@@ -5,3 +5,59 @@ Launcher of data portal using the flask API and React fronted. Datacrossways is 
 The API accesses a Postgres database that persists information. The API needs access to some AWS resources and requires limited AWS permissions that are passes by a configuration file. Specifically the API requires to create S3 buckets and upload and retrieve files from it. 
 
 <img src="https://user-images.githubusercontent.com/32603869/176254810-7a3bc02e-f47d-4c54-a939-9d1aef7d0df9.png" width="400">
+
+
+## Launch locally
+The backend and fronend can be deployed independently for development purposes. 
+
+### Run API
+
+First get the API code usig git:
+```
+git clone https://github.com/MaayanLab/datacrossways_api
+```
+Then navigate to the `datacorssways_api` folder. The API requires a config file `secrets/conf.json`. The format of the file should contain information about the database, OAuth credentials, and AWS credentials.
+
+Example
+```
+{
+    "api":{
+        "url": "http://localhost:5000"
+    },
+    "frontend": {
+        "url": "http://localhost:3000/"
+    },
+    "redirect": "http://localhost:5000/",
+    "web": {
+        "client_id": "xxxxxxxxxxxxxxx.apps.googleusercontent.com",
+        "project_id": "xxxxxxxxxxxxx",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret": "xxxxxxxxxxxxxxxxxxxxxxx",
+        "redirect_uris": [
+            "http://localhost:5000/login",
+            "http://localhost:5000/authorize",
+            "http://127.0.0.1:5000/authorize"
+        ],
+        "javascript_origins": [
+            "http://localhost:5000"
+        ]
+    },
+    "aws": {
+        "aws_id": "xxxxxxxxxxxxxxxx",
+        "aws_key": "xxxxxxxxxxxxxx",
+        "bucket_name": "unique_bucket_name",
+        "region": "us-east-1"
+    },
+    "db":{
+        "user": "xxxxxxx",
+        "pass": "xxxxxxxxxxxxx",
+        "server": "xxxxxxxxxx.us-east-1.rds.amazonaws.com",
+        "port": "5432",
+        "name": "xxxxxxxxx"
+    }
+}
+```
+
+The API is a flask application and can be started using the command `flask run`. 
