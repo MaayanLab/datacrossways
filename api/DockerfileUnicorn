@@ -14,8 +14,7 @@ RUN pip install install cffi
 
 RUN git clone https://github.com/MaayanLab/datacrossways_api.git
 
-RUN pwd
-RUN ls -ls
+WORKDIR /
 ADD /datacrossways_api /app/
-
+WORKDIR /app
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
