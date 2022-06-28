@@ -19,7 +19,8 @@ RUN ls -lh
 RUN git clone https://github.com/MaayanLab/datacrossways_api.git
 RUN ls -lh
 
-ADD /datacrossways_api /app/
+RUN cp -a /datacrossways_api/. /app/
+RUN rm -r /datacrossways_api
 RUN pwd
 RUN ls -lh
 
