@@ -1,16 +1,16 @@
 FROM tiangolo/meinheld-gunicorn-flask:python3.8-alpine3.11
 
-RUN apk update && apk add vim curl git
+#RUN apk update && apk add vim curl git
 
-RUN apk --no-cache add python3-dev \
-        gcc \
-        libc-dev \
-        libffi-dev \
-        openssl-dev \
-        musl-dev
+#RUN apk --no-cache add python3-dev \
+#        gcc \
+#        libc-dev \
+#        libffi-dev \
+#        openssl-dev \
+#        musl-dev
 
-RUN pip install --upgrade pip
-RUN pip install install cffi
+#RUN pip install --upgrade pip
+#RUN pip install install cffi
 
 WORKDIR /
 RUN pwd
@@ -24,4 +24,4 @@ RUN pwd
 RUN ls -lh
 
 WORKDIR /app
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+#RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
