@@ -13,7 +13,6 @@ RUN pip install --upgrade pip
 RUN pip install install cffi
 
 WORKDIR /
-ADD /datacrossways_api /app/
 RUN pwd
 RUN ls -lh
 
