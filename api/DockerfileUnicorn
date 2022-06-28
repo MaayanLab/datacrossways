@@ -19,4 +19,5 @@ RUN cp -a /datacrossways_api/. /app/
 RUN rm -r /datacrossways_api
 
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+RUN pip install sqlalchemy==1.4.18
 RUN pip install greenlet==0.4.17
