@@ -8,7 +8,7 @@ import os
 
 u_key = sys.argv[1]
 u_secret = sys.argv[2]
-project_name = sys.argv[3]
+project_name = sys.argv[3]+"-dxw"
 
 path = os.path.dirname(__file__)
 
@@ -21,7 +21,8 @@ elif "." in project_name:
 elif "," in project_name:
     print("Project name cannot contain commas.")
 else:
-
+    
+    print("Start creating resources...")
     aws_resources = {}
 
     iam = boto3.client("iam",
@@ -31,7 +32,7 @@ else:
     s3 = boto3.client("s3",
                     aws_access_key_id=u_key,
                     aws_secret_access_key=u_secret)
-    
+
     def colored(r, g, b, text):
         return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
 
@@ -54,7 +55,7 @@ else:
         return(response)
 
     def create_bucket(s3, project_name):
-        bucket_name = (project_name+"-vault").replace("_", "-")
+        bucket_name = (project_name+"-vault").replace("_", "-").lower()
         return(s3.create_bucket(Bucket=bucket_name))
 
     def create_user(iam, project_name):
@@ -126,7 +127,7 @@ else:
         attach_user_policy(iam, aws_resources["policy"]["Arn"], aws_resources["user"]["UserName"])
         print(colored(0,255,0," - policy attached to user"))
     except Exception:
-        print(colored(255,255,0," - upolicy could not be attached to user"))
+        print(colored(255,255,0," - user policy could not be attached to user"))
 
     try:
         attach_cors(s3, aws_resources["bucket"]["Location"].replace("/",""), path)

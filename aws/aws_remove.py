@@ -37,7 +37,7 @@ def delete_bucket_completely(s3, bucket_name):
         Bucket=bucket_name
     )
 
-def delete_all(iam, s3, aws_del):
+def delete_all(iam, s3, aws_del, project_name):
     counter = 0
     error_counter = 0
     try:
