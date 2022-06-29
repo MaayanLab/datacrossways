@@ -6,6 +6,9 @@ The API accesses a Postgres database that persists information. The API needs ac
 
 <img src="https://user-images.githubusercontent.com/32603869/176254810-7a3bc02e-f47d-4c54-a939-9d1aef7d0df9.png" width="400">
 
+## AWS resource configureation
+
+Datacrossways requires several AWS resources to be configured before the datacrossways API and frontend can run. While most of the configuration is automated there are some initial steps that need to be performed manually. The first step is to create a **tempoorary user** with credentials to create the final `user` credentials and `S3 bucket`, as well as a `RDS database`.
 
 ## Launch locally
 The backend and fronend can be deployed independently for development purposes. 
