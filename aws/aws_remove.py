@@ -4,10 +4,13 @@ import json
 from tqdm import trange
 import time
 import sys
+import os
 
 u_key = sys.argv[1]
 u_secret = sys.argv[2]
 project_name = sys.argv[3]
+
+path = os.path.dirname(__file__)
 
 aws_del = {}
 try:
