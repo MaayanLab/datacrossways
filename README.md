@@ -10,7 +10,7 @@ The API accesses a Postgres database that persists information. The API needs ac
 
 Datacrossways requires several AWS resources to be configured before the datacrossways API and frontend can run. While most of the configuration is automated there are some initial steps that need to be performed manually. The first step is to create a `temporary user` with credentials to create the final `user` credentials and `S3 bucket`, as well as a `RDS database`.
 
-### Create temporary user
+### Create temporary AWS user
 
 This user will only be used to set up the required AWS resources. After the setup this user should be removed again.
 
@@ -33,6 +33,22 @@ Log into the AWS dashboard at https://aws.amazon.com.
  - Review
     - Select `Create User`
  - Save `Access key ID` and `Secret access key` and keep them safe
+
+### Create EC2 instance
+
+Depending on the deployment this instance can be used to host the Datacrossways API and frontend, or can only be used to configure the AWS resources (in case of running the API and frontend locally for development). A small, cost efficient instance should be sufficient for most use cases (`t2.small`). Data traffic bypasses the host server, so it does not require significant harddisc space. It is recommended to have at least `10GB` to build all docker images when Datacrossways is deployed on this host.
+
+Log into the AWS dashboard at https://aws.amazon.com. 
+ - Navigate to EC2 dashboard
+    - Search for service EC2 which should open the EC2 dashboard
+    - Select `Launch Instance` button, click `Launch Instance`
+ - Configure Instance
+    - Under `Quick Start` select `Ubuntu` (as time of writing Ubuntu Server, 22.04 LTS (HMV), SSD Volume Type)
+    - Under `Instance` type select desired instance (at least `t2.small` @0.023/h or ~ $17/month), other good options are the other `t2` burstable instances.
+     - Pricing overview https://aws.amazon.com/ec2/pricing/on-demand/
+    - Under `Key pair` either use an existing `key pair` or generate a new one
+     - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file are used to log into the instance once it is created
+    -  
 
 ## Launch locally
 The backend and fronend can be deployed independently for development purposes. 
