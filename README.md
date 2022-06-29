@@ -45,10 +45,11 @@ Log into the AWS dashboard at https://aws.amazon.com.
  - Configure Instance
     - Under `Quick Start` select `Ubuntu` (as time of writing Ubuntu Server, 22.04 LTS (HMV), SSD Volume Type)
     - Under `Instance` type select desired instance (at least `t2.small` @0.023/h or ~ $17/month), other good options are the other `t2` burstable instances.
-     - Pricing overview https://aws.amazon.com/ec2/pricing/on-demand/
+          - Pricing overview https://aws.amazon.com/ec2/pricing/on-demand/
     - Under `Key pair` either use an existing `key pair` or generate a new one
-     - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file are used to log into the instance once it is created
-    -  
+          - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file are used to log into the instance once it is created
+    -  Under `Configure Storage` set to at least `10GB`. Space is mainly needed to build Docker images. If disk space is too small it can result in some minor issues.
+    *  <span style="color:blue">Optional: Under `Network settings` restrict SSH traffic to `My IP`</span>
 
 ## Launch locally
 The backend and fronend can be deployed independently for development purposes. 
