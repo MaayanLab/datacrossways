@@ -6,7 +6,7 @@
 # add secrets folder to datacrossways folder, and add config.json
 sudo apt-get update
 
-if ! command -v <docker ps> &> /dev/null
+if ! command -v docker ps /dev/null
 then
     sudo apt install docker.io -y
 
