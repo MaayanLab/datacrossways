@@ -32,7 +32,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - Select `Next: Review`
  - Review
     - Select `Create User`
- - Save `Access key ID` and `Secret access key` and keep them save
+ - Save `Access key ID` and `Secret access key` and keep them safe
 
 ## Launch locally
 The backend and fronend can be deployed independently for development purposes. 
