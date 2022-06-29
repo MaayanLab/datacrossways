@@ -53,6 +53,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     -  Select `Launch Instance` button
     -  Select newly created instance in table and copy `Public IPv4 address`
     -  Under UNIX connect to instance with `ssh -i pathtokey/key.pem ubuntu@ipaddress`
+    -  Windows users: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
 
 ## Launch locally
 The backend and fronend can be deployed independently for development purposes. 
