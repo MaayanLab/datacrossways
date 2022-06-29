@@ -4,10 +4,13 @@
 import sys
 import boto3
 import json
+import os
 
 u_key = sys.argv[1]
 u_secret = sys.argv[2]
 project_name = sys.argv[3]
+
+path = os.path.dirname(__file__)
 
 if "_" in project_name:
     print("Project name cannot contain underscores.")
@@ -38,8 +41,8 @@ else:
             for user in response["Users"]:
                 print(f"Username: {user['UserName']}, Arn: {user['Arn']}")
 
-    def create_policy(iam, project_name):
-        f = open("bucket_policy_template.json")
+    def create_policy(iam, project_name, path):
+        f = open(path+"/bucket_policy_template.json")
         policy = json.load(f)
         f.close()
         for s in policy["Statement"]:
@@ -71,8 +74,8 @@ else:
         )
         return(response['AccessKey'])
 
-    def attach_cors(s3, bucket):
-        f = open("bucket_cors_template.json")
+    def attach_cors(s3, bucket, path):
+        f = open(path+"/bucket_cors_template.json")
         cors_configuration = json.load(f)
         f.close()
         response = s3.put_bucket_cors(Bucket=bucket,
@@ -99,7 +102,7 @@ else:
         print(colored(255,255,0," - user already exists"))
 
     try:
-        policy = create_policy(iam, project_name)
+        policy = create_policy(iam, project_name, path)
         aws_resources["policy"] = policy["Policy"]
         print(colored(0,255,0," - policy created"))
     except Exception:
@@ -126,7 +129,7 @@ else:
         print(colored(255,255,0," - upolicy could not be attached to user"))
 
     try:
-        attach_cors(s3, aws_resources["bucket"]["Location"].replace("/",""))
+        attach_cors(s3, aws_resources["bucket"]["Location"].replace("/",""), path)
         print(colored(0,255,0," - CORS rules attached to S3 bucket"))
     except Exception:
         print(colored(255,255,0," - CORS rules could not be attached to S3 bucket"))
@@ -137,5 +140,5 @@ else:
     except Exception:
         print(colored(255,255,0," - S3 bucket privacy could not be enhanced"))
 
-    with open('aws_config_'+project_name+'.json', 'w') as f:
+    with open(path+'/aws_config_'+project_name+'.json', 'w') as f:
         f.write(json.dumps(aws_resources, indent=4, sort_keys=True, default=str))
