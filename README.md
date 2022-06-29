@@ -16,23 +16,23 @@ This user will only be used to set up the required AWS resources. After the setu
 
 Log into the AWS dashboard at https://aws.amazon.com. 
  - Navigate to create user under IAM
-    -> navigate to IAM
-    -> under `Access management` select `Users` in the left menu
-    -> Select `Add users` button
+    - navigate to IAM
+    - under `Access management` select `Users` in the left menu
+    - Select `Add users` button
  - Create User
-    -> choose a unique username e.g. `datacrossways_config_temp`
-    -> check box `Access key - Programmatic access`
-    -> Select `Next: Permissions` button
- -> Attach Permissions
+    - choose a unique username e.g. `datacrossways_config_temp`
+    - check box `Access key - Programmatic access`
+    - Select `Next: Permissions` button
+ - Attach Permissions
     -> Select `Attach existing policies directly`
     -> In `filter policies` type `IAMFullAccess` and check box
     -> In `filter policies` type `AmazonS3FullAccess` and check box
     -> Select `Next: Tags` button
- -> Add Tag
-    -> Select `Next: Review`
- -> Review
-    -> Select `Create User`
- -> Save `Access key ID` and `Secret access key` and keep them save
+ - Add Tag
+    - Select `Next: Review`
+ - Review
+    - Select `Create User`
+ - Save `Access key ID` and `Secret access key` and keep them save
 
 ## Launch locally
 The backend and fronend can be deployed independently for development purposes. 
