@@ -5,15 +5,19 @@
 
 # add secrets folder to datacrossways folder, and add config.json
 sudo apt-get update
-sudo apt install docker.io -y
 
-sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker
+if ! command -v <docker ps> &> /dev/null
+then
+    sudo apt install docker.io -y
 
-mkdir -p ~/.docker/cli-plugins/
-curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-chmod +x ~/.docker/cli-plugins/docker-compose
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    newgrp docker
+
+    mkdir -p ~/.docker/cli-plugins/
+    curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+    chmod +x ~/.docker/cli-plugins/docker-compose
+fi
 
 sudo apt-get install python3-pip -y
 pip3 install -r requirements.txt
