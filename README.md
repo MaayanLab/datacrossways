@@ -24,10 +24,10 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - check box `Access key - Programmatic access`
     - Select `Next: Permissions` button
  - Attach Permissions
-    -> Select `Attach existing policies directly`
-    -> In `filter policies` type `IAMFullAccess` and check box
-    -> In `filter policies` type `AmazonS3FullAccess` and check box
-    -> Select `Next: Tags` button
+    - Select `Attach existing policies directly`
+    - In `filter policies` type `IAMFullAccess` and check box
+    - In `filter policies` type `AmazonS3FullAccess` and check box
+    - Select `Next: Tags` button
  - Add Tag
     - Select `Next: Review`
  - Review
