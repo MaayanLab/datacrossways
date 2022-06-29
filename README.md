@@ -8,7 +8,31 @@ The API accesses a Postgres database that persists information. The API needs ac
 
 ## AWS resource configureation
 
-Datacrossways requires several AWS resources to be configured before the datacrossways API and frontend can run. While most of the configuration is automated there are some initial steps that need to be performed manually. The first step is to create a **tempoorary user** with credentials to create the final `user` credentials and `S3 bucket`, as well as a `RDS database`.
+Datacrossways requires several AWS resources to be configured before the datacrossways API and frontend can run. While most of the configuration is automated there are some initial steps that need to be performed manually. The first step is to create a `temporary user` with credentials to create the final `user` credentials and `S3 bucket`, as well as a `RDS database`.
+
+### Create temporary user
+
+This user will only be used to set up the required AWS resources. After the setup this user should be removed again.
+
+Log into the AWS dashboard at https://aws.amazon.com. 
+ - Navigate to create user under IAM
+    -> navigate to IAM
+    -> under `Access management` select `Users` in the left menu
+    -> Select `Add users` button
+ - Create User
+    -> choose a unique username e.g. `datacrossways_config_temp`
+    -> check box `Access key - Programmatic access`
+    -> Select `Next: Permissions` button
+ -> Attach Permissions
+    -> Select `Attach existing policies directly`
+    -> In `filter policies` type `IAMFullAccess` and check box
+    -> In `filter policies` type `AmazonS3FullAccess` and check box
+    -> Select `Next: Tags` button
+ -> Add Tag
+    -> Select `Next: Review`
+ -> Review
+    -> Select `Create User`
+ -> Save `Access key ID` and `Secret access key` and keep them save
 
 ## Launch locally
 The backend and fronend can be deployed independently for development purposes. 
