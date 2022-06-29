@@ -55,13 +55,32 @@ Log into the AWS dashboard at https://aws.amazon.com.
     -  Under UNIX connect to instance with `ssh -i pathtokey/key.pem ubuntu@ipaddress`
     -  Windows users: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
 
-### Create resources
+### Create AWS resources
+
+Now it is time to create the AWS resources. They encompass a designated user to control S3 access, a S3 bucket with specific configurations, as well as a RDS database to store metadata on stored data objects.
 
 After creating a temporary user and an AWS instance log into the server. From there get `Datacrossways` using git.
 ```
 git clone https://github.com/MaayanLab/datacrossways.git
 ```
+Go into the `datacrossways` folder in the home directory and run the command below to install some dependencies.
+```
+~/datacrossways/setup.sh
+```
+Now you can run the aws configuration script which will create the resources. To run it requires the temp user credentials and a project name. Project names should not contain `commas`, `periods`, `underscores`, or `spaces`. Since the `bucket name` is created from the project name there can be a conflict. The bucket name is `<project_name>-vault`. Since bucket names are globally unique this might lead to errors. Run the following command:
 
+```
+python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>
+```
+### Removing AWS resources
+
+Warning: When this is run all uploaded data is deleted permanently!
+
+To remove resources created before run the following command and follow onscreen instructions:
+```
+python3 ~/datacrossways/aws/aws_remove.py <aws_id> <aws_key> <project_name>
+```
+This script relies in a config file `~/datacommons/aws/aws_config_<project_name>-dxw.json` that is automatically generated when running `aws_setup.py`.
 
 ## Launch locally
 The backend and fronend can be deployed independently for development purposes. 
