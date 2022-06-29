@@ -49,7 +49,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - Under `Key pair` either use an existing `key pair` or generate a new one
           - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file are used to log into the instance once it is created
     -  Under `Configure Storage` set to at least `10GB`. Space is mainly needed to build Docker images. If disk space is too small it can result in some minor issues.
-    *  Optional: Under `Network settings` restrict SSH traffic to `My IP`
+    -  Optional: Under `Network settings` restrict SSH traffic to `My IP`
 
 ## Launch locally
 The backend and fronend can be deployed independently for development purposes. 
