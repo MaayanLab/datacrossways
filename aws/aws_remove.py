@@ -14,7 +14,7 @@ path = os.path.dirname(__file__)
 
 aws_del = {}
 try:
-    with open("aws_config_data.json", "r") as f:
+    with open(path+"/aws_config_data.json", "r") as f:
         aws_del = json.load(f)
 except Exception:
     print("AWS resource file could not be read")
