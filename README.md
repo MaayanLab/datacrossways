@@ -55,6 +55,14 @@ Log into the AWS dashboard at https://aws.amazon.com.
     -  Under UNIX connect to instance with `ssh -i pathtokey/key.pem ubuntu@ipaddress`
     -  Windows users: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
 
+### Create resources
+
+After creating a temporary user and an AWS instance log into the server. From there get `Datacrossways` using git.
+```
+git clone https://github.com/MaayanLab/datacrossways.git
+```
+
+
 ## Launch locally
 The backend and fronend can be deployed independently for development purposes. 
 
