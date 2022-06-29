@@ -67,7 +67,6 @@ else:
             UserName=username,
             PolicyArn=policy_arn
         )
-        print(response)
 
     def create_access_key(iam, username):
         response = iam.create_access_key(
@@ -81,7 +80,6 @@ else:
         f.close()
         response = s3.put_bucket_cors(Bucket=bucket,
                     CORSConfiguration=cors_configuration)
-        print(response)
 
     def block_bucket(s3, bucket):
         response = s3.put_public_access_block(
