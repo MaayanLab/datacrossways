@@ -34,6 +34,10 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - Select `Create User`
  - Save `Access key ID` and `Secret access key` and keep them safe
 
+When all is done the user should look something like this:
+<img width="1060" alt="Temporary User" src="https://user-images.githubusercontent.com/32603869/176680884-a375eaca-88bb-4e8e-8884-2b5ad2675db4.png">
+
+
 ### Create EC2 instance
 
 Depending on the deployment this instance can be used to host the Datacrossways API and frontend, or can only be used to configure the AWS resources (in case of running the API and frontend locally for development). A small, cost efficient instance should be sufficient for most use cases (`t2.small`). Data traffic bypasses the host server, so it does not require significant harddisc space. It is recommended to have at least `10GB` to build all docker images when Datacrossways is deployed on this host.
