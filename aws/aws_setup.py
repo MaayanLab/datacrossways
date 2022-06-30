@@ -8,6 +8,12 @@ import os
 import secrets
 import string
 import traceback
+from rich.console import Console
+
+import psycopg2
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+
+console = Console()
 
 u_key = sys.argv[1]
 u_secret = sys.argv[2]
@@ -113,61 +119,72 @@ else:
             MasterUserPassword=db_password,
             MasterUsername=db_user.replace("-", "_"))
         response["DBInstance"]["MasterUserPassword"] = db_password
+
+        print("  - database instance created")
+        print("  - waiting for instance to complete initialization ...")
+
         return(response)
 
     try:
         user = create_user(iam, project_name)
         aws_resources["user"] = user["User"]
-        print(colored(0,255,0," - user created"))
+        console.print(" - user created", style="green")
     except Exception:
         print(colored(255,255,0," x user could not be created"))
+        console.print_exception(show_locals=True)
 
     try:
         policy = create_policy(iam, project_name, path)
         aws_resources["policy"] = policy["Policy"]
-        print(colored(0,255,0," - policy created"))
+        console.print(" - policy created", style="green")
     except Exception:
         print(colored(255,255,0," x policy could not be created"))
+        console.print_exception(show_locals=True)
 
     try:
         key = create_access_key(iam, aws_resources["user"]["UserName"])
         aws_resources["user"]["key"] = key
-        print(colored(0,255,0," - user access key created"))
+        console.print("  - user access key created", style="green")
     except Exception:
         print(colored(255,255,0," x user access key could not be created"))
+        console.print_exception(show_locals=True)
 
     try:
         bucket = create_bucket(s3, project_name)
         aws_resources["bucket"] = bucket
-        print(colored(0,255,0," - S3 bucket created"))
+        console.print(" - S3 bucket created", style="green")
     except Exception:
         print(colored(255,255,0," x S3 bucket could not be created"))
+        console.print_exception(show_locals=True)
 
     try:
         attach_user_policy(iam, aws_resources["policy"]["Arn"], aws_resources["user"]["UserName"])
-        print(colored(0,255,0," - policy attached to user"))
+        console.print(" - policy attached to user", style="green")
     except Exception:
         print(colored(255,255,0," x user policy could not be attached to user"))
+        console.print_exception(show_locals=True)
 
     try:
         attach_cors(s3, aws_resources["bucket"]["Location"].replace("/",""), path)
-        print(colored(0,255,0," - CORS rules attached to S3 bucket"))
+        console.print(" - CORS rules attached to S3 bucket", style="green")
     except Exception:
         print(colored(255,255,0," x CORS rules could not be attached to S3 bucket"))
 
     try:
         block_bucket(s3, aws_resources["bucket"]["Location"].replace("/",""))
-        print(colored(0,255,0," - bucket privacy enhanced"))
+        console.print("  - S3 bucket privacy enhanced", style="green")
     except Exception:
         print(colored(255,255,0," x S3 bucket privacy could not be enhanced"))
+        console.print_exception(show_locals=True)
 
     try:
         response = create_database(rds, project_name)
         aws_resources["database"] = response["DBInstance"]
-        print(colored(0,255,0," - RDS database created"))
+        console.print(" - RDS database created", style="green")
     except Exception:
         print(traceback.format_exc())
         print(colored(255,255,0," x RDS database could not be created"))
+        console.print_exception(show_locals=True)
 
     with open(path+'/aws_config_'+project_name+'.json', 'w') as f:
         f.write(json.dumps(aws_resources, indent=4, sort_keys=True, default=str))
