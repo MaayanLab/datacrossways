@@ -29,6 +29,7 @@ The API accesses a Postgres database that persists information. The API needs ac
 
 Datacrossways requires several AWS resources to be configured before the datacrossways API and frontend can run. While most of the configuration is automated there are some initial steps that need to be performed manually. The first step is to create a `temporary user` with credentials to create the final `user` credentials and `S3 bucket`, as well as a `RDS database`.
 
+
 ### Create temporary AWS user
 
 This user will only be used to set up the required AWS resources. After the setup this user should be removed again.
@@ -79,6 +80,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     -  Under UNIX connect to instance with `ssh -i pathtokey/key.pem ubuntu@ipaddress`
     -  Windows users: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
 
+
 ### Create AWS resources
 
 Now it is time to create the AWS resources. They encompass a designated user to control S3 access, a S3 bucket with specific configurations, as well as a RDS database to store metadata on stored data objects.
@@ -96,6 +98,8 @@ Now you can run the aws configuration script which will create the resources. To
 ```sh
 python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>
 ```
+
+
 ### Remove AWS resources
 
 Warning: When this is run all uploaded data is deleted permanently!
@@ -109,6 +113,10 @@ This script relies in a config file `~/datacommons/aws/aws_config_<project_name>
 ## Local deployment
 The `backend API` and `React fronend` can be deployed on a local computer, mainly for development purposes. They still require the AWS resources like the `database` and `S3 bucket` configuration. The setup is described in details [here](#aws-resource-configuration).
 
+---
+
+## Local deployment
+
 ### Deploy API locally
 
 First get the API code usig git:
@@ -116,6 +124,7 @@ First get the API code usig git:
 git clone https://github.com/MaayanLab/datacrossways_api
 ```
 Then navigate to the `datacorssways_api` folder. The API requires a config file `secrets/conf.json`. The format of the file should contain information about the database, OAuth credentials, and AWS credentials.
+
 
 #### secrets/conf.json
 ```json
@@ -161,7 +170,8 @@ Then navigate to the `datacorssways_api` folder. The API requires a config file 
 
 The API is a flask application and can be started using the command `flask run`.
 
-## Run frontend locally
+
+## Deploy React frontend locally
 
 The React frontend depends on the API, so it should be set up first. Then get the frontend using git with:
 
