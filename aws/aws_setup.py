@@ -103,16 +103,15 @@ else:
 
     def create_database(rds, project_name):
         db_user = project_name+"-"+''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(8))
-        print(db_user)
         db_password = ''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(50))
         response = rds.create_db_instance(
             AllocatedStorage=5,
             DBInstanceClass='db.t3.micro',
-            DBInstanceIdentifier=project_name+"-dxw-db",
+            DBInstanceIdentifier=project_name+"-db",
             Engine='Postgres',
             EngineVersion='13.4',
             MasterUserPassword=db_password,
-            MasterUsername=db_user.replace("-", ""))
+            MasterUsername=db_user.replace("-", "_"))
         return(response)
 
     try:
@@ -162,7 +161,8 @@ else:
         print(colored(255,255,0," x S3 bucket privacy could not be enhanced"))
 
     try:
-        create_database(rds, project_name)
+        response = create_database(rds, project_name)
+        aws_resources["database"] = response["DBInstance"]
         print(colored(0,255,0," - RDS database created"))
     except Exception:
         print(traceback.format_exc())
