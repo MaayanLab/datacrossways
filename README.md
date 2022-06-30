@@ -6,6 +6,8 @@ The API accesses a Postgres database that persists information. The API needs ac
 
 <img src="https://user-images.githubusercontent.com/32603869/176254810-7a3bc02e-f47d-4c54-a939-9d1aef7d0df9.png" width="400">
 
+---
+
 ## Contents
 
 ### AWS configuration
@@ -14,10 +16,14 @@ The API accesses a Postgres database that persists information. The API needs ac
 [Create AWS resources](#create-aws-resources) •
 [Remove AWS resources](#remove-aws-resources)
 
+### Cloud deployment
+[Deploy Datacrossways for production](#deploy-datacrossways-for-production)
+
 ### Local deployment
+[Deploy API locally](#deploy-api-locally)
+[Deploy React frontend locally](#deploy-api-locally)
 
-
-
+---
 
 ## AWS resource configuration
 
