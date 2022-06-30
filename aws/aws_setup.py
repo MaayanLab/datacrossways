@@ -112,7 +112,7 @@ else:
             Engine='Postgres',
             EngineVersion='13.4',
             MasterUserPassword=db_password,
-            MasterUsername=db_user)
+            MasterUsername=db_user.replace("-", ""))
         return(response)
 
     try:
