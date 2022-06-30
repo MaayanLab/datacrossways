@@ -102,7 +102,7 @@ else:
         return(response)
 
     def create_database(rds, project_name):
-        db_user = project_name+"-dxw-"+''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(8))
+        db_user = project_name.lower()+"-dxw-"+''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(8))
         db_password = ''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(50))
         response = rds.create_db_instance(
             AllocatedStorage=5,
@@ -119,53 +119,53 @@ else:
         aws_resources["user"] = user["User"]
         print(colored(0,255,0," - user created"))
     except Exception:
-        print(colored(255,255,0," - user already exists"))
+        print(colored(255,255,0," x user could not be created"))
 
     try:
         policy = create_policy(iam, project_name, path)
         aws_resources["policy"] = policy["Policy"]
         print(colored(0,255,0," - policy created"))
     except Exception:
-        print(colored(255,255,0," - policy could not be created"))
+        print(colored(255,255,0," x policy could not be created"))
 
     try:
         key = create_access_key(iam, aws_resources["user"]["UserName"])
         aws_resources["user"]["key"] = key
         print(colored(0,255,0," - user access key created"))
     except Exception:
-        print(colored(255,255,0," - user access key could not be created"))
+        print(colored(255,255,0," x user access key could not be created"))
 
     try:
         bucket = create_bucket(s3, project_name)
         aws_resources["bucket"] = bucket
-        print(colored(0,255,0," - bucket created"))
+        print(colored(0,255,0," - S3 bucket created"))
     except Exception:
-        print(colored(255,255,0," - S3 bucket could not be created"))
+        print(colored(255,255,0," x S3 bucket could not be created"))
 
     try:
         attach_user_policy(iam, aws_resources["policy"]["Arn"], aws_resources["user"]["UserName"])
         print(colored(0,255,0," - policy attached to user"))
     except Exception:
-        print(colored(255,255,0," - user policy could not be attached to user"))
+        print(colored(255,255,0," x user policy could not be attached to user"))
 
     try:
         attach_cors(s3, aws_resources["bucket"]["Location"].replace("/",""), path)
         print(colored(0,255,0," - CORS rules attached to S3 bucket"))
     except Exception:
-        print(colored(255,255,0," - CORS rules could not be attached to S3 bucket"))
+        print(colored(255,255,0," x CORS rules could not be attached to S3 bucket"))
 
     try:
         block_bucket(s3, aws_resources["bucket"]["Location"].replace("/",""))
         print(colored(0,255,0," - bucket privacy enhanced"))
     except Exception:
-        print(colored(255,255,0," - S3 bucket privacy could not be enhanced"))
+        print(colored(255,255,0," x S3 bucket privacy could not be enhanced"))
 
     try:
         create_database(rds, project_name)
         print(colored(0,255,0," - RDS database created"))
     except Exception:
         print(traceback.format_exc())
-        print(colored(255,255,0," - RDS database could not be created"))
+        print(colored(255,255,0," x RDS database could not be created"))
 
     with open(path+'/aws_config_'+project_name+'.json', 'w') as f:
         f.write(json.dumps(aws_resources, indent=4, sort_keys=True, default=str))

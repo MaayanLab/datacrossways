@@ -58,7 +58,7 @@ def delete_all(iam, s3, rds, aws_del):
         counter = counter+1
         print(colored(0,255,0, " - policy detached"))
     except Exception:
-        print(colored(255,255,0, " - policy could not be detached"))
+        print(colored(255,255,0, " x policy could not be detached"))
         error_counter = error_counter+1
 
     try:
@@ -66,7 +66,7 @@ def delete_all(iam, s3, rds, aws_del):
         counter = counter+1
         print(colored(0,255,0, " - policy deleted"))
     except Exception:
-        print(colored(255,255,0, " - policy could not be deleted"))
+        print(colored(255,255,0, " x policy could not be deleted"))
         error_counter = error_counter+1
     
     try:
@@ -77,7 +77,7 @@ def delete_all(iam, s3, rds, aws_del):
         counter = counter+1
         print(colored(0,255,0, " - user access key deleted"))
     except Exception:
-        print(colored(255,255,0," - user access key could not be deleted"))
+        print(colored(255,255,0," x user access key could not be deleted"))
         error_counter = error_counter+1
     
     try:
@@ -85,7 +85,7 @@ def delete_all(iam, s3, rds, aws_del):
         counter = counter+1
         print(colored(0,255,0, " - user deleted"))
     except Exception:
-        print(colored(255,255,0," - user could not be deleted"))
+        print(colored(255,255,0," x user could not be deleted"))
         error_counter = error_counter+1
     
     try:
@@ -93,14 +93,14 @@ def delete_all(iam, s3, rds, aws_del):
         counter = counter+1
         print(colored(0,255,0, " - S3 bucket deleted"))
     except Exception:
-        print(colored(255,255,0," - S3 bucket could not be deleted"))
+        print(colored(255,255,0," x S3 bucket could not be deleted"))
         error_counter = error_counter+1
 
     try:
         response = delete_database(rds, aws_del)
         print(colored(0,255,0, " - RDS database deleted"))
     except Exception:
-        print(colored(255,255,0," - RDS database could not be deleted"))
+        print(colored(255,255,0," x RDS database could not be deleted"))
         error_counter = error_counter+1
     
     print("\nScript completed")
