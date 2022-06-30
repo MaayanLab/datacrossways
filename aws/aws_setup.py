@@ -102,7 +102,8 @@ else:
         return(response)
 
     def create_database(rds, project_name):
-        db_user = project_name.lower()+"-dxw-"+''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(8))
+        db_user = project_name+"-"+''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(8))
+        print(db_user)
         db_password = ''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(50))
         response = rds.create_db_instance(
             AllocatedStorage=5,
