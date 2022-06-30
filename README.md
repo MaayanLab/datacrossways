@@ -103,9 +103,11 @@ python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>
 
 Datacrossways currently uses google OAuth to manage user logins. To set up credentials go to [https://console.cloud.google.com/apis/dashboard](https://console.cloud.google.com/apis/dashboard), where you need to have an account or you need to create a new one.
 
-Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`.
+Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. The click `CREATE`.
 
 <img width="425" alt="oauth2" src="https://user-images.githubusercontent.com/32603869/176705928-fd5adccc-31a4-4b04-8a3f-66085d888677.png">
+
+The newly created entry should now appear under `OAuth 2.0 Client IDs`. Click `Download OAuth client` and save `Your Client ID` and `Your Client Secret`.
 
 ### Remove AWS resources
 
