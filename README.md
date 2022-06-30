@@ -1,14 +1,50 @@
 # DataCrossways
 
-Launcher of data portal using the flask API and React fronted. Datacrossways is meant for deployment on Amazon AWS. I allows users to connect to a React frontend or access resources programmatically, by difectly interacting with the Datacrossways API. The frontend receives all information from the Datacrossways API.
+Datacrossways is a lightweight, cloud based data management service. The service supports data upload, storage, data sharing, and fine grained data access control. It was designed to be easily deployed on Amazon AWS.
 
-The API accesses a Postgres database that persists information. The API needs access to some AWS resources and requires limited AWS permissions that are passes by a configuration file. Specifically the API requires to create S3 buckets and upload and retrieve files from it. 
+Launcher of data portal using the Flask API and React fronted. Datacrossways is meant for deployment on Amazon AWS. It allows users to connect to a React frontend or access resources programmatically, by directly interacting with the Datacrossways API. The frontend receives all information from the Datacrossways API.
+
+The API accesses a Postgres database that persists information. The API needs access to some AWS resources and requires limited AWS permissions that are passes by a configuration file. Specifically the API requires to create S3 buckets and upload and retrieve files from it.
 
 <img src="https://user-images.githubusercontent.com/32603869/176254810-7a3bc02e-f47d-4c54-a939-9d1aef7d0df9.png" width="400">
 
-## AWS resource configuration
+---
+
+
+## Contents
+
+### AWS/cloud configuration
+[GoogleOAuth configuration](#googleoauth-configuration) •
+[Create temporary AWS user](#create-temporary-aws-user) •
+[Create EC2 instance](#create-ec2-instance) •
+[Create AWS resources](#create-aws-resources) •
+[Remove AWS resources](#remove-aws-resources)
+
+
+### Cloud deployment
+[Deploy Datacrossways for production](#deploy-datacrossways-for-production)
+
+### Local deployment
+[Deploy API locally](#deploy-api-locally) •
+[Deploy React frontend locally](#deploy-api-locally)
+
+---
+
+## AWS/cloud configuration
 
 Datacrossways requires several AWS resources to be configured before the datacrossways API and frontend can run. While most of the configuration is automated there are some initial steps that need to be performed manually. The first step is to create a `temporary user` with credentials to create the final `user` credentials and `S3 bucket`, as well as a `RDS database`.
+
+### GoogleOAuth configuration
+
+Datacrossways currently uses google OAuth to manage user logins. To set up credentials go to [https://console.cloud.google.com/apis/dashboard](https://console.cloud.google.com/apis/dashboard), where you need to have an account or you need to create a new one.
+
+![oauth1](https://user-images.githubusercontent.com/32603869/176709575-b5c6b8b2-7873-42c3-bb7d-bd899a2f8368.png)
+
+Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. Here we can set multiple domains (choose one you want to use and own) that we would like to use. The `localhost` entries allow us to run Datacrossways locally. The click `CREATE`.
+
+<img width="425" alt="oauth2" src="https://user-images.githubusercontent.com/32603869/176705928-fd5adccc-31a4-4b04-8a3f-66085d888677.png">
+
+The newly created entry should now appear under `OAuth 2.0 Client IDs`. Click `Download OAuth client` and save `Your Client ID` and `Your Client Secret`.
 
 ### Create temporary AWS user
 
@@ -27,12 +63,17 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - Select `Attach existing policies directly`
     - In `filter policies` type `IAMFullAccess` and check box
     - In `filter policies` type `AmazonS3FullAccess` and check box
+    - In `filter policies` type `AmazonRDSFullAccess` and check box
     - Select `Next: Tags` button
  - Add Tag
     - Select `Next: Review`
  - Review
     - Select `Create User`
  - Save `Access key ID` and `Secret access key` and keep them safe
+
+When all is done the user should look something like this:
+<img width="1060" alt="Temporary User" src="https://user-images.githubusercontent.com/32603869/176680884-a375eaca-88bb-4e8e-8884-2b5ad2675db4.png">
+
 
 ### Create EC2 instance
 
@@ -55,46 +96,72 @@ Log into the AWS dashboard at https://aws.amazon.com.
     -  Under UNIX connect to instance with `ssh -i pathtokey/key.pem ubuntu@ipaddress`
     -  Windows users: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
 
+
 ### Create AWS resources
 
 Now it is time to create the AWS resources. They encompass a designated user to control S3 access, a S3 bucket with specific configurations, as well as a RDS database to store metadata on stored data objects.
 
 After creating a temporary user and an AWS instance log into the server. From there get `Datacrossways` using git.
-```
+```sh
 git clone https://github.com/MaayanLab/datacrossways.git
 ```
 Go into the `datacrossways` folder in the home directory and run the command below to install some dependencies.
-```
+```sh
 ~/datacrossways/setup.sh
 ```
 Now you can run the aws configuration script which will create the resources. To run it requires the temp user credentials and a project name. Project names should not contain `commas`, `periods`, `underscores`, or `spaces`. Since the `bucket name` is created from the project name there can be a conflict. The bucket name is `<project_name>-vault`. Since bucket names are globally unique this might lead to errors. Run the following command:
 
-```
+```sh
 python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>
 ```
-### Removing AWS resources
+
+### Remove AWS resources
 
 Warning: When this is run all uploaded data is deleted permanently!
 
 To remove resources created before run the following command and follow onscreen instructions:
-```
+```sh
 python3 ~/datacrossways/aws/aws_remove.py <aws_id> <aws_key> <project_name>
 ```
 This script relies in a config file `~/datacommons/aws/aws_config_<project_name>-dxw.json` that is automatically generated when running `aws_setup.py`.
 
-## Launch locally
-The backend and fronend can be deployed independently for development purposes. 
+## Local deployment
+The `backend API` and `React fronend` can be deployed on a local computer, mainly for development purposes. They still require the AWS resources like the `database` and `S3 bucket` configuration. The setup is described in details [here](#aws-resource-configuration).
 
-### Run API
+---
+
+
+## Cloud deployment
+
+### Deploy Datacrossways for production
+
+<img width="140" alt="under construction" src="https://user-images.githubusercontent.com/32603869/176712238-a90f801e-6f65-42fc-851f-31a5cff3c6cd.png">
+
+This section is currently being worked on.
+
+---
+
+## Local deployment
+
+Even though the API and React frontend are running locally, the cloud resources are still required. To create them please go through the steps described [here](#googleoauth-configuration) first. When the `S3 bucket` is created with all additional configuration proceed to deploy the API.
+
+### Deploy API locally
 
 First get the API code usig git:
-```
+```sh
 git clone https://github.com/MaayanLab/datacrossways_api
 ```
-Then navigate to the `datacorssways_api` folder. The API requires a config file `secrets/conf.json`. The format of the file should contain information about the database, OAuth credentials, and AWS credentials.
+Then navigate to the `datacorssways_api` folder. The API requires a config file `secrets/conf.json`. The configuration contains information about:
+
+ - Internal URLs (`api`, `fronend`, `redirect`)
+ - GoogleOAuth client credentials
+ - Database credentials
+ - AWS user credentials (Important: these are the credentials from the AWS user that has only read and write access to the newly created S3 bucket and NOT the `temporary user`)
+
+
 
 #### secrets/conf.json
-```
+```json
 {
     "api":{
         "url": "http://localhost:5000"
@@ -128,7 +195,7 @@ Then navigate to the `datacorssways_api` folder. The API requires a config file 
     "db":{
         "user": "xxxxxxx",
         "pass": "xxxxxxxxxxxxx",
-        "server": "xxxxxxxxxx.us-east-1.rds.amazonaws.com",
+        "server": "xxxxxxxxxx.xxxxx.rds.amazonaws.com",
         "port": "5432",
         "name": "xxxxxxxxx"
     }
@@ -137,7 +204,8 @@ Then navigate to the `datacorssways_api` folder. The API requires a config file 
 
 The API is a flask application and can be started using the command `flask run`.
 
-## Run frontend locally
+
+## Deploy React frontend locally
 
 The React frontend depends on the API, so it should be set up first. Then get the frontend using git with:
 
