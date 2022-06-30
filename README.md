@@ -1,6 +1,6 @@
 # DataCrossways
 
-Datacrossways is a lightweight, cloud based data management service. The service supports data upload, storage, data sharing, and fine grained data access control. It was designed with to be easily deployed on Amazon AWS.
+Datacrossways is a lightweight, cloud based data management service. The service supports data upload, storage, data sharing, and fine grained data access control. It was designed to be easily deployed on Amazon AWS.
 
 Launcher of data portal using the Flask API and React fronted. Datacrossways is meant for deployment on Amazon AWS. It allows users to connect to a React frontend or access resources programmatically, by difectly interacting with the Datacrossways API. The frontend receives all information from the Datacrossways API.
 
