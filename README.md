@@ -38,7 +38,7 @@ Datacrossways currently uses google OAuth to manage user logins. To set up crede
 
 ![oauth1](https://user-images.githubusercontent.com/32603869/176709575-b5c6b8b2-7873-42c3-bb7d-bd899a2f8368.png)
 
-Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. The click `CREATE`.
+Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. Here we can set multiple domains (choose one you want to use and own) that we would like to use. The `localhost` entries allow us to run Datacrossways locally. The click `CREATE`.
 
 <img width="425" alt="oauth2" src="https://user-images.githubusercontent.com/32603869/176705928-fd5adccc-31a4-4b04-8a3f-66085d888677.png">
 
