@@ -143,6 +143,8 @@ This section is currently being worked on.
 
 ## Local deployment
 
+Even though the API and React frontend are running locally, the cloud resources are still required. To run them please go through the steps described [here](#aws/cloud-configuration) first.
+
 ### Deploy API locally
 
 First get the API code usig git:
