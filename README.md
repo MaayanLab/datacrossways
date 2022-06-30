@@ -8,7 +8,7 @@ The API accesses a Postgres database that persists information. The API needs ac
 
 ## Contents
 
-### AWS confoiguration
+### AWS configuration
 [Create temporary AWS user](#create-temporary-aws-user) •
 [Create EC2 instance](#create-ec2-instance) •
 [Create AWS resources](#create-aws-resources) •
