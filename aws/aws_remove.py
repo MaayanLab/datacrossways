@@ -5,6 +5,7 @@ from tqdm import trange
 import time
 import sys
 import os
+import traceback
 
 u_key = sys.argv[1]
 u_secret = sys.argv[2]
