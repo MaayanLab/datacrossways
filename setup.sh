@@ -6,6 +6,8 @@
 # add secrets folder to datacrossways folder, and add config.json
 sudo apt-get update
 
+python3 -m pip install psycopg2-binary
+
 if ! command -v docker ps /dev/null
 then
     sudo apt install docker.io -y
