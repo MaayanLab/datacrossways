@@ -14,6 +14,11 @@ The API accesses a Postgres database that persists information. The API needs ac
 [Create AWS resources](#create-aws-resources) •
 [Remove AWS resources](#remove-aws-resources)
 
+### Local deployment
+
+
+
+
 ## AWS resource configuration
 
 Datacrossways requires several AWS resources to be configured before the datacrossways API and frontend can run. While most of the configuration is automated there are some initial steps that need to be performed manually. The first step is to create a `temporary user` with credentials to create the final `user` credentials and `S3 bucket`, as well as a `RDS database`.
@@ -95,10 +100,10 @@ python3 ~/datacrossways/aws/aws_remove.py <aws_id> <aws_key> <project_name>
 ```
 This script relies in a config file `~/datacommons/aws/aws_config_<project_name>-dxw.json` that is automatically generated when running `aws_setup.py`.
 
-## Launch locally
-The backend and fronend can be deployed independently for development purposes. 
+## Local deployment
+The `backend API` and `React fronend` can be deployed on a local computer, mainly for development purposes. They still require the AWS resources like the `database` and `S3 bucket` configuration. The setup is described in details [here][#aws-resource-configuration].
 
-### Run API
+### Deploy API locally
 
 First get the API code usig git:
 ```sh
