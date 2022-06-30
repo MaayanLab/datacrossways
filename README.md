@@ -143,7 +143,7 @@ This section is currently being worked on.
 
 ## Local deployment
 
-Even though the API and React frontend are running locally, the cloud resources are still required. To run them please go through the steps described [here](#aws/cloud-configuration) first.
+Even though the API and React frontend are running locally, the cloud resources are still required. To create them please go through the steps described [here](#googleoauth-configuration) first. When the `S3 bucket` is created with all additional configuration proceed to deploy the API.
 
 ### Deploy API locally
 
@@ -151,7 +151,13 @@ First get the API code usig git:
 ```sh
 git clone https://github.com/MaayanLab/datacrossways_api
 ```
-Then navigate to the `datacorssways_api` folder. The API requires a config file `secrets/conf.json`. The format of the file should contain information about the database, OAuth credentials, and AWS credentials.
+Then navigate to the `datacorssways_api` folder. The API requires a config file `secrets/conf.json`. The configuration contains information about:
+
+ - Internal URLs (`api`, `fronend`, `redirect`)
+ - GoogleOAuth client credentials
+ - Database credentials
+ - AWS user credentials (Important: these are the credentials from the AWS user that has only read and write access to the newly created S3 bucket and NOT the `temporary user`)
+
 
 
 #### secrets/conf.json
@@ -189,7 +195,7 @@ Then navigate to the `datacorssways_api` folder. The API requires a config file 
     "db":{
         "user": "xxxxxxx",
         "pass": "xxxxxxxxxxxxx",
-        "server": "xxxxxxxxxx.us-east-1.rds.amazonaws.com",
+        "server": "xxxxxxxxxx.xxxxx.rds.amazonaws.com",
         "port": "5432",
         "name": "xxxxxxxxx"
     }
