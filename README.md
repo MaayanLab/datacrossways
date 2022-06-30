@@ -20,7 +20,7 @@ The API accesses a Postgres database that persists information. The API needs ac
 [Deploy Datacrossways for production](#deploy-datacrossways-for-production)
 
 ### Local deployment
-[Deploy API locally](#deploy-api-locally)
+[Deploy API locally](#deploy-api-locally) •
 [Deploy React frontend locally](#deploy-api-locally)
 
 ---
