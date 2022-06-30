@@ -112,6 +112,7 @@ else:
             EngineVersion='13.4',
             MasterUserPassword=db_password,
             MasterUsername=db_user.replace("-", "_"))
+        response["DBInstance"]["MasterUserPassword"] = db_password
         return(response)
 
     try:

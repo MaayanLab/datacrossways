@@ -21,3 +21,4 @@ WORKDIR /apilock
 
 RUN chmod -R 777 /datacrossways_api
 ENTRYPOINT FLASK_APP=/datacrossways_api/app.py flask run --host=0.0.0.0 --port 5000
+
