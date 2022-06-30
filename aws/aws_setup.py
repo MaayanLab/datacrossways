@@ -7,6 +7,7 @@ import json
 import os
 import secrets
 import string
+import traceback
 
 u_key = sys.argv[1]
 u_secret = sys.argv[2]
@@ -163,6 +164,7 @@ else:
         create_database(rds, project_name)
         print(colored(0,255,0," - RDS database created"))
     except Exception:
+        print(traceback.format_exc())
         print(colored(255,255,0," - RDS database could not be created"))
 
     with open(path+'/aws_config_'+project_name+'.json', 'w') as f:
