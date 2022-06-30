@@ -41,6 +41,12 @@ def delete_bucket_completely(s3, bucket_name):
         Bucket=bucket_name
     )
 
+def delete_database(rds, aws_del):
+    rds.delete_db_instance(
+        DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'],
+        SkipFinalSnapshot=True,
+        DeleteAutomatedBackups=True)
+
 def delete_all(iam, s3, aws_del):
     counter = 0
     error_counter = 0
@@ -89,6 +95,13 @@ def delete_all(iam, s3, aws_del):
     except Exception:
         print(colored(255,255,0," - S3 bucket could not be deleted"))
         error_counter = error_counter+1
+
+    try:
+        response = delete_database(rds, aws_del)
+        print(colored(0,255,0, " - RDS database deleted"))
+    except Exception:
+        print(colored(255,255,0," - RDS database could not be deleted"))
+        error_counter = error_counter+1
     
     print("\nScript completed")
     if error_counter > 0:
@@ -118,4 +131,8 @@ if val == "Y":
         s3 = boto3.client("s3",
                 aws_access_key_id=u_key,
                 aws_secret_access_key=u_secret)
-        delete_all(iam, s3, aws_del)
+        rds = boto3.client("rds",
+                region_name='us-east-1',
+                aws_access_key_id=u_key,
+                aws_secret_access_key=u_secret)       
+        delete_all(iam, s3, rds, aws_del)

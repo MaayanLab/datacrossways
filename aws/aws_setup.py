@@ -5,6 +5,8 @@ import sys
 import boto3
 import json
 import os
+import secrets
+import string
 
 u_key = sys.argv[1]
 u_secret = sys.argv[2]
@@ -33,6 +35,11 @@ else:
                     aws_access_key_id=u_key,
                     aws_secret_access_key=u_secret)
 
+    rds = boto3.client('rds',
+			region_name='us-east-1',
+            aws_access_key_id=u_key,
+            aws_secret_access_key=u_secret)
+    
     def colored(r, g, b, text):
         return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
 
@@ -93,6 +100,19 @@ else:
                 )
         return(response)
 
+    def create_database(rds, project_name):
+        db_user = project_name+"-dxw-"+''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(8))
+        db_password = ''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(50))
+        response = rds.create_db_instance(
+            AllocatedStorage=5,
+            DBInstanceClass='db.t3.micro',
+            DBInstanceIdentifier=project_name+"-dxw-db",
+            Engine='Postgres',
+            EngineVersion='13.4',
+            MasterUserPassword=db_password,
+            MasterUsername=db_user)
+        return(response)
+
     try:
         user = create_user(iam, project_name)
         aws_resources["user"] = user["User"]
@@ -138,6 +158,12 @@ else:
         print(colored(0,255,0," - bucket privacy enhanced"))
     except Exception:
         print(colored(255,255,0," - S3 bucket privacy could not be enhanced"))
+
+    try:
+        create_database(rds, project_name)
+        print(colored(0,255,0," - RDS database created"))
+    except Exception:
+        print(colored(255,255,0," - RDS database could not be created"))
 
     with open(path+'/aws_config_'+project_name+'.json', 'w') as f:
         f.write(json.dumps(aws_resources, indent=4, sort_keys=True, default=str))
