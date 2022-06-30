@@ -27,6 +27,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - Select `Attach existing policies directly`
     - In `filter policies` type `IAMFullAccess` and check box
     - In `filter policies` type `AmazonS3FullAccess` and check box
+    - In `filter policies` type `AmazonRDSFullAccess` and check box
     - Select `Next: Tags` button
  - Add Tag
     - Select `Next: Review`
