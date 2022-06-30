@@ -47,7 +47,7 @@ def delete_database(rds, aws_del):
         SkipFinalSnapshot=True,
         DeleteAutomatedBackups=True)
 
-def delete_all(iam, s3, aws_del):
+def delete_all(iam, s3, rds, aws_del):
     counter = 0
     error_counter = 0
     try:
