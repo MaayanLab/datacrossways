@@ -101,7 +101,7 @@ python3 ~/datacrossways/aws/aws_remove.py <aws_id> <aws_key> <project_name>
 This script relies in a config file `~/datacommons/aws/aws_config_<project_name>-dxw.json` that is automatically generated when running `aws_setup.py`.
 
 ## Local deployment
-The `backend API` and `React fronend` can be deployed on a local computer, mainly for development purposes. They still require the AWS resources like the `database` and `S3 bucket` configuration. The setup is described in details [here][#aws-resource-configuration].
+The `backend API` and `React fronend` can be deployed on a local computer, mainly for development purposes. They still require the AWS resources like the `database` and `S3 bucket` configuration. The setup is described in details [here](#aws-resource-configuration).
 
 ### Deploy API locally
 
