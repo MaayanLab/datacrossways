@@ -35,6 +35,8 @@ Datacrossways requires several AWS resources to be configured before the datacro
 
 Datacrossways currently uses google OAuth to manage user logins. To set up credentials go to [https://console.cloud.google.com/apis/dashboard](https://console.cloud.google.com/apis/dashboard), where you need to have an account or you need to create a new one.
 
+<img width="725" alt="oauth2" src="https://user-images.githubusercontent.com/32603869/176709367-a16aa702-960b-44b7-88d6-a0b20cfd6dd9.png">
+
 Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. The click `CREATE`.
 
 <img width="425" alt="oauth2" src="https://user-images.githubusercontent.com/32603869/176705928-fd5adccc-31a4-4b04-8a3f-66085d888677.png">
