@@ -135,8 +135,7 @@ The `backend API` and `React fronend` can be deployed on a local computer, mainl
 
 ### Deploy Datacrossways for production
 
-![download](https://user-images.githubusercontent.com/32603869/176712238-a90f801e-6f65-42fc-851f-31a5cff3c6cd.png)
-
+<img width="220" alt="under construction" src="[https://user-images.githubusercontent.com/32603869/176680884-a375eaca-88bb-4e8e-8884-2b5ad2675db4.png](https://user-images.githubusercontent.com/32603869/176712238-a90f801e-6f65-42fc-851f-31a5cff3c6cd.png)">
 
 This section is currently being worked on.
 
