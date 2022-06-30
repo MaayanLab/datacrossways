@@ -11,11 +11,12 @@ The API accesses a Postgres database that persists information. The API needs ac
 ## Contents
 
 ### AWS configuration
+[GoogleOAuth configuration](#googleoauth-configuration) •
 [Create temporary AWS user](#create-temporary-aws-user) •
 [Create EC2 instance](#create-ec2-instance) •
 [Create AWS resources](#create-aws-resources) •
-[Remove AWS resources](#remove-aws-resources) •
-[GoogleOAuth configuration](#googleoauth-configuration)
+[Remove AWS resources](#remove-aws-resources)
+
 
 ### Cloud deployment
 [Deploy Datacrossways for production](#deploy-datacrossways-for-production)
@@ -82,7 +83,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     -  Windows users: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
 
 
-### Create AWS resources
+### Create AWS/cloud resources
 
 Now it is time to create the AWS resources. They encompass a designated user to control S3 access, a S3 bucket with specific configurations, as well as a RDS database to store metadata on stored data objects.
 
@@ -100,7 +101,7 @@ Now you can run the aws configuration script which will create the resources. To
 python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>
 ```
 
-### GoogleOAuth confioguration
+### GoogleOAuth configuration
 
 Datacrossways currently uses google OAuth to manage user logins. To set up credentials go to [https://console.cloud.google.com/apis/dashboard](https://console.cloud.google.com/apis/dashboard), where you need to have an account or you need to create a new one.
 
