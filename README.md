@@ -115,6 +115,12 @@ The `backend API` and `React fronend` can be deployed on a local computer, mainl
 
 ---
 
+## Cloud deployment
+
+### Deploy Datacrossways for production
+
+---
+
 ## Local deployment
 
 ### Deploy API locally
