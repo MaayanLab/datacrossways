@@ -6,6 +6,14 @@ The API accesses a Postgres database that persists information. The API needs ac
 
 <img src="https://user-images.githubusercontent.com/32603869/176254810-7a3bc02e-f47d-4c54-a939-9d1aef7d0df9.png" width="400">
 
+## Contents
+
+### AWS confoiguration
+[Create temporary AWS user](#create-temporary-aws-user) •
+[Create EC2 instance](#create-ec2-instance) •
+[Create AWS resources](#create-aws-resources) •
+[Removing AWS resources](#removing-aws-resources)
+
 ## AWS resource configuration
 
 Datacrossways requires several AWS resources to be configured before the datacrossways API and frontend can run. While most of the configuration is automated there are some initial steps that need to be performed manually. The first step is to create a `temporary user` with credentials to create the final `user` credentials and `S3 bucket`, as well as a `RDS database`.
@@ -65,16 +73,16 @@ Log into the AWS dashboard at https://aws.amazon.com.
 Now it is time to create the AWS resources. They encompass a designated user to control S3 access, a S3 bucket with specific configurations, as well as a RDS database to store metadata on stored data objects.
 
 After creating a temporary user and an AWS instance log into the server. From there get `Datacrossways` using git.
-```
+```sh
 git clone https://github.com/MaayanLab/datacrossways.git
 ```
 Go into the `datacrossways` folder in the home directory and run the command below to install some dependencies.
-```
+```sh
 ~/datacrossways/setup.sh
 ```
 Now you can run the aws configuration script which will create the resources. To run it requires the temp user credentials and a project name. Project names should not contain `commas`, `periods`, `underscores`, or `spaces`. Since the `bucket name` is created from the project name there can be a conflict. The bucket name is `<project_name>-vault`. Since bucket names are globally unique this might lead to errors. Run the following command:
 
-```
+```sh
 python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>
 ```
 ### Removing AWS resources
@@ -82,7 +90,7 @@ python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>
 Warning: When this is run all uploaded data is deleted permanently!
 
 To remove resources created before run the following command and follow onscreen instructions:
-```
+```sh
 python3 ~/datacrossways/aws/aws_remove.py <aws_id> <aws_key> <project_name>
 ```
 This script relies in a config file `~/datacommons/aws/aws_config_<project_name>-dxw.json` that is automatically generated when running `aws_setup.py`.
@@ -93,13 +101,13 @@ The backend and fronend can be deployed independently for development purposes.
 ### Run API
 
 First get the API code usig git:
-```
+```sh
 git clone https://github.com/MaayanLab/datacrossways_api
 ```
 Then navigate to the `datacorssways_api` folder. The API requires a config file `secrets/conf.json`. The format of the file should contain information about the database, OAuth credentials, and AWS credentials.
 
 #### secrets/conf.json
-```
+```json
 {
     "api":{
         "url": "http://localhost:5000"
