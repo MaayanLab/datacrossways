@@ -12,7 +12,7 @@ The API accesses a Postgres database that persists information. The API needs ac
 [Create temporary AWS user](#create-temporary-aws-user) •
 [Create EC2 instance](#create-ec2-instance) •
 [Create AWS resources](#create-aws-resources) •
-[Removing AWS resources](#removing-aws-resources)
+[Remove AWS resources](#remove-aws-resources)
 
 ## AWS resource configuration
 
@@ -85,7 +85,7 @@ Now you can run the aws configuration script which will create the resources. To
 ```sh
 python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>
 ```
-### Removing AWS resources
+### Remove AWS resources
 
 Warning: When this is run all uploaded data is deleted permanently!
 
