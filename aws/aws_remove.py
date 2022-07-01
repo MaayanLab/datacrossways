@@ -119,7 +119,7 @@ def colored(r, g, b, text):
     return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
 
 print("-"*80)
-print(colored(255, 0, 0, "\033[1mWARNING\033[0m") + "Deleting project: \033[1m"+project_name+"\033[0m\n")
+console.print("[red]WARNING![red] Deleting project: [bold]"+project_name+"[bold]")
 print(colored(255, 0, 0, "!!! You are about to \033[1mpermanently\033[0m")+colored(255,0,0, "remove all data associated with the project !!!\n"))
 print(colored(255, 255, 0, "The script will delete"))
 print(colored(255, 255, 0, " - AWS user:\t")+aws_del["user"]["UserName"])
