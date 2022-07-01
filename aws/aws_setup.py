@@ -129,15 +129,15 @@ else:
         user = create_user(iam, project_name)
         aws_resources["user"] = user["User"]
         console.print(" :thumbs_up: user created", style="green")
-    except Exception:
+    except Exception as err:
         print(colored(255,255,0," x user could not be created"))
-        console.print_exception(show_locals=False)
+        console.print(err, style="red")
 
     try:
         policy = create_policy(iam, project_name, path)
         aws_resources["policy"] = policy["Policy"]
         console.print(" :thumbs_up: policy created", style="green")
-    except Exception:
+    except Exception as err:
         print(colored(255,255,0," x policy could not be created"))
         console.print_exception(show_locals=False)
 
@@ -145,36 +145,37 @@ else:
         key = create_access_key(iam, aws_resources["user"]["UserName"])
         aws_resources["user"]["key"] = key
         console.print(" :thumbs_up: user access key created", style="green")
-    except Exception:
+    except Exception as err:
         print(colored(255,255,0," x user access key could not be created"))
-        console.print_exception(show_locals=False)
+        console.print(type(err))
+        console.print(err)
 
     try:
         bucket = create_bucket(s3, project_name)
         aws_resources["bucket"] = bucket
         console.print(" :thumbs_up: S3 bucket created", style="green")
-    except Exception:
+    except Exception as err:
         print(colored(255,255,0," x S3 bucket could not be created"))
         console.print_exception(show_locals=False)
 
     try:
         attach_user_policy(iam, aws_resources["policy"]["Arn"], aws_resources["user"]["UserName"])
         console.print(" :thumbs_up: policy attached to user", style="green")
-    except Exception:
+    except Exception as err:
         print(colored(255,255,0," x user policy could not be attached to user"))
         console.print_exception(show_locals=False)
 
     try:
         attach_cors(s3, aws_resources["bucket"]["Location"].replace("/",""), path)
         console.print(" :thumbs_up: CORS rules attached to S3 bucket", style="green")
-    except Exception:
+    except Exception as err:
         print(colored(255,255,0," x CORS rules could not be attached to S3 bucket"))
         console.print_exception(show_locals=False)
 
     try:
         block_bucket(s3, aws_resources["bucket"]["Location"].replace("/",""))
         console.print(" :thumbs_up: S3 bucket privacy enhanced", style="green")
-    except Exception:
+    except Exception as err:
         print(colored(255,255,0," x S3 bucket privacy could not be enhanced"))
         console.print_exception(show_locals=False)
 
@@ -182,7 +183,7 @@ else:
         response = create_database(rds, project_name)
         aws_resources["database"] = response["DBInstance"]
         console.print(" :thumbs_up: RDS database created", style="green")
-    except Exception:
+    except Exception as err:
         print(traceback.format_exc())
         print(colored(255,255,0," x RDS database could not be created"))
         console.print_exception(show_locals=False)
