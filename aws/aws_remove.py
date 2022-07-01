@@ -60,7 +60,7 @@ def delete_all(iam, s3, rds, aws_del):
         counter = counter+1
         console.print(" :thumbs_up: user access key created", style="green")
     except Exception as err:
-        console.print(" :x: policy detached", style="bold red")
+        console.print(" :x: policy could not be detached", style="bold red")
         print(err.args[0])
         error_counter = error_counter+1
 

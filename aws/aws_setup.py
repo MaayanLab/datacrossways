@@ -7,6 +7,7 @@ import json
 import os
 import secrets
 import string
+import time
 from rich.console import Console
 
 import psycopg2
@@ -118,10 +119,19 @@ else:
             MasterUserPassword=db_password,
             MasterUsername=db_user.replace("-", "_"))
         response["DBInstance"]["MasterUserPassword"] = db_password
-
         print("     - database instance created")
-        print("     - waiting for instance to complete initialization ...")
-
+        with console.status("     - waiting for instance to complete initialization ... ", spinner="monkey"):
+            time.sleep(20)
+            
+            for i in range(100):
+                if i > 99:
+                    raise Exception("RDS instance timed out during initialization.")
+                time.sleep(5)
+                resp = rds.describe_db_instances(DBInstanceIdentifier=response["DBInstance"]["DBInstanceIdentifier"])
+                if resp["DBInstances"][0]["DBInstanceStatus"] != "creating":
+                    dbhost = resp["DBInstances"][0]["DBInstanceStatus"]["endpoint"]["Address"]
+                    response["DBInstance"]["Address"] = dbhost
+                    break
         return(response)
 
     try:
