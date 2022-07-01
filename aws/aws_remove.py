@@ -68,7 +68,7 @@ def delete_all(iam, s3, rds, aws_del):
         respsone = iam.delete_policy(PolicyArn=aws_del["policy"]["Arn"])
         counter = counter+1
         console.print(" :thumbs_up: user policy deleted", style="green")
-    except Exception:
+    except Exception as err:
         console.print(" :x: user policy could not be deleted", style="bold red")
         print(err.args[0]) 
         error_counter = error_counter+1
@@ -80,7 +80,7 @@ def delete_all(iam, s3, rds, aws_del):
         )
         counter = counter+1
         console.print(" :thumbs_up: user access key deleted", style="green")
-    except Exception:
+    except Exception as err:
         console.print(" :x: user access key could not be deleted", style="bold red")
         print(err.args[0]) 
         error_counter = error_counter+1
@@ -89,7 +89,7 @@ def delete_all(iam, s3, rds, aws_del):
         respsone = iam.delete_user(UserName=aws_del["user"]["UserName"])
         counter = counter+1
         console.print(" :thumbs_up: user deleted", style="green")
-    except Exception:
+    except Exception as err:
         console.print(" :x: user could not be deleted", style="bold red")
         print(err.args[0]) 
         error_counter = error_counter+1
@@ -98,7 +98,7 @@ def delete_all(iam, s3, rds, aws_del):
         response = delete_bucket_completely(s3, aws_del["bucket"]["Location"].replace("/",""))
         counter = counter+1
         console.print(" :thumbs_up: S3 bucket deleted", style="green")
-    except Exception:
+    except Exception as err:
         console.print(" :x: S3 bucket could not be deleted", style="bold red")
         print(err.args[0]) 
         error_counter = error_counter+1
@@ -106,7 +106,7 @@ def delete_all(iam, s3, rds, aws_del):
     try:
         response = delete_database(rds, aws_del)
         console.print(" :thumbs_up: RDS database instance deleted", style="green")
-    except Exception:
+    except Exception as err:
         console.print(" :x: RDS database instance could not be deleted", style="bold red")
         print(err.args[0]) 
         error_counter = error_counter+1
