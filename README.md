@@ -130,13 +130,16 @@ In case of an error (e.g. the aws_config_<project_name>-dxw.json) gets lost the 
 Delete user
  - Go to https://us-east-1.console.aws.amazon.com/iamv2/home#/users
  - Find user <project_name>-dxw-user and select checkbox and then `Delete` (if the temporary user is still there also remove this user)
+
 Depete policy
  - Go to https://us-east-1.console.aws.amazon.com/iamv2/home#/policies
  - Type `dxw` in the filter input and hit enter
  - Select policy and under `Actions` select delete
+
 Delete RDS database
  - Assuming the database was generated in `us-east-1`, go to https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#databases
  - Select `<project_name>-dxw-db` and under `Actions` select `Delete`
+
 Delete S3 bucket
  - Assuming the database was generated in `us-east-1`, go to https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1
  - Search for `dxw` and select `<project_name>-dxw-vault`
