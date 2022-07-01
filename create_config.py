@@ -42,9 +42,9 @@ try:
         conf["db"]["server"] = aws_creds["database"]["Endpoint"]["Address"]
         conf["db"]["port"] = "5432"
         conf["db"]["name"] = "datacrossways"
-        conf["api"] = {"url": "http:localhost:5000/"}
-        conf["frontend"] = {"url": "http:localhost:5000/"}
-        conf["redirect"] = {"url": "http:localhost:5000"}
+        conf["api"] = {"url": "http://localhost:5000/"}
+        conf["frontend"] = {"url": "http://localhost:5000/"}
+        conf["redirect"] = {"url": "http://localhost:5000"}
 except Exception:
     print("Failed to build conf.json")
     traceback.print_exc()
