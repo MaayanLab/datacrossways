@@ -119,12 +119,12 @@ def colored(r, g, b, text):
     return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
 
 print("-"*80)
-console.print("[red]WARNING![/red] Deleting project: [bold][yellow]"+project_name+"[/yellow][bold]")
-print(colored(255, 0, 0, "!!! You are about to \033[1mpermanently\033[0m")+colored(255,0,0, "remove all data associated with the project !!!\n"))
-print(colored(255, 255, 0, "The script will delete"))
-print(colored(255, 255, 0, " - AWS user:\t")+aws_del["user"]["UserName"])
-print(colored(255, 255, 0, " - S3 bucket:\t")+aws_del["bucket"]["Location"].replace("/", ""))
-print(colored(255, 255, 0, " - RDS database: "))
+console.print("[red]WARNING![/red] Deleting project: [bold]"+project_name+"[/bold]")
+console.print("!!! You are about to [bold]permanently[/bold] remove all data associated with the project !!!\n")
+console.print("The script will delete", style="bright_yellow")
+console.print(" - AWS user:\t"+aws_del["user"]["UserName"], style="bright_yellow")
+console.print(" - S3 bucket:\t"+aws_del["bucket"]["Location"].replace("/", ""), style="bright_yellow")
+console.print(" - RDS database: "+aws_del["database"][], style="bright_yellow")
 print("-"*80)
 val = input("Remove all resources on AWS (Y/n)? : ")
 if val == "Y":
