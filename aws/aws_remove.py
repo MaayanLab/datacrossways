@@ -17,6 +17,7 @@ path = os.path.dirname(__file__)
 
 aws_del = {}
 try:
+    print(path+"/../secrets/aws_config_"+project_name+"-dxw.json")
     with open(path+"/../secrets/aws_config_"+project_name+"-dxw.json", "r") as f:
         aws_del = json.load(f)
 except Exception:
