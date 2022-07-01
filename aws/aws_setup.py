@@ -132,7 +132,7 @@ else:
     except Exception as err:
         print(colored(255,255,0," x user could not be created"))
         console.print(err, style="white")
-        print(err.args) 
+        print(err.args[0]) 
 
     try:
         policy = create_policy(iam, project_name, path)
