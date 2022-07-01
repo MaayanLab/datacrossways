@@ -131,7 +131,7 @@ else:
                 resp = rds.describe_db_instances(DBInstanceIdentifier=response["DBInstance"]["DBInstanceIdentifier"])
                 if resp["DBInstances"][0]["DBInstanceStatus"] != "creating":
                     dbhost = resp["DBInstances"][0]["Endpoint"]["Address"]
-                    response["DBInstance"]["Endpoint"]["Address"] = dbhost
+                    response["DBInstance"]["Endpoint"]={"Address": dbhost}
                     break
         return(response)
 
