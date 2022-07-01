@@ -9,7 +9,7 @@ path = os.path.dirname(__file__)
 
 aws_creds = {}
 try:
-    with open(path+"/secrets/aws_"+project_name+"-dxw.json", "r") as f:
+    with open(path+"/secrets/aws_config_"+project_name+"-dxw.json", "r") as f:
         aws_creds = json.load(f)
 except Exception:
     print("Could not read secrets/aws_"+project_name+"-dxw.json file. This file is generated when running aws/aws_setup.py.")
