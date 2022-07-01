@@ -177,16 +177,13 @@ else:
         console.print(" :thumbs_up: S3 bucket privacy enhanced", style="green")
     except Exception as err:
         print(colored(255,255,0," x S3 bucket privacy could not be enhanced"))
-        console.print_exception(show_locals=False)
 
     try:
         response = create_database(rds, project_name)
         aws_resources["database"] = response["DBInstance"]
         console.print(" :thumbs_up: RDS database created", style="green")
     except Exception as err:
-        print(traceback.format_exc())
         print(colored(255,255,0," x RDS database could not be created"))
-        console.print_exception(show_locals=False)
 
     with open(path+'/aws_config_'+project_name+'.json', 'w') as f:
         f.write(json.dumps(aws_resources, indent=4, sort_keys=True, default=str))
