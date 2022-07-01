@@ -185,14 +185,14 @@ else:
     except Exception as err:
         console.print(" :x: S3 bucket privacy could not be enhanced", style="bold red")
         print(err.args[0])
-
+    
     try:
         response = create_database(rds, project_name)
         aws_resources["database"] = response["DBInstance"]
         db = psycopg2.connect(
                     user=aws_resources["database"]["MasterUsername"], 
                     password=aws_resources["database"]["MasterUserPassword"], 
-                    dbname="datacrossways", 
+                    dbname="postgres", 
                     host=aws_resources["database"]["Endpoint"]["Address"])
         
         db.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
