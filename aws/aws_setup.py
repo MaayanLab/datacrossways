@@ -73,6 +73,16 @@ else:
         bucket_name = (project_name+"-vault").replace("_", "-").lower()
         return(s3.create_bucket(Bucket=bucket_name))
 
+    def get_bucket_region(s3, project_name):
+        response = s3.get_bucket_location(Bucket=project_name+"-vault")        
+        region = "us-east-1"
+        try:
+            region = response["ResponseMetadata"]["LocationConstraint"]
+            region = "us-east-1" if region is None else region
+        except Exception:
+            region = "us-east-1"
+        return(region)
+
     def create_user(iam, project_name):
         response = iam.create_user(UserName=project_name+"-user")
         return(response)
@@ -160,6 +170,8 @@ else:
 
     try:
         bucket = create_bucket(s3, project_name)
+        region = get_bucket_region(s3, project_name)
+        bucket["Region"] = region
         aws_resources["bucket"] = bucket
         console.print(" :thumbs_up: S3 bucket created", style="green")
     except Exception as err:
