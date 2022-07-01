@@ -17,7 +17,7 @@ path = os.path.dirname(__file__)
 
 aws_del = {}
 try:
-    with open(path+"/aws_config_"+project_name+"-dxw.json", "r") as f:
+    with open(path+"/../secrets/aws_config_"+project_name+"-dxw.json", "r") as f:
         aws_del = json.load(f)
 except Exception:
     print("AWS resource file could not be read")
@@ -124,7 +124,7 @@ console.print("!!! You are about to [bold]permanently[/bold] remove all data ass
 console.print("The script will delete", style="bright_yellow")
 console.print(" - AWS user:\t"+aws_del["user"]["UserName"], style="bright_yellow")
 console.print(" - S3 bucket:\t"+aws_del["bucket"]["Location"].replace("/", ""), style="bright_yellow")
-console.print(" - RDS database: "+aws_del["database"][], style="bright_yellow")
+console.print(" - RDS database: "+aws_del["database"]["Database"], style="bright_yellow")
 print("-"*80)
 val = input("Remove all resources on AWS (Y/n)? : ")
 if val == "Y":

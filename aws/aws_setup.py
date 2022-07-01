@@ -184,5 +184,5 @@ else:
         console.print(" :x: RDS database could not be created", style="bold red")
         print(err.args[0])
 
-    with open(path+'/aws_config_'+project_name+'.json', 'w') as f:
+    with open(path+'/../secrets/aws_config_'+project_name+'.json', 'w') as f:
         f.write(json.dumps(aws_resources, indent=4, sort_keys=True, default=str))
