@@ -5,11 +5,13 @@ from tqdm import trange
 import time
 import sys
 import os
-import traceback
+from rich.console import Console
 
 u_key = sys.argv[1]
 u_secret = sys.argv[2]
 project_name = sys.argv[3]
+
+console = Console()
 
 path = os.path.dirname(__file__)
 
@@ -56,17 +58,19 @@ def delete_all(iam, s3, rds, aws_del):
             PolicyArn=aws_del["policy"]["Arn"]
         )
         counter = counter+1
-        print(colored(0,255,0, " - policy detached"))
-    except Exception:
-        print(colored(255,255,0, " x policy could not be detached"))
+        console.print(" :thumbs_up: user access key created", style="green")
+    except Exception as err:
+        console.print(" :x: policy detached", style="bold red")
+        print(err.args[0])
         error_counter = error_counter+1
 
     try:
         respsone = iam.delete_policy(PolicyArn=aws_del["policy"]["Arn"])
         counter = counter+1
-        print(colored(0,255,0, " - policy deleted"))
+        console.print(" :thumbs_up: user policy deleted", style="green")
     except Exception:
-        print(colored(255,255,0, " x policy could not be deleted"))
+        console.print(" :x: user policy could not be deleted", style="bold red")
+        print(err.args[0]) 
         error_counter = error_counter+1
     
     try:
@@ -75,37 +79,41 @@ def delete_all(iam, s3, rds, aws_del):
             UserName=aws_del["user"]["UserName"]
         )
         counter = counter+1
-        print(colored(0,255,0, " - user access key deleted"))
+        console.print(" :thumbs_up: user access key deleted", style="green")
     except Exception:
-        print(colored(255,255,0," x user access key could not be deleted"))
+        console.print(" :x: user access key could not be deleted", style="bold red")
+        print(err.args[0]) 
         error_counter = error_counter+1
     
     try:
         respsone = iam.delete_user(UserName=aws_del["user"]["UserName"])
         counter = counter+1
-        print(colored(0,255,0, " - user deleted"))
+        console.print(" :thumbs_up: user deleted", style="green")
     except Exception:
-        print(colored(255,255,0," x user could not be deleted"))
+        console.print(" :x: user could not be deleted", style="bold red")
+        print(err.args[0]) 
         error_counter = error_counter+1
     
     try:
         response = delete_bucket_completely(s3, aws_del["bucket"]["Location"].replace("/",""))
         counter = counter+1
-        print(colored(0,255,0, " - S3 bucket deleted"))
+        console.print(" :thumbs_up: S3 bucket deleted", style="green")
     except Exception:
-        print(colored(255,255,0," x S3 bucket could not be deleted"))
+        console.print(" :x: S3 bucket could not be deleted", style="bold red")
+        print(err.args[0]) 
         error_counter = error_counter+1
 
     try:
         response = delete_database(rds, aws_del)
-        print(colored(0,255,0, " - RDS database deleted"))
+        console.print(" :thumbs_up: RDS database instance deleted", style="green")
     except Exception:
-        print(colored(255,255,0," x RDS database could not be deleted"))
+        console.print(" :x: RDS database instance could not be deleted", style="bold red")
+        print(err.args[0]) 
         error_counter = error_counter+1
     
     print("\nScript completed")
     if error_counter > 0:
-        print(colored(255,0,0, "The script encountered "+str(error_counter)+" errors. Some of the resources might not have been removed or have been removed previously."))
+        console.print("The script encountered "+str(error_counter)+" errors. Some of the resources might not have been removed or have been removed previously.", style="red")
 
 def colored(r, g, b, text):
     return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)

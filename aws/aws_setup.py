@@ -147,7 +147,6 @@ else:
         console.print(" :thumbs_up: user access key created", style="green")
     except Exception as err:
         console.print(" :x: user access key could not be created", style="bold red")
-        print(err.args[0]) 
 
     try:
         bucket = create_bucket(s3, project_name)
@@ -162,7 +161,6 @@ else:
         console.print(" :thumbs_up: policy attached to user", style="green")
     except Exception as err:
         console.print(" :x: user policy could not be attached to user", style="bold red")
-        print(err.args[0]) 
 
     try:
         attach_cors(s3, aws_resources["bucket"]["Location"].replace("/",""), path)
