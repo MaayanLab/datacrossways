@@ -43,7 +43,7 @@ try:
         conf["db"]["port"] = "5432"
         conf["db"]["name"] = "datacrossways"
         conf["api"] = {"url": "http://localhost:5000/"}
-        conf["frontend"] = {"url": "http://localhost:5000/"}
+        conf["frontend"] = {"url": "http://localhost:3000/"}
         conf["redirect"] = {"url": "http://localhost:5000"}
 except Exception:
     print("Failed to build conf.json")
