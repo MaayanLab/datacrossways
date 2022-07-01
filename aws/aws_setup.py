@@ -184,5 +184,5 @@ else:
         print(err.args[0])
 
     os.makedirs(path+'/../secrets', exist_ok=False)
-    with open(path+'/../secrets/aws_config_'+project_name+'.json', 'w') as f:
+    with open(path+'/../secrets/aws_config_'+project_name+'.json'.lower(), 'w') as f:
         f.write(json.dumps(aws_resources, indent=4, sort_keys=True, default=str))
