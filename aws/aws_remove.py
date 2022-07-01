@@ -124,7 +124,7 @@ console.print("!!! You are about to [bold]permanently[/bold] remove all data ass
 console.print("The script will delete", style="bright_yellow")
 console.print(" - AWS user:\t"+aws_del["user"]["UserName"], style="bright_yellow")
 console.print(" - S3 bucket:\t"+aws_del["bucket"]["Location"].replace("/", ""), style="bright_yellow")
-console.print(" - RDS database: "+aws_del["database"]["Database"], style="bright_yellow")
+console.print(" - RDS database: "+aws_del["database"]["DBInstanceIdentifier"], style="bright_yellow")
 print("-"*80)
 val = input("Remove all resources on AWS (Y/n)? : ")
 if val == "Y":
