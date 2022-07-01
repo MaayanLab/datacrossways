@@ -127,24 +127,20 @@ This script relies in a config file `~/datacommons/secrets/aws_config_<project_n
 
 In case of an error (e.g. the aws_config_<project_name>-dxw.json) gets lost the resources can easily be removed manually. The resources will be in `RDS`, `IAM`, and `S3`. To delete:
 
-Delete user
- - Go to https://us-east-1.console.aws.amazon.com/iamv2/home#/users
- - Find user <project_name>-dxw-user and select checkbox and then `Delete` (if the temporary user is still there also remove this user)
-
-Delete policy
- - Go to https://us-east-1.console.aws.amazon.com/iamv2/home#/policies
- - Type `dxw` in the filter input and hit enter
- - Select policy and under `Actions` select delete
-
-Delete RDS database
- - Assuming the database was generated in `us-east-1`, go to https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#databases
- - Select `<project_name>-dxw-db` and under `Actions` select `Delete`
-
-Delete S3 bucket
- - Assuming the database was generated in `us-east-1`, go to https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1
- - Search for `dxw` and select `<project_name>-dxw-vault`
- - First select `Empty` and then `Delete`
-
+ - Delete user
+    - Go to https://us-east-1.console.aws.amazon.com/iamv2/home#/users
+    - Find user <project_name>-dxw-user and select checkbox and then `Delete` (if the temporary user is still there also remove this user)
+ - Delete policy
+    - Go to https://us-east-1.console.aws.amazon.com/iamv2/home#/policies
+    - Type `dxw` in the filter input and hit enter
+    - Select policy and under `Actions` select delete
+ - Delete RDS database
+    - Assuming the database was generated in `us-east-1`, go to https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#databases
+    - Select `<project_name>-dxw-db` and under `Actions` select `Delete`
+ - Delete S3 bucket
+    - Assuming the database was generated in `us-east-1`, go to https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1
+    - Search for `dxw` and select `<project_name>-dxw-vault`
+    - First select `Empty` and then `Delete`
 
 ## Local deployment
 The `backend API` and `React fronend` can be deployed on a local computer, mainly for development purposes. They still require the AWS resources like the `database` and `S3 bucket` configuration. The setup is described in details [here](#aws-resource-configuration).
