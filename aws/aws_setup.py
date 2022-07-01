@@ -119,8 +119,8 @@ else:
             MasterUserPassword=db_password,
             MasterUsername=db_user.replace("-", "_"))
         response["DBInstance"]["MasterUserPassword"] = db_password
-        print("     - database instance created")
-        with console.status("     - waiting for instance to complete initialization ... ", spinner="monkey"):
+        print("     - RDS database instance created")
+        with console.status("- waiting for RDS instance to complete initialization ... ", spinner="monkey"):
             time.sleep(20)
             
             for i in range(100):
@@ -193,6 +193,6 @@ else:
         console.print(" :x: RDS database could not be created", style="bold red")
         print(err.args[0])
 
-    os.makedirs(path+'/../secrets', exist_ok=False)
+    os.makedirs(path+'/../secrets', exist_ok=True)
     with open(path+'/../secrets/aws_config_'+project_name+'.json'.lower(), 'w') as f:
         f.write(json.dumps(aws_resources, indent=4, sort_keys=True, default=str))
