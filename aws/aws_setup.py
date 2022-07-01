@@ -9,6 +9,7 @@ import secrets
 import string
 import time
 from rich.console import Console
+import traceback
 
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
@@ -201,6 +202,7 @@ else:
         console.print(" :thumbs_up: RDS database created", style="green")
     except Exception as err:
         console.print(" :x: RDS database could not be created", style="bold red")
+        traceback.print_exc()
         print(err.args[0])
 
     os.makedirs(path+'/../secrets', exist_ok=True)
