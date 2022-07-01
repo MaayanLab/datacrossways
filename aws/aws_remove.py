@@ -38,7 +38,7 @@ def delete_bucket_completely(s3, bucket_name):
         response = s3.list_objects_v2(
             Bucket=bucket_name,
         )
-    print('Now deleting bucket %s' % bucket_name)
+    print('\t\t- empty and delete bucket %s' % bucket_name)
     response = s3.delete_bucket(
         Bucket=bucket_name
     )
