@@ -129,9 +129,8 @@ else:
                 time.sleep(5)
                 resp = rds.describe_db_instances(DBInstanceIdentifier=response["DBInstance"]["DBInstanceIdentifier"])
                 if resp["DBInstances"][0]["DBInstanceStatus"] != "creating":
-                    print(resp)
-                    dbhost = resp["DBInstances"][0]["DBInstanceStatus"]["endpoint"]["Address"]
-                    response["DBInstance"]["Address"] = dbhost
+                    dbhost = resp["DBInstances"][0]["Endpoint"]["Address"]
+                    response["DBInstance"]["Endpoint"]["Address"] = dbhost
                     break
         return(response)
 
@@ -189,6 +188,16 @@ else:
     try:
         response = create_database(rds, project_name)
         aws_resources["database"] = response["DBInstance"]
+        db = psycopg2.connect(
+                    user=aws_resources["database"]["MasterUsername"], 
+                    password=aws_resources["database"]["MasterUserPassword"], 
+                    dbname="datacrossways", 
+                    host=aws_resources["database"]["Endpoint"]["Address"])
+        
+        db.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        db.cursor().execute("CREATE DATABASE datacrossways")
+        db.commit()
+        db.close()
         console.print(" :thumbs_up: RDS database created", style="green")
     except Exception as err:
         console.print(" :x: RDS database could not be created", style="bold red")
