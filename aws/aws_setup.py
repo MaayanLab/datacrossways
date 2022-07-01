@@ -130,7 +130,7 @@ else:
         aws_resources["user"] = user["User"]
         console.print(" :thumbs_up: user created", style="green")
     except Exception as err:
-        console.print(" :x: user could not be created")
+        console.print(" :x: user could not be created", style="bold red")
         print(err.args[0]) 
 
     try:
