@@ -139,7 +139,7 @@ else:
         console.print(" :thumbs_up: policy created", style="green")
     except Exception as err:
         print(colored(255,255,0," x policy could not be created"))
-        console.print_exception(show_locals=False)
+        console.print(err, style="red")
 
     try:
         key = create_access_key(iam, aws_resources["user"]["UserName"])
@@ -156,21 +156,21 @@ else:
         console.print(" :thumbs_up: S3 bucket created", style="green")
     except Exception as err:
         print(colored(255,255,0," x S3 bucket could not be created"))
-        console.print_exception(show_locals=False)
+        console.print(err, style="red")
 
     try:
         attach_user_policy(iam, aws_resources["policy"]["Arn"], aws_resources["user"]["UserName"])
         console.print(" :thumbs_up: policy attached to user", style="green")
     except Exception as err:
         print(colored(255,255,0," x user policy could not be attached to user"))
-        console.print_exception(show_locals=False)
+        console.print(err, style="red")
 
     try:
         attach_cors(s3, aws_resources["bucket"]["Location"].replace("/",""), path)
         console.print(" :thumbs_up: CORS rules attached to S3 bucket", style="green")
     except Exception as err:
         print(colored(255,255,0," x CORS rules could not be attached to S3 bucket"))
-        console.print_exception(show_locals=False)
+        console.print(err, style="red")
 
     try:
         block_bucket(s3, aws_resources["bucket"]["Location"].replace("/",""))
