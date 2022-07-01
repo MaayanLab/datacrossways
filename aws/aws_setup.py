@@ -131,7 +131,7 @@ else:
         console.print(" :thumbs_up: user created", style="green")
     except Exception as err:
         print(colored(255,255,0," x user could not be created"))
-        print(str(err).encode("UTF-8").decode("UTF-8"))
+        console.print(str(err).encode("UTF-8").decode("UTF-8"), style="white")
 
     try:
         policy = create_policy(iam, project_name, path)
