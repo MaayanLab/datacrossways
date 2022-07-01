@@ -131,7 +131,7 @@ Delete user
  - Go to https://us-east-1.console.aws.amazon.com/iamv2/home#/users
  - Find user <project_name>-dxw-user and select checkbox and then `Delete` (if the temporary user is still there also remove this user)
 
-Depete policy
+Delete policy
  - Go to https://us-east-1.console.aws.amazon.com/iamv2/home#/policies
  - Type `dxw` in the filter input and hit enter
  - Select policy and under `Actions` select delete
