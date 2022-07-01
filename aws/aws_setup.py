@@ -120,7 +120,7 @@ else:
             MasterUsername=db_user.replace("-", "_"))
         response["DBInstance"]["MasterUserPassword"] = db_password
         print("     - RDS database instance created")
-        with console.status("- waiting for RDS instance to complete initialization ... ", spinner="monkey"):
+        with console.status(" - waiting for RDS instance to complete initialization ... ", spinner="monkey"):
             time.sleep(20)
             
             for i in range(100):
