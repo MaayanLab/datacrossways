@@ -105,7 +105,7 @@ def delete_all(iam, s3, rds, aws_del):
 
     try:
         response = delete_database(rds, aws_del)
-        console.print(" :thumbs_up: RDS database instance deleted", style="green")
+        console.print(" :thumbs_up: RDS database instance deletion started. Takes time to complete.", style="green")
     except Exception as err:
         console.print(" :x: RDS database instance could not be deleted", style="bold red")
         print(err.args[0]) 
@@ -122,9 +122,13 @@ print("-"*80)
 console.print("[red][bold]WARNING![/bold][/red] Deleting project: [bold]"+project_name+"[/bold]\n")
 console.print("!!! You are about to [bold]permanently[/bold] remove all data associated with the project !!!\n")
 console.print("The script will delete", style="bright_yellow")
-console.print(" - AWS user:\t "+aws_del["user"]["UserName"], style="bright_yellow")
-console.print(" - S3 bucket:\t "+aws_del["bucket"]["Location"].replace("/", ""), style="bright_yellow")
-console.print(" - RDS database: "+aws_del["database"]["DBInstanceIdentifier"], style="bright_yellow")
+try:
+    console.print(" - AWS user:\t "+aws_del["user"]["UserName"], style="bright_yellow")
+    console.print(" - S3 bucket:\t "+aws_del["bucket"]["Location"].replace("/", ""), style="bright_yellow")
+    console.print(" - RDS database: "+aws_del["database"]["DBInstanceIdentifier"], style="bright_yellow")
+except Exception:
+    x=1
+
 print("-"*80)
 val = input("Remove all resources on AWS (Y/n)? : ")
 if val == "Y":

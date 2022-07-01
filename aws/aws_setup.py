@@ -129,6 +129,7 @@ else:
                 time.sleep(5)
                 resp = rds.describe_db_instances(DBInstanceIdentifier=response["DBInstance"]["DBInstanceIdentifier"])
                 if resp["DBInstances"][0]["DBInstanceStatus"] != "creating":
+                    print(resp)
                     dbhost = resp["DBInstances"][0]["DBInstanceStatus"]["endpoint"]["Address"]
                     response["DBInstance"]["Address"] = dbhost
                     break
