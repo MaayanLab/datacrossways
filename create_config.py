@@ -47,5 +47,5 @@ except Exception:
     traceback.print_exc()
     quit()
 
-with open(path+"/secrets/conf.json") as f:
+with open(path+"/secrets/conf.json", "w") as f:
     f.write(json.dumps(conf, indent=4, sort_keys=True, default=str))
