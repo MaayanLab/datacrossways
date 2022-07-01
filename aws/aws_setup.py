@@ -139,7 +139,7 @@ else:
         console.print(" :thumbs_up: policy created", style="green")
     except Exception as err:
         print(colored(255,255,0," x policy could not be created"))
-        console.print(str(err))
+        console.print(str(err).replace("An error occurred ", "").replace("(", "").replace(")", ""))
 
     try:
         key = create_access_key(iam, aws_resources["user"]["UserName"])
