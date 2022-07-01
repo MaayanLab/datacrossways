@@ -130,15 +130,15 @@ else:
         aws_resources["user"] = user["User"]
         console.print(" :thumbs_up: user created", style="green")
     except Exception as err:
-        print(colored(255,255,0," x user could not be created"))
-        console.print(err.args[0], style="red") 
+        console.print(" :x: user could not be created")
+        print(err.args[0]) 
 
     try:
         policy = create_policy(iam, project_name, path)
         aws_resources["policy"] = policy["Policy"]
         console.print(" :thumbs_up: policy created", style="green")
     except Exception as err:
-        print(colored(255,255,0," x policy could not be created"))
+        console.print(" :x: policy could not be created")
         console.print(str(err))
 
     try:
