@@ -125,6 +125,8 @@ python3 ~/datacrossways/aws/aws_remove.py <aws_id> <aws_key> <project_name>
 ```
 This script relies in a config file `~/datacommons/secrets/aws_config_<project_name>-dxw.json` that is automatically generated when running `aws_setup.py`.
 
+### Remove manually
+
 In case of an error (e.g. the aws_config_<project_name>-dxw.json) gets lost the resources can easily be removed manually. The resources will be in `RDS`, `IAM`, and `S3`. To delete:
 
  - Delete user
