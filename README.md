@@ -176,7 +176,24 @@ Then navigate to the `datacorssways_api` folder. The API requires a config file 
  - Database credentials
  - AWS user credentials (Important: these are the credentials from the AWS user that has only read and write access to the newly created S3 bucket and NOT the `temporary user`)
 
+The `conf.json` file can be created after setting up all AWS resource. For this run `python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>` and follow the instructions to retrieve the `Google OAuth credentials` [here](#googleoauth-configuration). The `JSON` file from the `Google Developer Console` should be copied into `~/datacrossways/secrets/` (the name of the file is not important, it will be automatically detected).
 
+```sh
+python ~/datacrossways/create_config.py <project_name>
+```
+This will generate a file at `~/datacrossways/secrets/conf.json`.
+
+Then run:
+
+```sh
+mkdir ~/datacrossways_api/secrets
+mv ~/datacrossways/secrets/conf.json~/datacrossways_api/secrets/conf.json
+
+cd ~/datacrossways_api
+flask run
+```
+
+The API should now be up and running
 
 #### secrets/conf.json
 ```json
@@ -190,13 +207,12 @@ Then navigate to the `datacorssways_api` folder. The API requires a config file 
     "redirect": "http://localhost:5000/",
     "web": {
         "client_id": "xxxxxxxxxxxxxxx.apps.googleusercontent.com",
+        "client_secret": "xxxxxxxxxxxxxxxxxxxxxxx",
         "project_id": "xxxxxxxxxxxxx",
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_secret": "xxxxxxxxxxxxxxxxxxxxxxx",
         "redirect_uris": [
-            "http://localhost:5000/login",
             "http://localhost:5000/authorize",
             "http://127.0.0.1:5000/authorize"
         ],
