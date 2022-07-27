@@ -211,21 +211,23 @@ The API should now be up and running
         "url": "http://localhost:3000/"
     },
     "redirect": "http://localhost:5000/",
-    "web": {
-        "client_id": "xxxxxxxxxxxxxxx.apps.googleusercontent.com",
-        "client_secret": "xxxxxxxxxxxxxxxxxxxxxxx",
-        "project_id": "xxxxxxxxxxxxx",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "redirect_uris": [
-            "http://localhost:5000/authorize",
-            "http://127.0.0.1:5000/authorize"
-        ],
-        "javascript_origins": [
-            "http://localhost:5000"
-        ]
+    "oauth": {
+        "google": {
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "client_id": "XXXXXXXXXXXXX-xxxxxxxxxxxxxxxx.apps.googleusercontent.com",
+            "client_secret": "XXXXXXXXXX-xxxxxxxxxxxxx",
+            "javascript_origins": [
+                "http://localhost:5000"
+            ],
+            "project_id": "xxxxxxxxxx",
+            "redirect_uris": [
+                "http://localhost:5000/authorize"
+            ],
+            "token_uri": "https://oauth2.googleapis.com/token"
+        }
     },
+
     "aws": {
         "aws_id": "xxxxxxxxxxxxxxxx",
         "aws_key": "xxxxxxxxxxxxxx",
