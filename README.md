@@ -227,7 +227,6 @@ The API should now be up and running
             "token_uri": "https://oauth2.googleapis.com/token"
         }
     },
-
     "aws": {
         "aws_id": "xxxxxxxxxxxxxxxx",
         "aws_key": "xxxxxxxxxxxxxx",
