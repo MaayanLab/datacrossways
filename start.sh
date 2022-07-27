@@ -1,9 +1,12 @@
 #!/bin/bash
 
 echo What is the domain name \(e.g. datacommons.org\)?
-read domain
+read -p 'Domain: ' domain
 
 echo What is the email address for Let\'s Encrypt notifications \(e.g. myemail@admin.org\)?
-read email
+read -p 'E-mail:' email
 
-#docker compose up
+export BASE_URL=$domain
+export LETS_ENCRYPT_EMAIL=$email
+
+docker compose up
