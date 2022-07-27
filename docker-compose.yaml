@@ -28,7 +28,7 @@ services:
       - 3000:3000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`ui.localhost`)"
+      - "traefik.http.routers.frontend.rule=Host(`ui.lymecommons.org`)"
       - "traefik.http.services.frontend.loadbalancer.server.port=3000"
       - "traefik.http.routers.frontend.entrypoints=web"
       - "traefik.http.routers.frontend.tls=true"
