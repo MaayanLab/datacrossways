@@ -28,11 +28,11 @@ services:
       - 3000:3000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`lymecommons.org`)"
+      - "traefik.http.routers.frontend.rule=Host(`ui.lymecommons.org`)"
       - "traefik.http.services.frontend.loadbalancer.server.port=3000"
-      - "traefik.http.routers.frontend.entrypoints=web"
-      - "traefik.http.routers.frontend.tls=true"
-      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt-prod"
+      #- "traefik.http.routers.frontend.entrypoints=web"
+      #- "traefik.http.routers.frontend.tls=true"
+      #- "traefik.http.routers.frontend.tls.certresolver=letsencrypt-prod"
       #- "traefik.http.routers.frontend.tls.domains[0].main=lymemindcommons.com"
   api:
     container_name: datacrossways_api
@@ -45,7 +45,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`lymecommons.org`)"
       - "traefik.http.services.api.loadbalancer.server.port=5000"
-      - "traefik.http.routers.api.entrypoints=web"
+      #- "traefik.http.routers.api.entrypoints=web"
       - "traefik.http.routers.api.tls=true"
       - "traefik.http.routers.api.tls.certresolver=letsencrypt-prod"
       - "traefik.http.routers.api.tls.domains[0].main=lymecommons.org"
