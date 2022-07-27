@@ -175,25 +175,25 @@ First get the API code usig git:
 ```sh
 git clone https://github.com/MaayanLab/datacrossways_api
 ```
-Then navigate to the `datacorssways_api` folder. The API requires a config file `secrets/conf.json`. The configuration contains information about:
+Then navigate to the `datacorssways_api` folder. The API requires a config file `secrets/config.json`. The configuration contains information about:
 
  - Internal URLs (`api`, `fronend`, `redirect`)
  - GoogleOAuth client credentials
  - Database credentials
  - AWS user credentials (Important: these are the credentials from the AWS user that has only read and write access to the newly created S3 bucket and NOT the `temporary user`)
 
-The `conf.json` file can be created after setting up all AWS resource. For this run `python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>` and follow the instructions to retrieve the `Google OAuth credentials` [here](#googleoauth-configuration). The `JSON` file from the `Google Developer Console` should be copied into `~/datacrossways/secrets/` (the name of the file is not important, it will be automatically detected).
+The `config.json` file can be created after setting up all AWS resource. For this run `python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>` and follow the instructions to retrieve the `Google OAuth credentials` [here](#googleoauth-configuration). The `JSON` file from the `Google Developer Console` should be copied into `~/datacrossways/secrets/` (the name of the file is not important, it will be automatically detected).
 
 ```sh
 python ~/datacrossways/create_config.py <project_name>
 ```
-This will generate a file at `~/datacrossways/secrets/conf.json`.
+This will generate a file at `~/datacrossways/secrets/config.json`.
 
 Then run:
 
 ```sh
 mkdir ~/datacrossways_api/secrets
-mv ~/datacrossways/secrets/conf.json~/datacrossways_api/secrets/conf.json
+mv ~/datacrossways/secrets/conf.json~/datacrossways_api/secrets/config.json
 
 cd ~/datacrossways_api
 flask run
@@ -201,7 +201,7 @@ flask run
 
 The API should now be up and running
 
-#### secrets/conf.json
+#### secrets/config.json
 ```json
 {
     "api":{
