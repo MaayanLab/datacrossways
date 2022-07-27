@@ -11,7 +11,7 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.letsencrypt-prod.acme.email=alexander.lachmann@mssm.edu"
+      - "--certificatesresolvers.letsencrypt-prod.acme.email=${LETS_ENCRYPT_EMAIL}"
       - "--certificatesresolvers.letsencrypt-prod.acme.storage=/data/acme.json"
       - "--certificatesresolvers.letsencrypt-prod.acme.tlschallenge=true"
     ports:
@@ -28,12 +28,10 @@ services:
       - 3000:3000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`ui.lymecommons.org`)"
+      - "traefik.http.routers.frontend.rule=Host(`ui.${BASE_URL}`)"
       - "traefik.http.services.frontend.loadbalancer.server.port=3000"
-      #- "traefik.http.routers.frontend.entrypoints=web"
-      #- "traefik.http.routers.frontend.tls=true"
-      #- "traefik.http.routers.frontend.tls.certresolver=letsencrypt-prod"
-      #- "traefik.http.routers.frontend.tls.domains[0].main=lymemindcommons.com"
+    environment:
+      - NEXT_PUBLIC_URL=${BASE_URL}
   api:
     container_name: datacrossways_api
     build: ./api
@@ -43,12 +41,11 @@ services:
       - ./secrets:/app/secrets
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`lymecommons.org`)"
+      - "traefik.http.routers.api.rule=Host(`${BASE_URL}`)"
       - "traefik.http.services.api.loadbalancer.server.port=5000"
-      #- "traefik.http.routers.api.entrypoints=web"
       - "traefik.http.routers.api.tls=true"
       - "traefik.http.routers.api.tls.certresolver=letsencrypt-prod"
-      - "traefik.http.routers.api.tls.domains[0].main=lymecommons.org"
+      - "traefik.http.routers.api.tls.domains[0].main=${BASE_URL}"
     environment:
       - PORT=5000
       - APP_MODULE=app:app
