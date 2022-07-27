@@ -123,7 +123,8 @@ To remove resources created before run the following command and follow onscreen
 ```sh
 python3 ~/datacrossways/aws/aws_remove.py <aws_id> <aws_key> <project_name>
 ```
-This script relies in a config file `~/datacommons/secrets/aws_config_<project_name>-dxw.json` that is automatically generated when running `aws_setup.py`. The database will take more than a minute to fully shut down completely, the status can be seen in the RDS section of the AWS console. While the status is ![image](https://user-images.githubusercontent.com/32603869/181263578-0ff8a72b-a90a-4998-962b-ade0ef36c7af.png) the database name can not be reused.
+This script relies in a config file `~/datacommons/secrets/aws_config_<project_name>-dxw.json` that is automatically generated when running `aws_setup.py`. The database will take more than a minute to fully shut down completely, the status can be seen in the RDS section of the AWS console. While the status is ![image](https://user-images.githubusercontent.com/32603869/181263946-5e91469d-88f8-49f5-b8c1-085b5e0947f5.png)
+ the database name can not be reused.
 
 ![image](https://user-images.githubusercontent.com/32603869/181263067-4b8a7159-4fe8-4f19-9ee3-6653da20e266.png)
 
