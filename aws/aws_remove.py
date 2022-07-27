@@ -6,6 +6,7 @@ import time
 import sys
 import os
 from rich.console import Console
+import traceback
 
 u_key = sys.argv[1]
 u_secret = sys.argv[2]
@@ -20,6 +21,7 @@ try:
     with open(path+"/../secrets/aws_config_"+project_name.lower()+"-dxw.json".lower(), "r") as f:
         aws_del = json.load(f)
 except Exception:
+    traceback.print_exc()
     print("AWS resource file could not be read")
     quit()
 
