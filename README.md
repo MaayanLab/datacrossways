@@ -115,6 +115,9 @@ Now you can run the aws configuration script which will create the resources. To
 python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>
 ```
 
+![image](https://user-images.githubusercontent.com/32603869/181282184-4bc81bb8-4f00-417e-99e6-dc8db43a1b1e.png)
+
+
 ### Remove AWS resources
 
 Warning: When this is run all uploaded data is deleted permanently!
