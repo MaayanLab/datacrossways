@@ -1,4 +1,4 @@
-FROM python:3.10.5-alpine3.16
+FROM tiangolo/meinheld-gunicorn-flask:python3.8-alpine3.11
 
 RUN apk update && apk add vim curl git
 
@@ -11,14 +11,15 @@ RUN apk --no-cache add python3-dev \
 
 RUN pip install --upgrade pip
 RUN pip install install cffi
+RUN pip install psycopg2-binary
 
+WORKDIR /
 RUN git clone https://github.com/MaayanLab/datacrossways_api.git
+WORKDIR /app
+RUN cp -a /datacrossways_api/. /app/
+RUN rm -r /datacrossways_api
 
-RUN pip install -r /datacrossways_api/requirements.txt
-
-EXPOSE 5000
-WORKDIR /apilock
-
-RUN chmod -R 777 /datacrossways_api
-ENTRYPOINT FLASK_APP=/datacrossways_api/app.py flask run --host=0.0.0.0 --port 5000
-
+RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+RUN pip install greenlet==0.4.17
+RUN pip install sqlalchemy==1.4.18
+RUN pip install greenlet==0.4.17

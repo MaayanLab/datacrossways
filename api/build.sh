@@ -5,8 +5,8 @@ docker rm $(docker ps -q -f status=exited)
 docker kill datacrosswayapi
 docker rm datacrosswayapi
 
-docker build --no-cache=true -f Dockerfile -t maayanlab/datacrosswayapi:0.0.1 .
-#docker build --no-cache=true -f DockerfileUnicorn -t maayanlab/datacrosswayapiunicorn:0.0.1 .
+#docker build --no-cache=true -f Dockerfile -t maayanlab/datacrosswayapi:0.0.1 .
+docker build --no-cache=true -f DockerfileUnicorn -t maayanlab/datacrosswayapiunicorn:0.0.1 .
 
 docker push maayanlab/datacrosswayapi:0.0.1
 

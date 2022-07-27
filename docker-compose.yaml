@@ -1,14 +1,40 @@
 version: "3.8"
 services:
+  traefik:
+    image: "traefik:v2.6"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
   frontend:
     container_name: datacrossways_frontend
     build: ./frontend
     ports:
       - 3000:3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`localhost/ui`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+      - "traefik.http.routers.frontend.entrypoints=web"
   api:
     container_name: datacrossways_api
     build: ./api
     ports:
       - 5000:5000
     volumes:
-      - ./secrets:/apilock/secrets
+      - ./secrets:/app/secrets
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5000"
+      - "traefik.http.routers.api.entrypoints=web"
+    environment:
+      - PORT=5000
+      - APP_MODULE=app:app
