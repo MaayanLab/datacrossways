@@ -8,11 +8,19 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt-prod.acme.email=alexander.lachmann@mssm.edu"
+      - "--certificatesresolvers.letsencrypt-prod.acme.storage=/data/acme.json"
+      - "--certificatesresolvers.letsencrypt-prod.acme.tlschallenge=true"
     ports:
       - "80:80"
+      - "443:443"
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./data/ingress:/data"
   frontend:
     container_name: datacrossways_frontend
     build: ./frontend
