@@ -7,6 +7,6 @@ cd $SCRIPT_DIR
 rm -rf datacrossways_api
 git clone https://github.com/MaayanLab/datacrossways_api.git
 
-pip install -r requirements.txt
+pip install -r datacrossways_api/requirements.txt
 
 python3 datacrossways_api/createdb.py
