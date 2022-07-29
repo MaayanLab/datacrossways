@@ -39,7 +39,7 @@ git clone https://github.com/MaayanLab/datacrossways_api.git
 cd datacrossways_api
 pip install -r requirements.txt
 
-python3 datacrossways_api/createdb.py
+python3 createdb.py
 cd ..
 rm -rf datacrossways_api
 
