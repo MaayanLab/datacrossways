@@ -9,16 +9,13 @@ RUN apk --no-cache add python3-dev \
         openssl-dev \
         musl-dev
 
-RUN pip install --upgrade pip
-RUN pip install install cffi
-RUN pip install psycopg2-binary
-
 WORKDIR /
 RUN git clone https://github.com/MaayanLab/datacrossways_api.git
 WORKDIR /app
 RUN cp -a /datacrossways_api/. /app/
 RUN rm -r /datacrossways_api
 
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 RUN pip install greenlet==0.4.17
 RUN pip install sqlalchemy==1.4.18
