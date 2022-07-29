@@ -3,7 +3,6 @@ services:
   traefik:
     image: "traefik:v2.6"
     command:
-      #- "--log.level=DEBUG"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
@@ -30,8 +29,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`ui.${BASE_URL}`)"
       - "traefik.http.services.frontend.loadbalancer.server.port=3000"
-    environment:
-      - NEXT_PUBLIC_URL=${BASE_URL}
   api:
     container_name: datacrossways_api
     build: ./api

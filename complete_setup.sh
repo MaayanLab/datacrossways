@@ -1,0 +1,3 @@
+path=pwd
+echo $path
+
