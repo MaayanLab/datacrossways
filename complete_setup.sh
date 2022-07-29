@@ -1,3 +1,3 @@
-path=pwd
+path=${pwd}
 echo $path
 
