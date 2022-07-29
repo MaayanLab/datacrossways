@@ -4,9 +4,11 @@
 # 8 GB disk space / I would recommend slightly more (can run out of space when building the docker images)
 
 # add secrets folder to datacrossways folder, and add config.json
-sudo apt-get update
+OLD_DIR=$(pwd)
+SCRIPT_DIR=$( dirname -- "$0"; )
+cd $SCRIPT_DIR
 
-python3 -m pip install psycopg2-binary
+sudo apt-get update
 
 if ! command -v docker ps /dev/null
 then
@@ -23,3 +25,20 @@ fi
 
 sudo apt-get install python3-pip -y
 pip3 install -r requirements.txt
+
+python3 aws/aws_setup.py $AWS_ID $AWS_KEY $PROJECT_NAME
+python3 create_config.py $PROJECT_NAME
+
+rm -rf datacrossways_api
+git clone https://github.com/MaayanLab/datacrossways_api.git
+
+cd datacrossways_api
+pip install -r requirements.txt
+
+python3 datacrossways_api/createdb.py
+cd ..
+rm -rf datacrossways_api
+
+cd $OLD_DIR
+
+echo Setup complete! Run \'./start.sh\' to deploy Datacrossways
