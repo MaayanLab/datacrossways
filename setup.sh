@@ -43,7 +43,7 @@ if [ $# -eq 0 ] ; then
 
     printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 
-    read -p 'Is the entered information correct? (Y/n): ' INPUT_OK
+    read -p 'Please add the OAuth credentials in the folder ~/datacrossways/secrets (https://github.com/MaayanLab/datacrossways#googleoauth-configuration). Is the entered information correct and the are the OAuth credentials present? (Y/n): ' INPUT_OK
 
     if [[ $INPUT_OK != "Y" ]]; then
         exit 0
