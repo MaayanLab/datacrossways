@@ -4,15 +4,16 @@ import os
 from os import listdir
 import traceback
 
-project_name = sys.argv[1]
+PROJECT_NAME = sys.argv[1]
+DOMAIN = sys.argv[1]
 path = os.path.dirname(__file__)
 
 aws_creds = {}
 try:
-    with open(path+"/secrets/aws_config_"+project_name+"-dxw.json", "r") as f:
+    with open(path+"/secrets/aws_config_"+PROJECT_NAME+"-dxw.json", "r") as f:
         aws_creds = json.load(f)
 except Exception:
-    print("Could not read secrets/aws_"+project_name+"-dxw.json file. This file is generated when running aws/aws_setup.py.")
+    print("Could not read secrets/aws_"+PROJECT_NAME+"-dxw.json file. This file is generated when running aws/aws_setup.py.")
     quit()
 
 google_oauth = {}
@@ -44,7 +45,7 @@ try:
         conf["db"]["name"] = "datacrossways"
         conf["api"] = {"url": "http://api:5000/"}
         conf["frontend"] = {"url": "http://frontend:3000/"}
-        conf["redirect"] = {"url": "http://localhost:5000"}
+        conf["redirect"] = {"url": "https://"+DOMAIN}
 except Exception:
     print("Failed to build conf.json")
     traceback.print_exc()

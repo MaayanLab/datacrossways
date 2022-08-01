@@ -133,7 +133,7 @@ sudo apt-get install python3-pip -y
 pip3 install -r requirements.txt
 
 python3 aws/aws_setup.py $AWS_ID $AWS_KEY $PROJECT_NAME
-python3 create_config.py $PROJECT_NAME
+python3 create_config.py $PROJECT_NAME $DOMAIN
 
 rm -rf datacrossways_api
 git clone https://github.com/MaayanLab/datacrossways_api.git
