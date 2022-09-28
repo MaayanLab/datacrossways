@@ -2,3 +2,4 @@ secrets/*
 config.json
 aws/aws_config_*
 test/*
+.DS_Store
