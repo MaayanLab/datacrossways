@@ -162,8 +162,17 @@ The `backend API` and `React fronend` can be deployed on a local computer, mainl
 For development the Authentification might be problematic, especially when the font end is developed on a different server. For this reason there is a separate way to deploy the API. The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user.
 
 #### Start Services
+
+To start the datacrossway service run the command below. It will ask for some additional information. Namely for the domain name and an email required for let's encrypt notifications.
 ```
-docker compose up
+~/datacrossways/start.sh
+```
+
+#### Stop Services
+
+The following command will stop the docker containers
+```
+~/datacrossways/start.sh
 ```
 
 #### Remove Services
