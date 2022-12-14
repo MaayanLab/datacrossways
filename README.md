@@ -157,7 +157,17 @@ The `backend API` and `React fronend` can be deployed on a local computer, mainl
 
 ## Cloud deployment
 
+### Deploy Datacrossways for development
+
+For development the Authentification might be problematic, especially when the font end is developed on a different server. For this reason there is a separate way to deploy the API. The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user.
+
+```
+docker compose up
+```
+
 ### Deploy Datacrossways for production
+
+
 
 <img width="140" alt="under construction" src="https://user-images.githubusercontent.com/32603869/176712238-a90f801e-6f65-42fc-851f-31a5cff3c6cd.png">
 
