@@ -77,7 +77,7 @@ When all is done the user should look something like this:
 
 ### Create EC2 instance
 
-Depending on the deployment this instance can be used to host the Datacrossways API and frontend, or can only be used to configure the AWS resources (in case of running the API and frontend locally for development). A small, cost efficient instance should be sufficient for most use cases (`t2.small`). Data traffic bypasses the host server, so it does not require significant harddisc space. It is recommended to have at least `10GB` to build all docker images when Datacrossways is deployed on this host.
+Depending on the deployment this instance can be used to host the Datacrossways API and frontend, or can only be used to configure the AWS resources (in case of running the API and frontend locally for development). A small, cost efficient instance should be sufficient for most use cases (`t2.small`). Data traffic bypasses the host server, so it does not require significant harddisc space. It is recommended to have at least `20GB` to build all docker images when Datacrossways is deployed on this host.
 
 Log into the AWS dashboard at https://aws.amazon.com. 
  - Navigate to EC2 dashboard
@@ -89,7 +89,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
           - Pricing overview https://aws.amazon.com/ec2/pricing/on-demand/
     - Under `Key pair` either use an existing `key pair` or generate a new one
           - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file are used to log into the instance once it is created. Under UNIX the key should be placed into folder with limited user rights (chmod 700) and the key (chmod 600) 
-    -  Under `Configure Storage` set to at least `10GB`. Space is mainly needed to build Docker images. If disk space is too small it can result in some minor issues.
+    -  Under `Configure Storage` set to at least `20GB`. Space is mainly needed to build Docker images. If disk space is too small it can result in some minor issues.
     -  Optional: Under `Network settings` restrict SSH traffic to `My IP`
     -  Select `Launch Instance` button
     -  Select newly created instance in table and copy `Public IPv4 address`
@@ -105,7 +105,7 @@ After creating a temporary user and an AWS instance log into the server. From th
 ```sh
 git clone https://github.com/MaayanLab/datacrossways.git
 ```
-Go into the `datacrossways` folder in the home directory and run the command below to install some dependencies.
+Go into the `datacrossways` folder in the home directory and run the command below. It will ask for some required information.
 ```sh
 ~/datacrossways/setup.sh
 ```
@@ -157,7 +157,36 @@ The `backend API` and `React fronend` can be deployed on a local computer, mainl
 
 ## Cloud deployment
 
+### Deploy Datacrossways for development
+
+For development the Authentification might be problematic, especially when the font end is developed on a different server. For this reason there is a separate way to deploy the API. The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user.
+
+#### Start Services
+
+To start the datacrossway service run the command below. It will ask for some additional information. Namely for the domain name and an email required for let's encrypt notifications.
+```
+~/datacrossways/start.sh
+```
+
+#### Stop Services
+
+The following command will stop the docker containers
+```
+~/datacrossways/start.sh
+```
+
+#### Remove Services
+Removing the docker containers will not remove any of the persisted data in the database or the S3 bucket. If you want to permanently delete the project first run 
+
+```
+docker compose down
+```
+
+And then remove all the cloud resources following the steps described [here](#remove-aws-resources).
+
 ### Deploy Datacrossways for production
+
+
 
 <img width="140" alt="under construction" src="https://user-images.githubusercontent.com/32603869/176712238-a90f801e-6f65-42fc-851f-31a5cff3c6cd.png">
 
