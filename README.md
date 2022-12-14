@@ -105,7 +105,7 @@ After creating a temporary user and an AWS instance log into the server. From th
 ```sh
 git clone https://github.com/MaayanLab/datacrossways.git
 ```
-Go into the `datacrossways` folder in the home directory and run the command below to install some dependencies.
+Go into the `datacrossways` folder in the home directory and run the command below. It will ask for some required information.
 ```sh
 ~/datacrossways/setup.sh
 ```
