@@ -77,7 +77,7 @@ When all is done the user should look something like this:
 
 ### Create EC2 instance
 
-Depending on the deployment this instance can be used to host the Datacrossways API and frontend, or can only be used to configure the AWS resources (in case of running the API and frontend locally for development). A small, cost efficient instance should be sufficient for most use cases (`t2.small`). Data traffic bypasses the host server, so it does not require significant harddisc space. It is recommended to have at least `10GB` to build all docker images when Datacrossways is deployed on this host.
+Depending on the deployment this instance can be used to host the Datacrossways API and frontend, or can only be used to configure the AWS resources (in case of running the API and frontend locally for development). A small, cost efficient instance should be sufficient for most use cases (`t2.small`). Data traffic bypasses the host server, so it does not require significant harddisc space. It is recommended to have at least `20GB` to build all docker images when Datacrossways is deployed on this host.
 
 Log into the AWS dashboard at https://aws.amazon.com. 
  - Navigate to EC2 dashboard
