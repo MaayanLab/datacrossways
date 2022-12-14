@@ -5,7 +5,7 @@ from os import listdir
 import traceback
 
 PROJECT_NAME = sys.argv[1]
-DOMAIN = sys.argv[1]
+DOMAIN = sys.argv[2]
 path = os.path.dirname(__file__)
 
 aws_creds = {}
