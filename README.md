@@ -161,9 +161,19 @@ The `backend API` and `React fronend` can be deployed on a local computer, mainl
 
 For development the Authentification might be problematic, especially when the font end is developed on a different server. For this reason there is a separate way to deploy the API. The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user.
 
+#### Start Services
 ```
 docker compose up
 ```
+
+#### Remove Services
+Removing the docker containers will not remove any of the persisted data in the database or the S3 bucket. If you want to permanently delete the project first run 
+
+```
+docker compose down
+```
+
+And then remove all the cloud resources following the steps described [here](#remove-aws-resources).
 
 ### Deploy Datacrossways for production
 
