@@ -89,7 +89,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
           - Pricing overview https://aws.amazon.com/ec2/pricing/on-demand/
     - Under `Key pair` either use an existing `key pair` or generate a new one
           - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file are used to log into the instance once it is created. Under UNIX the key should be placed into folder with limited user rights (chmod 700) and the key (chmod 600) 
-    -  Under `Configure Storage` set to at least `10GB`. Space is mainly needed to build Docker images. If disk space is too small it can result in some minor issues.
+    -  Under `Configure Storage` set to at least `20GB`. Space is mainly needed to build Docker images. If disk space is too small it can result in some minor issues.
     -  Optional: Under `Network settings` restrict SSH traffic to `My IP`
     -  Select `Launch Instance` button
     -  Select newly created instance in table and copy `Public IPv4 address`
