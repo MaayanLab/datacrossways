@@ -172,7 +172,7 @@ To start the datacrossway service run the command below. It will ask for some ad
 
 The following command will stop the docker containers
 ```
-~/datacrossways/start.sh
+~/datacrossways/stop.sh
 ```
 
 #### Remove Services
