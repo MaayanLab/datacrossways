@@ -69,7 +69,8 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - select `Create role` button
 
 When all is done the user should look something like this:
-<img width="1060" alt="Temporary User" src="https://user-images.githubusercontent.com/32603869/176680884-a375eaca-88bb-4e8e-8884-2b5ad2675db4.png">
+
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/32603869/255299224-09461034-dd31-4628-b085-e14aff08250c.png" width="1060"  alt="Configuration role">
 
 
 ### Create EC2 instance
