@@ -46,30 +46,27 @@ Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There create a new
 
 The newly created entry should now appear under `OAuth 2.0 Client IDs`. Click `Download OAuth client` and save `Your Client ID` and `Your Client Secret`.
 
-### Create temporary AWS user
+### Create temporary AWS role
 
-This user will only be used to set up the required AWS resources. After the setup this user should be removed again.
+This role will only be used to set up the required AWS resources. After the setup this role can be removed again.
 
 Log into the AWS dashboard at https://aws.amazon.com. 
- - Navigate to create user under IAM
+ - Navigate to create role under IAM
     - navigate to IAM
-    - under `Access management` select `Users` in the left menu
-    - Select `Add users` button
- - Create User
-    - choose a unique username e.g. `datacrossways_config_temp`
-    - check box `Access key - Programmatic access`
-    - Select `Next: Permissions` button
+    - under `Access management` select `Roles` in the left menu
+    - Select `Create role` button
+ - Create Role
+    - select AWS service and use case EC2
+    - Select `Next` button
  - Attach Permissions
-    - Select `Attach existing policies directly`
-    - In `filter policies` type `IAMFullAccess` and check box
-    - In `filter policies` type `AmazonS3FullAccess` and check box
-    - In `filter policies` type `AmazonRDSFullAccess` and check box
-    - Select `Next: Tags` button
- - Add Tag
-    - Select `Next: Review`
- - Review
-    - Select `Create User`
- - Save `Access key ID` and `Secret access key` and keep them safe
+    - In `filter policies` type `IAMFullAccess` press `enter` and check box
+    - In `filter policies` type `AmazonS3FullAccess` press `enter` and check box
+    - In `filter policies` type `AmazonRDSFullAccess` press `enter` and check box
+    - Select `Next` button
+ - Add name and description
+    - Choose a unique role name
+    - write a description `role for datacrossways configuration`
+    - select `Create role` button
 
 When all is done the user should look something like this:
 <img width="1060" alt="Temporary User" src="https://user-images.githubusercontent.com/32603869/176680884-a375eaca-88bb-4e8e-8884-2b5ad2675db4.png">
