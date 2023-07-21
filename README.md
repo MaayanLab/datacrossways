@@ -89,6 +89,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
           - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file are used to log into the instance once it is created. Under UNIX the key should be placed into folder with limited user rights (chmod 700) and the key (chmod 600) 
     -  Under `Configure Storage` set to at least `20GB`. Space is mainly needed to build Docker images. If disk space is too small it can result in some minor issues.
     -  Optional: Under `Network settings` restrict SSH traffic to `My IP`
+    -  Under `Advanced details` select IAM instance profile and select the role created 
     -  Select `Launch Instance` button
     -  Select newly created instance in table and copy `Public IPv4 address`
     -  Under UNIX connect to instance with `ssh -i pathtokey/key.pem ubuntu@ipaddress`
