@@ -22,9 +22,8 @@ if [ $# -eq 0 ] ; then
     printf "\nWhat is the project name (e.g. mydatacrossways)? The project name is used to create AWS resource names such as the S3 bucket and the database. The project name has to be unique to avoid conflicts such as already existing S3 bucket names.\n"
     read -p 'Project name: ' PROJECT_NAME
 
-    printf "\nTo set up AWS resources Datacrossways setup requires AWS credentials. For more information please refer to https://github.com/MaayanLab/datacrossways#create-temporary-aws-user.\n"
-    read -p 'AWS ID: ' AWS_ID
-    read -p 'AWS Key: ' AWS_KEY
+    printf "\nTo set up AWS resources Datacrossways setup requires AWS region. (us-east-1, us-west-1, ...)\n"
+    read -p 'AWS region: ' AWS_REGION
 
     printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 
@@ -37,9 +36,8 @@ if [ $# -eq 0 ] ; then
     printf "Project name:  $PROJECT_NAME \n"
     printf "DOMAIN:  $DOMAIN \n\n"
 
-    printf "AWS User Information\n"
-    printf "AWS ID:  $AWS_ID \n"
-    printf "AWS Key:  $AWS_KEY \n"
+    printf "AWS Region\n"
+    printf "AWS region:  $AWS_REGION \n"
 
     printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 
@@ -51,13 +49,8 @@ if [ $# -eq 0 ] ; then
 else
     while [[ $# -gt 0 ]]; do
         case $1 in
-            -i|--awsid)
+            -r|--awsregion)
             AWS_ID="$2"
-            shift # past argument
-            shift # past value
-            ;;
-            -k|--awskey)
-            AWS_KEY="$2"
             shift # past argument
             shift # past value
             ;;
@@ -96,11 +89,10 @@ fi
 if !( [[ -v AWS_KEY ]] && [[ -v AWS_ID ]] && [[ -v DOMAIN ]] && [[ -v FIRST_NAME ]] && [[ -v LAST_NAME ]] && [[ -v EMAIL ]] && [[ -v PROJECT_NAME ]]); then
     printf "Error. Some arguments are missing. Please enter all required arguments"
     printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
-    printf "-i|--awsid       AWS ID  (https://github.com/MaayanLab/datacrossways#create-temporary-aws-user)"
-    printf "-k|--awskey      AWS Key  (https://github.com/MaayanLab/datacrossways#create-temporary-aws-user)"
-    printf "-d|--domain      Domain (datacrossways.org)"
     printf "-p|--project     Project name"
-    printf "-e|--email       Admin email (Gmail account e.g. user@gmail.com)"
+    printf "-d|--domain      Domain (datacrossways.org)"
+    printf "-r|--awsregion       AWS region (e.g. us-east-1, us-west-1, ...)"
+    printf "-e|--email       Admin email matching Google or Orcid account (e.g. user@gmail.com)"
     printf "-f|--firstname   Admin firstname"
     printf "-l|--lastname    Admin lastname"
     printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -

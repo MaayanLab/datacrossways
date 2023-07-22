@@ -6,6 +6,8 @@ read -p 'Domain: ' domain
 echo What is the email address for Let\'s Encrypt notifications \(e.g. myemail@admin.org\)?
 read -p 'E-mail: ' email
 
+y | ./stop.sh
+
 export BASE_URL=$domain
 export LETS_ENCRYPT_EMAIL=$email
 

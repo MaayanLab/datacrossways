@@ -16,9 +16,14 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 console = Console()
 
-u_key = sys.argv[1]
-u_secret = sys.argv[2]
-project_name = sys.argv[3]+"-dxw"
+if len(sys.argv) < 2:
+    console.print("Usage: python script.py <project_name> [aws_region]", style="bold red")
+    sys.exit(1)
+
+project_name = sys.argv[1] + "-dxw"
+
+# Set the AWS region from the command-line argument or use default "us-east-1"
+aws_region = sys.argv[2] if len(sys.argv) >= 3 else "us-east-1"
 
 path = os.path.dirname(__file__)
 
@@ -35,27 +40,20 @@ else:
     print("Start creating resources...")
     aws_resources = {}
 
-    iam = boto3.client("iam",
-                    aws_access_key_id=u_key,
-                    aws_secret_access_key=u_secret)
+    iam = boto3.client("iam")
 
-    s3 = boto3.client("s3",
-                    aws_access_key_id=u_key,
-                    aws_secret_access_key=u_secret)
+    s3 = boto3.client("s3")
 
-    rds = boto3.client('rds',
-			region_name='us-east-1',
-            aws_access_key_id=u_key,
-            aws_secret_access_key=u_secret)
+    rds = boto3.client('rds', region_name=aws_region)
     
     def colored(r, g, b, text):
         return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
 
-    def list_users(iam):
-        paginator = iam.get_paginator('list_users')
-        for response in paginator.paginate():
-            for user in response["Users"]:
-                print(f"Username: {user['UserName']}, Arn: {user['Arn']}")
+def list_users(iam):
+    paginator = iam.get_paginator('list_users')
+    for response in paginator.paginate():
+        for user in response["Users"]:
+            print(f"Username: {user['UserName']}, Arn: {user['Arn']}")
 
     def create_policy(iam, project_name, path):
         f = open(path+"/bucket_policy_template.json")
@@ -69,9 +67,22 @@ else:
         )
         return(response)
 
-    def create_bucket(s3, project_name):
+    def create_bucket(s3, project_name, region="us-east-1"):
         bucket_name = (project_name+"-vault").replace("_", "-").lower()
-        return(s3.create_bucket(Bucket=bucket_name))
+        bucket_configuration = {
+            'LocationConstraint': region,  # Set to the region where the bucket should be created
+            'Encryption': {
+                'ServerSideEncryptionConfiguration': [
+                    {
+                        'BucketKeyEnabled': True,
+                        'ServerSideEncryptionByDefault': {
+                            'SSEAlgorithm': 'AES256'
+                        }
+                    }
+                ]
+            }
+        }
+        return(s3.create_bucket(Bucket=bucket_name, CreateBucketConfiguration=bucket_configuration))
 
     def get_bucket_region(s3, project_name):
         response = s3.get_bucket_location(Bucket=project_name+"-vault")        
@@ -169,7 +180,7 @@ else:
         console.print(" :x: user access key could not be created", style="bold red")
 
     try:
-        bucket = create_bucket(s3, project_name)
+        bucket = create_bucket(s3, project_name, aws_region)
         region = get_bucket_region(s3, project_name)
         bucket["Region"] = region
         aws_resources["bucket"] = bucket
