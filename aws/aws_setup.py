@@ -49,12 +49,12 @@ else:
     def colored(r, g, b, text):
         return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
 
-def list_users(iam):
-    paginator = iam.get_paginator('list_users')
-    for response in paginator.paginate():
-        for user in response["Users"]:
-            print(f"Username: {user['UserName']}, Arn: {user['Arn']}")
-
+    def list_users(iam):
+        paginator = iam.get_paginator('list_users')
+        for response in paginator.paginate():
+            for user in response["Users"]:
+                print(f"Username: {user['UserName']}, Arn: {user['Arn']}")
+    
     def create_policy(iam, project_name, path):
         f = open(path+"/bucket_policy_template.json")
         policy = json.load(f)
