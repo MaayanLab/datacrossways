@@ -95,7 +95,6 @@ Log into the AWS dashboard at https://aws.amazon.com.
     -  Under UNIX connect to instance with `ssh -i pathtokey/key.pem ubuntu@ipaddress`
     -  Windows users: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
 
-
 ### Create AWS resources
 
 Now it is time to create the AWS resources. They encompass a designated user to control S3 access, a S3 bucket with specific configurations, as well as a RDS database to store metadata on stored data objects.
