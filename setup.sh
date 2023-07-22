@@ -50,7 +50,7 @@ else
     while [[ $# -gt 0 ]]; do
         case $1 in
             -r|--awsregion)
-            AWS_ID="$2"
+            AWS_REGION="$2"
             shift # past argument
             shift # past value
             ;;
@@ -86,7 +86,7 @@ else
     done
 fi
 
-if !( [[ -v AWS_KEY ]] && [[ -v AWS_ID ]] && [[ -v DOMAIN ]] && [[ -v FIRST_NAME ]] && [[ -v LAST_NAME ]] && [[ -v EMAIL ]] && [[ -v PROJECT_NAME ]]); then
+if !( [[ -v AWS_REGION ]] && [[ -v DOMAIN ]] && [[ -v FIRST_NAME ]] && [[ -v LAST_NAME ]] && [[ -v EMAIL ]] && [[ -v PROJECT_NAME ]]); then
     printf "Error. Some arguments are missing. Please enter all required arguments"
     printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
     printf "-p|--project     Project name"
@@ -124,7 +124,7 @@ fi
 sudo apt-get install python3-pip -y
 pip3 install -r requirements.txt
 
-python3 aws/aws_setup.py $AWS_ID $AWS_KEY $PROJECT_NAME
+python3 aws/aws_setup.py $PROJECT_NAME $AWS_REGION
 python3 create_config.py $PROJECT_NAME $DOMAIN
 
 rm -rf datacrossways_api
