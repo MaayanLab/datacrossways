@@ -54,7 +54,7 @@ else:
         for response in paginator.paginate():
             for user in response["Users"]:
                 print(f"Username: {user['UserName']}, Arn: {user['Arn']}")
-    
+
     def create_policy(iam, project_name, path):
         f = open(path+"/bucket_policy_template.json")
         policy = json.load(f)
@@ -71,16 +71,6 @@ else:
         bucket_name = (project_name+"-vault").replace("_", "-").lower()
         bucket_configuration = {
             'LocationConstraint': region,  # Set to the region where the bucket should be created
-            'Encryption': {
-                'ServerSideEncryptionConfiguration': [
-                    {
-                        'BucketKeyEnabled': True,
-                        'ServerSideEncryptionByDefault': {
-                            'SSEAlgorithm': 'AES256'
-                        }
-                    }
-                ]
-            }
         }
         return(s3.create_bucket(Bucket=bucket_name, CreateBucketConfiguration=bucket_configuration))
 
