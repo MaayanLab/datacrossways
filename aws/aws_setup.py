@@ -189,14 +189,14 @@ else:
         console.print(" :x: user policy could not be attached to user", style="bold red")
 
     try:
-        attach_cors(s3, aws_resources["bucket"]["Location"].replace("/",""), path)
+        attach_cors(s3, project_name+"-vault", path)
         console.print(" :thumbs_up: CORS rules attached to S3 bucket", style="green")
     except Exception as err:
         console.print(" :x: CORS rules could not be attached to S3 bucket", style="bold red")
         print(err.args[0])
 
     try:
-        block_bucket(s3, aws_resources["bucket"]["Location"].replace("/",""))
+        block_bucket(s3, project_name+"-vault")
         console.print(" :thumbs_up: S3 bucket privacy enhanced", style="green")
     except Exception as err:
         console.print(" :x: S3 bucket privacy could not be enhanced", style="bold red")
