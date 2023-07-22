@@ -130,7 +130,7 @@ else:
             DBInstanceClass='db.t3.micro',
             DBInstanceIdentifier=project_name+"-db",
             Engine='Postgres',
-            EngineVersion='13.4',
+            EngineVersion='15.3',
             MasterUserPassword=db_password,
             MasterUsername=db_user.replace("-", "_"))
         response["DBInstance"]["MasterUserPassword"] = db_password
