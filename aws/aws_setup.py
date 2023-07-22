@@ -42,7 +42,7 @@ else:
 
     iam = boto3.client("iam")
 
-    s3 = boto3.client("s3")
+    s3 = boto3.client("s3", region_name=aws_region)
 
     rds = boto3.client('rds', region_name=aws_region)
     
@@ -69,11 +69,14 @@ else:
 
     def create_bucket(s3, project_name, region="us-east-1"):
         bucket_name = (project_name+"-vault").replace("_", "-").lower()
-        bucket_configuration = {
-            'LocationConstraint': region,  # Set to the region where the bucket should be created
-        }
-        return(s3.create_bucket(Bucket=bucket_name, CreateBucketConfiguration=bucket_configuration))
-
+        if region != "us-east-1":
+            bucket_configuration = {
+                'LocationConstraint': region,  # Set to the region where the bucket should be created
+            }
+            return(s3.create_bucket(Bucket=bucket_name, CreateBucketConfiguration=bucket_configuration))
+        else:
+            return(s3.create_bucket(Bucket=bucket_name))
+        
     def get_bucket_region(s3, project_name):
         response = s3.get_bucket_location(Bucket=project_name+"-vault")        
         region = "us-east-1"
