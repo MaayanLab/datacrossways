@@ -10,6 +10,7 @@ import string
 import time
 from rich.console import Console
 import traceback
+import requests
 
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
@@ -39,8 +40,11 @@ else:
     
     print("Start creating resources...")
     aws_resources = {}
+    aws_resources["aws_region"] = aws_region
 
     iam = boto3.client("iam")
+
+    ec2 = boto3.client("ec2", region_name=aws_region)
 
     s3 = boto3.client("s3", region_name=aws_region)
 
@@ -76,7 +80,7 @@ else:
             return(s3.create_bucket(Bucket=bucket_name, CreateBucketConfiguration=bucket_configuration))
         else:
             return(s3.create_bucket(Bucket=bucket_name))
-        
+    
     def get_bucket_region(s3, project_name):
         response = s3.get_bucket_location(Bucket=project_name+"-vault")        
         region = "us-east-1"
@@ -122,7 +126,7 @@ else:
                 )
         return(response)
 
-    def create_database(rds, project_name):
+    def create_database(rds, project_name, security_group_id):
         db_user = project_name+"-"+''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(8))
         db_password = ''.join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(50))
         response = rds.create_db_instance(
@@ -132,12 +136,12 @@ else:
             Engine='Postgres',
             EngineVersion='15.3',
             MasterUserPassword=db_password,
-            MasterUsername=db_user.replace("-", "_"))
+            MasterUsername=db_user.replace("-", "_"),
+            VpcSecurityGroupIds=[security_group_id])
         response["DBInstance"]["MasterUserPassword"] = db_password
         print("     - RDS database instance created")
         with console.status(" - waiting for RDS instance to complete initialization ... ", spinner="monkey"):
             time.sleep(20)
-            
             for i in range(100):
                 if i > 99:
                     raise Exception("RDS instance timed out during initialization.")
@@ -148,6 +152,30 @@ else:
                     response["DBInstance"]["Endpoint"]={"Address": dbhost}
                     break
         return(response)
+
+    def get_public_ip():
+        response = requests.get('https://api.ipify.org')
+        return response.text
+
+    def create_security_group(ec2, group_name, description):
+        ip = get_public_ip()
+        response = ec2.create_security_group(
+            GroupName=group_name,
+            Description=description
+        )
+        security_group_id = response['GroupId']
+        print('Security Group Created %s in vpc %s.' % (security_group_id, ip))
+        data = ec2.authorize_security_group_ingress(
+            GroupId=security_group_id,
+            IpPermissions=[
+                {'IpProtocol': 'tcp',
+                'FromPort': 5432,
+                'ToPort': 5432,
+                'IpRanges': [{'CidrIp': ip+"/32", 'Description': 'postgresql access'}]}
+            ]
+        )
+        return security_group_id
+
 
     try:
         user = create_user(iam, project_name)
@@ -200,6 +228,14 @@ else:
         console.print(" :thumbs_up: S3 bucket privacy enhanced", style="green")
     except Exception as err:
         console.print(" :x: S3 bucket privacy could not be enhanced", style="bold red")
+        print(err.args[0])
+    
+    try:
+        security_group = create_security_group(ec2, project_name, project_name)
+        aws_resources["security_group"] = security_group
+        console.print(" :thumbs_up: Database firewall configured", style="green")
+    except Exception as err:
+        console.print(" :x: Database firewall configuration failed", style="bold red")
         print(err.args[0])
     
     try:

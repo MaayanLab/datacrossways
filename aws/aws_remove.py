@@ -8,9 +8,7 @@ import os
 from rich.console import Console
 import traceback
 
-u_key = sys.argv[1]
-u_secret = sys.argv[2]
-project_name = sys.argv[3]
+project_name = sys.argv[1]
 
 console = Console()
 
@@ -51,7 +49,7 @@ def delete_database(rds, aws_del):
         SkipFinalSnapshot=True,
         DeleteAutomatedBackups=True)
 
-def delete_all(iam, s3, rds, aws_del):
+def delete_all(iam, ec2, s3, rds, aws_del):
     counter = 0
     error_counter = 0
     try:
@@ -113,6 +111,14 @@ def delete_all(iam, s3, rds, aws_del):
         print(err.args[0]) 
         error_counter = error_counter+1
     
+    try:
+        ec2.delete_security_group()
+        console.print(" :thumbs_up: Deleted security group.", style="green")
+    except Exception as err:
+        console.print(" :x: Security group could not be deleted", style="bold red")
+        print(err.args[0]) 
+        error_counter = error_counter+1
+    
     print("\nScript completed")
     if error_counter > 0:
         console.print("The script encountered "+str(error_counter)+" errors. Some of the resources might not have been removed or have been removed previously.", style="red")
@@ -139,14 +145,8 @@ if val == "Y":
         for i in trange(100, desc="Countdown ", bar_format="{desc:<5} |{bar}", leave=False):
             time.sleep(0.02)
         print("Deleting resources.\n")
-        iam = boto3.client("iam",
-                aws_access_key_id=u_key,
-                aws_secret_access_key=u_secret)
-        s3 = boto3.client("s3",
-                aws_access_key_id=u_key,
-                aws_secret_access_key=u_secret)
-        rds = boto3.client("rds",
-                region_name='us-east-1',
-                aws_access_key_id=u_key,
-                aws_secret_access_key=u_secret)       
-        delete_all(iam, s3, rds, aws_del)
+        iam = boto3.client("iam", region_name=aws_del["aws_region"])
+        ec2 = boto3.client("ec2", region_name=aws_del["aws_region"])
+        s3 = boto3.client("s3", region_name=aws_del["aws_region"])
+        rds = boto3.client("rds", region_name=aws_del["aws_region"])       
+        delete_all(iam, ec2, s3, rds, aws_del)
