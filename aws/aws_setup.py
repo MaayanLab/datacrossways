@@ -239,7 +239,7 @@ else:
         print(err.args[0])
     
     try:
-        response = create_database(rds, project_name)
+        response = create_database(rds, project_name, security_group)
         aws_resources["database"] = response["DBInstance"]
         db = psycopg2.connect(
                     user=aws_resources["database"]["MasterUsername"], 
