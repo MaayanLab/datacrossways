@@ -129,7 +129,7 @@ Warning: When this is run all uploaded data is deleted permanently!
 
 To remove resources created before run the following command and follow onscreen instructions:
 ```sh
-python3 ~/datacrossways/aws/aws_remove.py <aws_id> <aws_key> <project_name>
+python3 ~/datacrossways/aws/aws_remove.py <project_name>
 ```
 This script relies in a config file `~/datacommons/secrets/aws_config_<project_name>-dxw.json` that is automatically generated when running `aws_setup.py`. The database will take more than a minute to fully shut down completely, the status can be seen in the RDS section of the AWS console. While the status is ![image](https://user-images.githubusercontent.com/32603869/181263946-5e91469d-88f8-49f5-b8c1-085b5e0947f5.png)
  the database name can not be reused.
@@ -154,6 +154,11 @@ In case of an error (e.g. the aws_config_<project_name>-dxw.json) gets lost the 
     - Assuming the database was generated in `us-east-1`, go to https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1
     - Search for `dxw` and select `<project_name>-dxw-vault`
     - First select `Empty` and then `Delete`
+ - Security group
+    -  Assuming the database was generated in `us-east-1`, go to https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#SecurityGroups
+    -  Search for `<project_name>` and select `<project_name>-dxw`
+    -  Under actions select `Delete security groups`
+    -  The security group can only be deleted once the RDS instance is completely shut down. This process can take more than a minute.
 
 ## Local deployment
 The `backend API` and `React fronend` can be deployed on a local computer, mainly for development purposes. They still require the AWS resources like the `database` and `S3 bucket` configuration. The setup is described in details [here](#aws-resource-configuration).
