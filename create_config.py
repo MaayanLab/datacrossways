@@ -29,24 +29,24 @@ for file in listdir(path+"/secrets"):
 
 conf = {}
 try:
-    if len(google_oauth) > 0:
-        conf["oauth"] = {}
-        if "web" in google_oauth:
-            conf["oauth"]["google"] = google_oauth["web"]
-        conf["aws"] = {}
-        conf["aws"]["aws_id"] = aws_creds["user"]["key"]["AccessKeyId"]
-        conf["aws"]["aws_key"] = aws_creds["user"]["key"]["SecretAccessKey"]
-        conf["aws"]["bucket"] = aws_creds["bucket"]["Name"]
-        conf["aws"]["region"] = aws_creds["bucket"]["Region"]
-        conf["database"] = {}
-        conf["database"]["user"] = aws_creds["database"]["MasterUsername"]
-        conf["database"]["pass"] = aws_creds["database"]["MasterUserPassword"]
-        conf["database"]["server"] = aws_creds["database"]["Endpoint"]["Address"]
-        conf["database"]["port"] = "5432"
-        conf["database"]["name"] = "datacrossways"
-        conf["api"] = {"url": "http://api:5000/"}
-        conf["frontend"] = {"url": "http://frontend:3000/"}
-        conf["redirect"] = {"url": "https://"+DOMAIN}
+    conf["oauth"] = {}
+    if "web" in google_oauth:
+        conf["oauth"]["google"] = google_oauth["web"]
+    conf["aws"] = {}
+    conf["aws"]["aws_id"] = aws_creds["user"]["key"]["AccessKeyId"]
+    conf["aws"]["aws_key"] = aws_creds["user"]["key"]["SecretAccessKey"]
+    conf["aws"]["bucket"] = aws_creds["bucket"]["Name"]
+    conf["aws"]["region"] = aws_creds["bucket"]["Region"]
+    conf["database"] = {}
+    conf["database"]["user"] = aws_creds["database"]["MasterUsername"]
+    conf["database"]["pass"] = aws_creds["database"]["MasterUserPassword"]
+    conf["database"]["server"] = aws_creds["database"]["Endpoint"]["Address"]
+    conf["database"]["port"] = "5432"
+    conf["database"]["name"] = "datacrossways"
+    conf["api"] = {"url": "http://api:5000/"}
+    conf["frontend"] = {"url": "http://frontend:3000/"}
+    conf["redirect"] = {"url": "https://"+DOMAIN}
+    conf["development"] = False
 except Exception:
     print("Failed to build conf.json")
     traceback.print_exc()
