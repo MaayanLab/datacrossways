@@ -112,7 +112,7 @@ def delete_all(iam, ec2, s3, rds, aws_del):
         error_counter = error_counter+1
     
     try:
-        ec2.delete_security_group(groupId=aws_del["security_group"])
+        ec2.delete_security_group(GroupId=aws_del["security_group"])
         console.print(" :thumbs_up: Deleted security group.", style="green")
     except Exception as err:
         console.print(" :x: Security group could not be deleted", style="bold red")
