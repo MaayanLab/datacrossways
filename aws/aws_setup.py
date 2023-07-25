@@ -241,11 +241,14 @@ else:
     try:
         response = create_database(rds, project_name, security_group)
         aws_resources["database"] = response["DBInstance"]
+        aws_resources["database"]["user"] = aws_resources["database"]["MasterUsername"]
+        aws_resources["database"]["pass"] = aws_resources["database"]["MasterUserPassword"]
+        aws_resources["database"]["server"] = aws_resources["database"]["Endpoint"]["Address"]
         db = psycopg2.connect(
-                    user=aws_resources["database"]["MasterUsername"], 
-                    password=aws_resources["database"]["MasterUserPassword"], 
+                    user=aws_resources["database"]["user"], 
+                    password=aws_resources["database"]["pass"], 
                     dbname="postgres", 
-                    host=aws_resources["database"]["Endpoint"]["Address"])
+                    host=aws_resources["database"]["server"])
         
         db.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         db.cursor().execute("CREATE DATABASE datacrossways")
