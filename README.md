@@ -78,6 +78,8 @@ When all is done the user should look something like this:
 
 Depending on the deployment this instance can be used to host the Datacrossways API and frontend, or can only be used to configure the AWS resources (in case of running the API and frontend locally for development). A small, cost efficient instance should be sufficient for most use cases (`t2.small`). Data traffic bypasses the host server, so it does not require significant harddisc space. It is recommended to have at least `20GB` to build all docker images when Datacrossways is deployed on this host.
 
+Assuming you want to create resources in region `us-east-1` you can first create an `Elastic IP address`. These IP addresses will remain reserved, even if you should terminate the AWS instance. This is recommended to make sure the domain will be properly linked to your datacrossways instance. Navigate to https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-2#Addresses: and select `Allocate Elastic IP address`. Then select `Allocate`. Adding a tag is optional.
+
 Log into the AWS dashboard at https://aws.amazon.com. 
  - Navigate to EC2 dashboard
     - Search for service EC2 which should open the EC2 dashboard
@@ -92,6 +94,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     -  Optional: Under `Network settings` restrict SSH traffic to `My IP`
     -  Under `Advanced details` select IAM instance profile and select the role created 
     -  Select `Launch Instance` button
+    -  Assuming `us-east-1` navigate to `https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running` select newly created instance, select `Actions`, `Networking`, `Manage IP addresses` and attach `Elastic IP`
     -  Select newly created instance in table and copy `Public IPv4 address`
     -  Under UNIX connect to instance with `ssh -i pathtokey/key.pem ubuntu@ipaddress`
     -  Windows users: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
@@ -167,9 +170,11 @@ The `backend API` and `React fronend` can be deployed on a local computer, mainl
 
 ## Cloud deployment
 
+Most of the work is done when the AWS resources were created. The remaining steps are launching the API and frontend using docker-compose.
+
 ### Deploy Datacrossways for development
 
-For development the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user.
+For development the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user. To modify the behavior edit `~datacrossways/secrets/config.json` and set the field `development` to be either `true` or `false`.
 
 #### Start Services
 
@@ -194,13 +199,9 @@ docker compose down
 
 And then remove all the cloud resources following the steps described [here](#remove-aws-resources).
 
-### Deploy Datacrossways for production
+### Make datacrossways accessible via domain
 
-
-
-<img width="140" alt="under construction" src="https://user-images.githubusercontent.com/32603869/176712238-a90f801e-6f65-42fc-851f-31a5cff3c6cd.png">
-
-This section is currently being worked on.
+First, you need to register a domain name that is available. There are several ways of doing this. In this example, we will go through the process using an AWS service `Route53`. 
 
 ---
 
