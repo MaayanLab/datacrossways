@@ -134,7 +134,7 @@ cd datacrossways_api
 pip install -r requirements.txt
 
 mkdir -p secrets
-cp ../secrets/aws_config_"$PROJECT_NAME"-dxw.json secrets/config.json
+cp ../secrets/config.json secrets/config.json
 python3 createdb.py $EMAIL $FIRST_NAME $LAST_NAME
 
 cd ..
