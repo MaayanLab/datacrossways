@@ -95,7 +95,7 @@ def delete_all(iam, ec2, s3, rds, aws_del):
         error_counter = error_counter+1
     
     try:
-        response = delete_bucket_completely(s3, aws_del["bucket"]["Location"].replace("/",""))
+        response = delete_bucket_completely(s3, aws_del["bucket"]["Name"])
         counter = counter+1
         console.print(" :thumbs_up: S3 bucket deleted", style="green")
     except Exception as err:

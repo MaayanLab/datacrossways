@@ -203,6 +203,7 @@ else:
     try:
         bucket = create_bucket(s3, project_name, aws_region)
         bucket["Region"] = aws_region
+        bucket["Name"] = project_name+"-vault"
         aws_resources["bucket"] = bucket
         console.print(" :thumbs_up: S3 bucket created", style="green")
     except Exception as err:
