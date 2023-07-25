@@ -59,6 +59,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - select AWS service and use case EC2
     - Select `Next` button
  - Attach Permissions
+    - In `filter policies` type `EC2FullAccess` press `enter` and check box
     - In `filter policies` type `IAMFullAccess` press `enter` and check box
     - In `filter policies` type `AmazonS3FullAccess` press `enter` and check box
     - In `filter policies` type `AmazonRDSFullAccess` press `enter` and check box
@@ -103,15 +104,21 @@ After creating a temporary user and an AWS instance log into the server. From th
 ```sh
 git clone https://github.com/MaayanLab/datacrossways.git
 ```
-Go into the `datacrossways` folder in the home directory and run the command below. It will ask for some required information.
-```sh
-~/datacrossways/setup.sh
-```
-Now you can run the aws configuration script which will create the resources. To run it requires the temp user credentials and a project name. Project names should not contain `commas`, `periods`, `underscores`, or `spaces`. Since the `bucket name` is created from the project name there can be a conflict. The bucket name is `<project_name>-dxw-vault`. Since bucket names are globally unique this might lead to errors. Run the following command:
+
+Now assuming you have generated and downloaded the OAuth information described in section above (`GoogleOAuth configuration`) copy the json into a folder named `datacrossways/secrets`. You can create a new file with the information downloaded from the Google Developer Console. The file can be named any way you like. The code below is an example how you can create this file:
 
 ```sh
-python3 ~/datacrossways/aws/aws_setup.py <aws_id> <aws_key> <project_name>
+mkdir datacrossways/secrets
+cd datacrossways/secrets
+vi datacrossways/secrets/google_oauth.json
 ```
+
+Go into the `datacrossways` folder in the home directory and run the command below. It will ask for some required information.
+```sh
+cd ~
+~/datacrossways/setup.sh
+```
+Now you can run the aws configuration script which will create the resources. To run it requires the temp user credentials and a project name. Project names should not contain `commas`, `periods`, `underscores`, or `spaces`. Since the `bucket name` is created from the project name there can be a conflict. The bucket name is `<project_name>-dxw-vault`. Since bucket names are globally unique this might lead to errors. So make sure the project name is unique to avoid conflicts with existing resources.
 
 ![image](https://user-images.githubusercontent.com/32603869/181282184-4bc81bb8-4f00-417e-99e6-dc8db43a1b1e.png)
 
@@ -157,7 +164,7 @@ The `backend API` and `React fronend` can be deployed on a local computer, mainl
 
 ### Deploy Datacrossways for development
 
-For development the Authentification might be problematic, especially when the font end is developed on a different server. For this reason there is a separate way to deploy the API. The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user.
+For development the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user.
 
 #### Start Services
 
