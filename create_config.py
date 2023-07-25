@@ -31,11 +31,12 @@ conf = {}
 try:
     if len(google_oauth) > 0:
         conf["oauth"] = {}
-        conf["oauth"]["google"] = google_oauth["web"]
+        if "web" in google_oauth:
+            conf["oauth"]["google"] = google_oauth["web"]
         conf["aws"] = {}
         conf["aws"]["aws_id"] = aws_creds["user"]["key"]["AccessKeyId"]
         conf["aws"]["aws_key"] = aws_creds["user"]["key"]["SecretAccessKey"]
-        conf["aws"]["bucket"] = aws_creds["bucket"]["Location"].replace("/", "")
+        conf["aws"]["bucket"] = aws_creds["bucket"]["Name"]
         conf["aws"]["region"] = aws_creds["bucket"]["Region"]
         conf["database"] = {}
         conf["database"]["user"] = aws_creds["database"]["MasterUsername"]
