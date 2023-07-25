@@ -133,7 +133,7 @@ git clone https://github.com/MaayanLab/datacrossways_api.git
 cd datacrossways_api
 pip install -r requirements.txt
 
-cp -r ../secrets/ secrets
+cp -r ../secrets/aws_config_"$PROJECT_NAME"-dxw.json secrets/config.json
 python3 createdb.py $EMAIL $FIRST_NAME $LAST_NAME
 
 cd ..
@@ -141,4 +141,5 @@ rm -rf datacrossways_api
 
 cd $OLD_DIR
 
-echo Setup complete! Run \'./start.sh\' to deploy Datacrossways
+echo Setup complete! Add additional information to the secrets folder complete configuration and run the create_config.py script. 
+echo Run \'./start.sh\' to deploy Datacrossways

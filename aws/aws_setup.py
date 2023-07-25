@@ -202,8 +202,7 @@ else:
 
     try:
         bucket = create_bucket(s3, project_name, aws_region)
-        region = get_bucket_region(s3, project_name)
-        bucket["Region"] = region
+        bucket["Region"] = aws_region
         aws_resources["bucket"] = bucket
         console.print(" :thumbs_up: S3 bucket created", style="green")
     except Exception as err:
