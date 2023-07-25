@@ -133,7 +133,8 @@ git clone https://github.com/MaayanLab/datacrossways_api.git
 cd datacrossways_api
 pip install -r requirements.txt
 
-cp -r ../secrets/aws_config_"$PROJECT_NAME"-dxw.json secrets/config.json
+mkdir -p secrets
+cp ../secrets/aws_config_"$PROJECT_NAME"-dxw.json secrets/config.json
 python3 createdb.py $EMAIL $FIRST_NAME $LAST_NAME
 
 cd ..
