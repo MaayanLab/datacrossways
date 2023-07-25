@@ -201,7 +201,7 @@ And then remove all the cloud resources following the steps described [here](#re
 
 ### Make datacrossways accessible via domain
 
-First, you need to register a domain name that is available. There are several ways of doing this. In this example, we will go through the process using an AWS service `Route53`. 
+First, you need to register a domain name that is available. There are several ways of doing this. In this example, we will go through the process using an AWS service `Route53`. First, register a new domain in `Route53` under `Hosted zones`. Now you need to link the IP address of the AWS instance to the zone. Select your new zone/domain and select `Create record`. Select `A-Routes ...` as the record type and paste the IP address into the value field. Then select `Create records`. Now your instance should be linked to the domain.
 
 ---
 
