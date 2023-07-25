@@ -244,6 +244,8 @@ else:
         aws_resources["database"]["user"] = aws_resources["database"]["MasterUsername"]
         aws_resources["database"]["pass"] = aws_resources["database"]["MasterUserPassword"]
         aws_resources["database"]["server"] = aws_resources["database"]["Endpoint"]["Address"]
+        aws_resources["database"]["port"] = "5432"
+        aws_resources["database"]["name"] = "datacrossways"
         db = psycopg2.connect(
                     user=aws_resources["database"]["user"], 
                     password=aws_resources["database"]["pass"], 
