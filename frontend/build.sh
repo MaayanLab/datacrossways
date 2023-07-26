@@ -1,11 +1,12 @@
-# get rid of old stuff
 docker rmi -f $(docker images | grep "^<none>" | awk "{print $3}")
 docker rm $(docker ps -q -f status=exited)
 
-docker kill datacrosswayui
-docker rm datacrosswayui
+docker kill datacrosswayfrontend
+docker rm datacrosswayfrontend
 
-docker build --no-cache=true -f Dockerfile -t maayanlab/datacrosswayui:0.0.1 .
+../stop.sh
 
-docker push maayanlab/datacrosswayui:0.0.1
+docker rmi datacrossways_frontend
+#docker image prune -a -f
 
+docker build --no-cache=true -f Dockerfile -t datacrossways_frontend .
