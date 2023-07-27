@@ -279,7 +279,7 @@ The API should now be up and running
         "bucket_name": "unique_bucket_name",
         "region": "us-east-1"
     },
-    "db":{
+    "database":{
         "user": "xxxxxxx",
         "pass": "xxxxxxxxxxxxx",
         "server": "xxxxxxxxxx.xxxxx.rds.amazonaws.com",
