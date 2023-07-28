@@ -77,7 +77,8 @@ Log into the AWS dashboard at https://aws.amazon.com.
 
 When all is done the user should look something like this:
 
-<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/32603869/bbb3be6f-362d-49c3-9c92-d6d179cc3ae8.png" width="1060"  alt="Configuration role">
+![role_aws](https://github.com/MaayanLab/datacrossways/assets/32603869/f19a0784-85ed-4898-9112-467279df1acb)
+
 
 ### Create EC2 instance
 
