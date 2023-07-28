@@ -30,25 +30,31 @@ The API accesses a Postgres database that persists information. The API needs ac
 
 ---
 
-## AWS/cloud configuration
+## Before you start
 
-Datacrossways requires several AWS resources to be configured before the datacrossways API and frontend can run. While most of the configuration is automated there are some initial steps that need to be performed manually. The first step is to create a `temporary user` with credentials to create the final `user` credentials and `S3 bucket`, as well as a `RDS database`.
+Decide on a domain (e.g. datacrossways.org) and get a fixed/elastic IP address. These should be the first steps to take. Then follow all other instructions below for an easy setup of a Datacrossways instance. The whole process should not take too long. To register a new domain you can use the AWS `Route53` service. During the setup process, you will need to provide the domain name.
 
 ### GoogleOAuth configuration
 
-Datacrossways currently uses google OAuth to manage user logins. To set up credentials go to [https://console.cloud.google.com/apis/dashboard](https://console.cloud.google.com/apis/dashboard), where you need to have an account or you need to create a new one.
+Datacrossways currently uses Google OAuth to manage user logins. It is a prerequisite for initializing a Datacrossways instance. To set up credentials go to [https://console.cloud.google.com/apis/dashboard](https://console.cloud.google.com/apis/dashboard), where you need to have an account, or you need to create a new one.
 
 ![oauth1](https://user-images.githubusercontent.com/32603869/176709575-b5c6b8b2-7873-42c3-bb7d-bd899a2f8368.png)
 
-Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. Here we can set multiple domains (choose one you want to use and own) that we would like to use. The `localhost` entries allow us to run Datacrossways locally. The click `CREATE`.
+Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There, create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. Here we can set multiple domains (choose one you want to use and own) that we would like to use. The `localhost` entries allow us to run Datacrossways locally. Then select `CREATE`.
 
 <img width="425" alt="oauth2" src="https://user-images.githubusercontent.com/32603869/176705928-fd5adccc-31a4-4b04-8a3f-66085d888677.png">
 
-The newly created entry should now appear under `OAuth 2.0 Client IDs`. Click `Download OAuth client` and save `Your Client ID` and `Your Client Secret`.
+The newly created entry should appear under `OAuth 2.0 Client IDs`. Click `Download OAuth client` and save `Your Client ID` and `Your Client Secret`.
 
-### Create temporary AWS role
 
-This role will only be used to set up the required AWS resources. After the setup this role can be removed again.
+## AWS/cloud configuration
+
+Datacrossways requires several AWS resources to be configured before the datacrossways API and frontend can run. While most of the configuration is automated there are some initial steps that need to be performed manually. The first step is to create a `temporary role` with credentials to create the final `user` credentials and `S3 bucket`, as well as an `RDS database`.
+
+
+### Create a temporary AWS role
+
+This role will only be used to set up the required AWS resources. After the setup, this role can be removed again. Generally, this many user rights can be problematic and you want to limit the instance user rights once the resources are created.
 
 Log into the AWS dashboard at https://aws.amazon.com. 
  - Navigate to create role under IAM
@@ -76,9 +82,9 @@ When all is done the user should look something like this:
 
 ### Create EC2 instance
 
-Depending on the deployment this instance can be used to host the Datacrossways API and frontend, or can only be used to configure the AWS resources (in case of running the API and frontend locally for development). A small, cost efficient instance should be sufficient for most use cases (`t2.small`). Data traffic bypasses the host server, so it does not require significant harddisc space. It is recommended to have at least `20GB` to build all docker images when Datacrossways is deployed on this host.
+Depending on the deployment, this instance can be used to host the Datacrossways API and frontend, or can only be used to configure the AWS resources (in case of running the API and frontend locally for development). A small, cost-efficient instance should be sufficient for most use cases (`t2.small`). Data traffic bypasses the host server, so it does not require significant harddisc space. It is recommended to have at least `20GB` to build all docker images when Datacrossways is deployed on this host.
 
-Assuming you want to create resources in region `us-east-1` you can first create an `Elastic IP address`. These IP addresses will remain reserved, even if you should terminate the AWS instance. This is recommended to make sure the domain will be properly linked to your datacrossways instance. Navigate to https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-2#Addresses: and select `Allocate Elastic IP address`. Then select `Allocate`. Adding a tag is optional.
+Assuming you want to create resources in region `us-east-1` you can first create an `Elastic IP address`. These IP addresses will remain reserved, even if you should terminate the AWS instance. This is recommended to make sure the domain will be properly linked to your datacrossways instance. Navigate to https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-1#Addresses: and select `Allocate Elastic IP address`. Then select `Allocate`. Adding a tag is optional.
 
 Log into the AWS dashboard at https://aws.amazon.com. 
  - Navigate to EC2 dashboard
@@ -86,13 +92,15 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - Select `Launch Instance` button, click `Launch Instance`
  - Configure Instance
     - Under `Quick Start` select `Ubuntu` (as time of writing Ubuntu Server, 22.04 LTS (HMV), SSD Volume Type)
-    - Under `Instance` type select desired instance (at least `t2.small` @0.023/h or ~ $17/month), other good options are the other `t2` burstable instances.
+    - Under `Instance` type select desired instance (at least `t2.small` @0.023/h or ~ $17/month), other good options are the other `t2/t3` burstable instances.
           - Pricing overview https://aws.amazon.com/ec2/pricing/on-demand/
     - Under `Key pair` either use an existing `key pair` or generate a new one
-          - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file are used to log into the instance once it is created. Under UNIX the key should be placed into folder with limited user rights (chmod 700) and the key (chmod 600) 
+          - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file is used to log into the instance once it is created. Under UNIX the key should be placed into a folder with limited user rights (chmod 700) and the key (chmod 600) 
     -  Under `Configure Storage` set to at least `20GB`. Space is mainly needed to build Docker images. If disk space is too small it can result in some minor issues.
     -  Optional: Under `Network settings` restrict SSH traffic to `My IP`
-    -  Under `Advanced details` select IAM instance profile and select the role created 
+    -  Select `Allow HTTPS traffic from internet`
+    -  Select `Allow HTTP traffic from internet`
+    -  Under `Advanced details` select IAM instance profile and select the role created before
     -  Select `Launch Instance` button
     -  Assuming `us-east-1` navigate to `https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Instances:instanceState=running` select newly created instance, select `Actions`, `Networking`, `Manage IP addresses` and attach `Elastic IP`
     -  Select newly created instance in table and copy `Public IPv4 address`
@@ -101,24 +109,22 @@ Log into the AWS dashboard at https://aws.amazon.com.
 
 ### Create AWS resources
 
-Now it is time to create the AWS resources. They encompass a designated user to control S3 access, a S3 bucket with specific configurations, as well as a RDS database to store metadata on stored data objects.
+Now it is time to create the AWS resources. They encompass a designated user to control S3 access, a S3 bucket with specific configurations, as well as an RDS database to store metadata on stored data objects.
 
 After creating a temporary user and an AWS instance log into the server. From there get `Datacrossways` using git.
 ```sh
 git clone https://github.com/MaayanLab/datacrossways.git
 ```
 
-Now assuming you have generated and downloaded the OAuth information described in section above (`GoogleOAuth configuration`) copy the json into a folder named `datacrossways/secrets`. You can create a new file with the information downloaded from the Google Developer Console. The file can be named any way you like. The code below is an example how you can create this file:
+Now assuming you have generated and downloaded the OAuth information described in section above (`GoogleOAuth configuration`) copy the json into a folder named `~/datacrossways/secrets`. You can create a new file with the information downloaded from the Google Developer Console. The file can be named any way you like. The code below is an example how you can create this file:
 
 ```sh
-mkdir datacrossways/secrets
-cd datacrossways/secrets
-vi datacrossways/secrets/google_oauth.json
+mkdir ~/datacrossways/secrets
+vi ~/datacrossways/secrets/google_oauth.json
 ```
 
 Go into the `datacrossways` folder in the home directory and run the command below. It will ask for some required information.
 ```sh
-cd ~
 ~/datacrossways/setup.sh
 ```
 Now you can run the aws configuration script which will create the resources. To run it requires the temp user credentials and a project name. Project names should not contain `commas`, `periods`, `underscores`, or `spaces`. Since the `bucket name` is created from the project name there can be a conflict. The bucket name is `<project_name>-dxw-vault`. Since bucket names are globally unique this might lead to errors. So make sure the project name is unique to avoid conflicts with existing resources.
@@ -135,7 +141,7 @@ To remove resources created before run the following command and follow onscreen
 python3 ~/datacrossways/aws/aws_remove.py <project_name>
 ```
 This script relies in a config file `~/datacommons/secrets/aws_config_<project_name>-dxw.json` that is automatically generated when running `aws_setup.py`. The database will take more than a minute to fully shut down completely, the status can be seen in the RDS section of the AWS console. While the status is ![image](https://user-images.githubusercontent.com/32603869/181263946-5e91469d-88f8-49f5-b8c1-085b5e0947f5.png)
- the database name can not be reused.
+ the database name can not be reused. Deleting the security group may fail as it is still linked to the RDS which takes time to delete. You can rerun the script after the RDS is completely shut down or remove the security group manually.
 
 ![image](https://user-images.githubusercontent.com/32603869/181263067-4b8a7159-4fe8-4f19-9ee3-6653da20e266.png)
 
@@ -174,7 +180,7 @@ Most of the work is done when the AWS resources were created. The remaining step
 
 ### Deploy Datacrossways for development
 
-For development the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user. To modify the behavior edit `~datacrossways/secrets/config.json` and set the field `development` to be either `true` or `false`.
+For development the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user. To modify the behavior edit `~datacrossways/secrets/config.json` and set the field `development` to be either `true` or `false`. By default the development status is `false`.
 
 #### Start Services
 
@@ -273,7 +279,7 @@ The API should now be up and running
         "bucket_name": "unique_bucket_name",
         "region": "us-east-1"
     },
-    "db":{
+    "database":{
         "user": "xxxxxxx",
         "pass": "xxxxxxxxxxxxx",
         "server": "xxxxxxxxxx.xxxxx.rds.amazonaws.com",
