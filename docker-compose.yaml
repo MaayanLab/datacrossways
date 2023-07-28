@@ -22,7 +22,10 @@ services:
       - "./data/ingress:/data"
   frontend:
     container_name: datacrossways_frontend
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        BASE_URL: ${BASE_URL}
     ports:
       - 3000:80
     labels:

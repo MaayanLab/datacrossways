@@ -1,12 +1,16 @@
 FROM node:18.13.0-alpine3.17 as builder
 
-RUN apk update && apk add vim curl git
+ARG BASE_URL
+
+RUN apk update && apk add vim curl git sed
 
 
 WORKDIR /
 RUN git clone https://github.com/MaayanLab/datacrossways_frontend.git
 
 WORKDIR /datacrossways_frontend
+RUN sed -i 's|BASE_URL|$BASE_URL|g' /datacrossways_frontend/src/data/config.json
+RUN sed -i 's|BASE_URL|$BASE_URL|g' /datacrossways_frontend/.env
 
 RUN npm install --legacy-peer-deps
 
