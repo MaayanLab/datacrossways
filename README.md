@@ -180,11 +180,11 @@ Most of the work is done when the AWS resources were created. The remaining step
 
 ### Deploy Datacrossways for development
 
-For development the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user. To modify the behavior edit `~datacrossways/secrets/config.json` and set the field `development` to be either `true` or `false`. By default the development status is `false`.
+For development, the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user. To modify the behavior edit `~datacrossways/secrets/config.json` and set the field `development` to be either `true` or `false`. By default the development status is `false`.
 
 #### Start Services
 
-To start the datacrossway service run the command below. It will ask for some additional information. Namely for the domain name and an email required for let's encrypt notifications.
+To start the datacrossway service run the command below. It will ask for some additional information. Namely for the domain name and an email required for Let's Encrypt notifications. The domain should be entered in this format without protocol prefix e.g. `datacrossways.org`.
 ```
 ~/datacrossways/start.sh
 ```
