@@ -174,7 +174,7 @@ else:
     
     def create_security_group(ec2, group_name, description):
         ip = get_public_ip()
-        private_ip = get_internal_ip()
+        private_ip = get_internal_ip(ec2, get_instance_id())
         response = ec2.create_security_group(
             GroupName=group_name,
             Description=description
@@ -199,7 +199,7 @@ else:
             IpPermissions=ip_permissions
         )
         return security_group_id
-    
+
     try:
         user = create_user(iam, project_name)
         aws_resources["user"] = user["User"]
