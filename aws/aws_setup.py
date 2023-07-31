@@ -153,10 +153,10 @@ else:
                     break
         return(response)
 
-    def get_public_ip():
-        response = requests.get('https://api.ipify.org')
-        return response.text
-    
+    #def get_public_ip():
+    #    response = requests.get('https://api.ipify.org')
+    #    return response.text
+
     def get_instance_id():
         url = "http://169.254.169.254/latest/meta-data/instance-id"
         response = requests.get(url)
@@ -164,28 +164,26 @@ else:
             return response.text
         else:
             return None
-    
-    def get_internal_ip(ec2, instance_id):
-        try:
-            instance = ec2.Instance(instance_id)
-            return instance.private_ip_address
-        except Exception:
-            return ""
-    
+
+    def get_instance_ips(ec2, instance_id: str):
+        data = ec2.describe_instances(Filters=[{"Name": "instance-id", "Values": [instance_id]}])
+        private_ip = data["Reservations"][0]["Instances"][0]["PrivateIpAddress"]
+        public_ip = data["Reservations"][0]["Instances"][0]["PublicIpAddress"]
+        return (private_ip, public_ip)
+
     def create_security_group(ec2, group_name, description):
-        ip = get_public_ip()
-        private_ip = get_internal_ip(ec2, get_instance_id())
+        public_ip, private_ip = get_instance_ips(ec2, get_instance_id)
         response = ec2.create_security_group(
             GroupName=group_name,
             Description=description
         )
         security_group_id = response['GroupId']
-        print('Security Group Created %s for IP %s.' % (security_group_id, ip))
+        print('Security Group Created %s for IP %s.' % (security_group_id, public_ip))
         ip_permissions = [
                 {'IpProtocol': 'tcp',
                 'FromPort': 5432,
                 'ToPort': 5432,
-                'IpRanges': [{'CidrIp': ip+"/32", 'Description': 'postgresql access'}]}
+                'IpRanges': [{'CidrIp': public_ip+"/32", 'Description': 'postgresql access'}]}
             ]
         if len(private_ip) > 0:
             ip_permissions.append(
