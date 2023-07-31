@@ -156,27 +156,50 @@ else:
     def get_public_ip():
         response = requests.get('https://api.ipify.org')
         return response.text
-
+    
+    def get_instance_id():
+        url = "http://169.254.169.254/latest/meta-data/instance-id"
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.text
+        else:
+            return None
+    
+    def get_internal_ip(ec2, instance_id):
+        try:
+            instance = ec2.Instance(instance_id)
+            return instance.private_ip_address
+        except Exception:
+            return ""
+    
     def create_security_group(ec2, group_name, description):
         ip = get_public_ip()
+        private_ip = get_internal_ip()
         response = ec2.create_security_group(
             GroupName=group_name,
             Description=description
         )
         security_group_id = response['GroupId']
-        print('Security Group Created %s in vpc %s.' % (security_group_id, ip))
-        data = ec2.authorize_security_group_ingress(
-            GroupId=security_group_id,
-            IpPermissions=[
+        print('Security Group Created %s for IP %s.' % (security_group_id, ip))
+        ip_permissions = [
                 {'IpProtocol': 'tcp',
                 'FromPort': 5432,
                 'ToPort': 5432,
                 'IpRanges': [{'CidrIp': ip+"/32", 'Description': 'postgresql access'}]}
             ]
+        if len(private_ip) > 0:
+            ip_permissions.append(
+                {'IpProtocol': 'tcp',
+                'FromPort': 5432,
+                'ToPort': 5432,
+                'IpRanges': [{'CidrIp': private_ip+"/32", 'Description': 'postgresql access'}]}
+            )
+        data = ec2.authorize_security_group_ingress(
+            GroupId=security_group_id,
+            IpPermissions=ip_permissions
         )
         return security_group_id
-
-
+    
     try:
         user = create_user(iam, project_name)
         aws_resources["user"] = user["User"]
@@ -251,7 +274,7 @@ else:
                     password=aws_resources["database"]["pass"], 
                     dbname="postgres", 
                     host=aws_resources["database"]["server"])
-        
+
         db.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         db.cursor().execute("CREATE DATABASE datacrossways")
         db.commit()
