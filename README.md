@@ -77,7 +77,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
 
 When all is done the user should look something like this:
 
-<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/32603869/255299224-09461034-dd31-4628-b085-e14aff08250c.png" width="1060"  alt="Configuration role">
+![role_aws](https://github.com/MaayanLab/datacrossways/assets/32603869/f19a0784-85ed-4898-9112-467279df1acb)
 
 
 ### Create EC2 instance
@@ -180,11 +180,11 @@ Most of the work is done when the AWS resources were created. The remaining step
 
 ### Deploy Datacrossways for development
 
-For development the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user. To modify the behavior edit `~datacrossways/secrets/config.json` and set the field `development` to be either `true` or `false`. By default the development status is `false`.
+For development, the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user. To modify the behavior edit `~datacrossways/secrets/config.json` and set the field `development` to be either `true` or `false`. By default the development status is `false`.
 
 #### Start Services
 
-To start the datacrossway service run the command below. It will ask for some additional information. Namely for the domain name and an email required for let's encrypt notifications.
+To start the datacrossway service run the command below. It will ask for some additional information. Namely for the domain name and an email required for Let's Encrypt notifications. The domain should be entered in this format without protocol prefix e.g. `datacrossways.org`.
 ```
 ~/datacrossways/start.sh
 ```
