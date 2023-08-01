@@ -112,9 +112,11 @@ sudo apt-get update
 if ! command -v docker > /dev/null 2>&1; then
     sudo apt install docker.io -y
 
-    sudo groupadd docker
+    if ! grep -q docker /etc/group; then
+        sudo groupadd docker
+    fi
     sudo usermod -aG docker $USER
-    newgrp docker
+    #newgrp docker
 fi
 
 # Check if docker-compose is installed
