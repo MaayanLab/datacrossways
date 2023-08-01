@@ -148,4 +148,5 @@ rm -rf datacrossways_api
 cd $OLD_DIR
 
 echo Setup complete! Add additional information to the secrets folder complete configuration and run the create_config.py script. 
-echo Run \'./start.sh\' to deploy Datacrossways
+echo Please log out and back in to update user rights
+echo then run \'~/datacrossways/start.sh\' to deploy Datacrossways
