@@ -12,7 +12,6 @@ RUN apk --no-cache add python3-dev \
 RUN pip install --upgrade pip
 RUN pip install install cffi
 
-RUN git reset --hard
 RUN git clone https://github.com/MaayanLab/datacrossways_api.git
 
 WORKDIR /app
