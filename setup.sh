@@ -108,15 +108,21 @@ cd $SCRIPT_DIR
 
 sudo apt-get update
 
-sudo apt install docker.io -y
+# Check if docker is installed
+if ! command -v docker > /dev/null 2>&1; then
+    sudo apt install docker.io -y
 
-sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    newgrp docker
+fi
 
-mkdir -p ~/.docker/cli-plugins/
-curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
-chmod +x ~/.docker/cli-plugins/docker-compose
+# Check if docker-compose is installed
+if [ ! -f ~/.docker/cli-plugins/docker-compose ]; then
+    mkdir -p ~/.docker/cli-plugins/
+    curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+    chmod +x ~/.docker/cli-plugins/docker-compose
+fi
 
 sudo apt-get install python3-pip -y
 pip3 install -r requirements.txt
