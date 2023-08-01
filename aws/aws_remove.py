@@ -106,9 +106,7 @@ def delete_all(iam, ec2, s3, rds, aws_del):
     try:
         response = rds.modify_db_instance(
             DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'],
-            VpcSecurityGroupIds=[
-                aws_del["security_group"],
-            ]
+            VpcSecurityGroupIds=[]
         )
         console.print(" :thumbs_up: Detach security group.", style="green")
     except Exception as err:

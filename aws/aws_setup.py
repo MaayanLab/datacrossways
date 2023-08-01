@@ -152,11 +152,7 @@ else:
                     response["DBInstance"]["Endpoint"]={"Address": dbhost}
                     break
         return(response)
-
-    #def get_public_ip():
-    #    response = requests.get('https://api.ipify.org')
-    #    return response.text
-
+    
     def get_instance_id():
         url = "http://169.254.169.254/latest/meta-data/instance-id"
         response = requests.get(url)
