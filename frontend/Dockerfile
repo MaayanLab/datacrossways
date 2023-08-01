@@ -9,8 +9,8 @@ WORKDIR /
 RUN git clone https://github.com/MaayanLab/datacrossways_frontend.git
 
 WORKDIR /datacrossways_frontend
-RUN sed -i 's|BASE_URL|$BASE_URL|g' /datacrossways_frontend/src/data/config.json
-RUN sed -i 's|BASE_URL|$BASE_URL|g' /datacrossways_frontend/.env
+RUN sed -i "s|BASE_URL|$BASE_URL|g" /datacrossways_frontend/src/data/config.json
+RUN sed -i "s|BASE_URL|$BASE_URL|g" /datacrossways_frontend/.env
 
 RUN npm install --legacy-peer-deps
 
