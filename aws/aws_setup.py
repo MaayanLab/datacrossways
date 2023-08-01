@@ -172,7 +172,7 @@ else:
         return (private_ip, public_ip)
 
     def create_security_group(ec2, group_name, description):
-        public_ip, private_ip = get_instance_ips(ec2, get_instance_id)
+        public_ip, private_ip = get_instance_ips(ec2, get_instance_id())
         response = ec2.create_security_group(
             GroupName=group_name,
             Description=description
