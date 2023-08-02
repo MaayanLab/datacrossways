@@ -127,7 +127,7 @@ Go into the `datacrossways` folder in the home directory and run the command bel
 ```sh
 ~/datacrossways/setup.sh
 ```
-Now you can run the aws configuration script which will create the resources. To run it requires the temp user credentials and a project name. Project names should not contain `commas`, `periods`, `underscores`, or `spaces`. Since the `bucket name` is created from the project name there can be a conflict. The bucket name is `<project_name>-dxw-vault`. Since bucket names are globally unique this might lead to errors. So make sure the project name is unique to avoid conflicts with existing resources.
+Now you can run the aws configuration script which will create the resources. Project names should not contain `commas`, `periods`, `underscores`, or `spaces`. Since the `bucket name` is created from the project name there can be a conflict. The bucket name is `<project_name>-dxw-vault`. Since bucket names are globally unique this might lead to errors. So make sure the project name is unique to avoid conflicts with existing resources.
 
 ![image](https://user-images.githubusercontent.com/32603869/181282184-4bc81bb8-4f00-417e-99e6-dc8db43a1b1e.png)
 
