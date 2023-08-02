@@ -109,10 +109,11 @@ Log into the AWS dashboard at https://aws.amazon.com.
 
 ### Register a domain
 
-Datacrossways needs to be accessible via a dedicated domain. The easiest way is to register a domain using Route53 which is a service from AWS. First check if the domain is still available. If it is you can proceed to checkout.
+Datacrossways needs to be accessible via a dedicated domain. The easiest way is to register a domain using Route53 which is a service from AWS. First, check if the domain is still available. If it is you can proceed to checkout.
 
 <img width="1241" alt="image" src="https://github.com/MaayanLab/datacrossways/assets/32603869/1c3846fb-3f1c-4b94-a907-8a1213742423">
 
+Then follow the descriptions of the registration to complete the domain registration. The domain will then be accessible after some time (usually a couple of minutes). Once the domain is registered you need to link your AWS instance with the domain. Under `hosted zones` (https://us-east-1.console.aws.amazon.com/route53/v2/hostedzones) select the newly created domain and add a new record.
 
 ### Create AWS resources
 
