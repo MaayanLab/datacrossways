@@ -107,6 +107,13 @@ Log into the AWS dashboard at https://aws.amazon.com.
     -  Under UNIX connect to instance with `ssh -i pathtokey/key.pem ubuntu@ipaddress`
     -  Windows users: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
 
+### Register a domain
+
+Datacrossways needs to be accessible via a dedicated domain. The easiest way is to register a domain using Route53 which is a service from AWS. First check if the domain is still available. If it is you can proceed to checkout.
+
+<img width="1241" alt="image" src="https://github.com/MaayanLab/datacrossways/assets/32603869/1c3846fb-3f1c-4b94-a907-8a1213742423">
+
+
 ### Create AWS resources
 
 Now it is time to create the AWS resources. They encompass a designated user to control S3 access, a S3 bucket with specific configurations, as well as an RDS database to store metadata on stored data objects.
