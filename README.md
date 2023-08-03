@@ -42,7 +42,7 @@ Datacrossways currently uses Google OAuth to manage user logins. It is a prerequ
 
 Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There, create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. Here we can set multiple domains (choose one you want to use and own) that we would like to use. The `localhost` entries allow us to run Datacrossways locally. Then select `CREATE`.
 
-<img width="425" alt="oauth2" src="https://user-images.githubusercontent.com/32603869/176705928-fd5adccc-31a4-4b04-8a3f-66085d888677.png">
+![image](https://github.com/MaayanLab/datacrossways/assets/32603869/b970d1a2-4f9a-4e62-ba26-dc89ec170bf4)
 
 The newly created entry should appear under `OAuth 2.0 Client IDs`. Click `Download OAuth client` and save `Your Client ID` and `Your Client Secret`.
 
