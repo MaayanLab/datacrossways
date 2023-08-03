@@ -40,11 +40,11 @@ Datacrossways currently uses Google OAuth to manage user logins. It is a prerequ
 
 ![oauth1](https://user-images.githubusercontent.com/32603869/176709575-b5c6b8b2-7873-42c3-bb7d-bd899a2f8368.png)
 
-Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There, create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. Here we can set multiple domains (choose one you want to use and own) that we would like to use. The `localhost` entries allow us to run Datacrossways locally. Then select `CREATE`.
+Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There, create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. Here we can set multiple domains (choose one you want to use and own) that we would like to use. For the redicrect URL add following entry: `https://<domain>/api/user/authorize?provider=google`.  Then select `CREATE`.
 
 ![image](https://github.com/MaayanLab/datacrossways/assets/32603869/b970d1a2-4f9a-4e62-ba26-dc89ec170bf4)
 
-The newly created entry should appear under `OAuth 2.0 Client IDs`. Click `Download OAuth client` and save `Your Client ID` and `Your Client Secret`.
+The newly created entry should appear under `OAuth 2.0 Client IDs`. Click `Download OAuth client` and save `Your Client ID` and `Your Client Secret` as a JSON. This file can later be used when deploying the Datacrossways instance, so keep it handy.
 
 
 ## AWS/cloud configuration
