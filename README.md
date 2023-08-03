@@ -38,6 +38,12 @@ Decide on a domain (e.g. datacrossways.org) and get a fixed/elastic IP address. 
 
 Datacrossways currently uses Google OAuth to manage user logins. It is a prerequisite for initializing a Datacrossways instance. To set up credentials go to [https://console.cloud.google.com/apis/dashboard](https://console.cloud.google.com/apis/dashboard), where you need to have an account, or you need to create a new one.
 
+If not done so you will have to configure your Oauth consent screen first. Fill out the information such as domain and admin email. In the scopes section select the first three options:
+
+![image](https://github.com/MaayanLab/datacrossways/assets/32603869/0c6d09fb-21c5-43b7-8297-2835acfdd02a)
+
+
+
 ![oauth1](https://user-images.githubusercontent.com/32603869/176709575-b5c6b8b2-7873-42c3-bb7d-bd899a2f8368.png)
 
 Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There, create a new `web application` entry and fill in the `Authorized JavaScript origins` and `Authorized redirect URIs`. Here we can set multiple domains (choose one you want to use and own) that we would like to use. For the redicrect URL add following entry: `https://<domain>/api/user/authorize?provider=google`.  Then select `CREATE`.
