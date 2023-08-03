@@ -75,7 +75,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - write a description `role for datacrossways configuration`
     - select `Create role` button
 
-When all is done the user should look something like this:
+When all is done, the user should look something like this:
 
 ![role_aws](https://github.com/MaayanLab/datacrossways/assets/32603869/f19a0784-85ed-4898-9112-467279df1acb)
 
@@ -95,7 +95,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - Under `Instance` type select desired instance (at least `t2.small` @0.023/h or ~ $17/month), other good options are the other `t2/t3` burstable instances.
           - Pricing overview https://aws.amazon.com/ec2/pricing/on-demand/
     - Under `Key pair` either use an existing `key pair` or generate a new one
-          - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file is used to log into the instance once it is created. Under UNIX the key should be placed into a folder with limited user rights (chmod 700) and the key (chmod 600) 
+          - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file is used to log into the instance once created. Under UNIX the key should be placed into a folder with limited user rights (chmod 700) and the key (chmod 600) 
     -  Under `Configure Storage` set to at least `20GB`. Space is mainly needed to build Docker images. If disk space is too small it can result in some minor issues.
     -  Optional: Under `Network settings` restrict SSH traffic to `My IP`
     -  Select `Allow HTTPS traffic from internet`
@@ -106,6 +106,10 @@ Log into the AWS dashboard at https://aws.amazon.com.
     -  Select newly created instance in table and copy `Public IPv4 address`
     -  Under UNIX connect to instance with `ssh -i pathtokey/key.pem ubuntu@ipaddress`
     -  Windows users: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
+Under EC2 select the newly created instance. The public IP can be found in the `Instance Details` tab.
+
+![image](https://github.com/MaayanLab/datacrossways/assets/32603869/2e513efb-8039-47d7-a743-fc6b60473556)
+
 
 ### Register a domain
 
@@ -115,16 +119,18 @@ Datacrossways needs to be accessible via a dedicated domain. The easiest way is 
 
 Then follow the descriptions of the registration to complete the domain registration. The domain will then be accessible after some time (usually a couple of minutes). Once the domain is registered you need to link your AWS instance with the domain. Under `hosted zones` (https://us-east-1.console.aws.amazon.com/route53/v2/hostedzones) select the newly created domain and add a new record.
 
+Select `Create Record` and in the following dialogue paste the IP address of the newly created instance into the `Value` field. All other settings should be left unchanged. Make sure the record type is `A - Routes traffic to an IPv4 address and some AWS resources`. Then create the record.
+
 ### Create AWS resources
 
-Now it is time to create the AWS resources. They encompass a designated user to control S3 access, a S3 bucket with specific configurations, as well as an RDS database to store metadata on stored data objects.
+Now it is time to create the other AWS resources. They encompass a designated user to control S3 access, an S3 bucket with specific configurations, as well as an RDS database to store metadata on stored data objects.
 
 After creating a temporary user and an AWS instance log into the server. From there get `Datacrossways` using git.
 ```sh
 git clone https://github.com/MaayanLab/datacrossways.git
 ```
 
-Now assuming you have generated and downloaded the OAuth information described in section above (`GoogleOAuth configuration`) copy the json into a folder named `~/datacrossways/secrets`. You can create a new file with the information downloaded from the Google Developer Console. The file can be named any way you like. The code below is an example how you can create this file:
+Now assuming you have generated and downloaded the OAuth information described in the section above (`GoogleOAuth configuration`) copy the JSON into a folder named `~/datacrossways/secrets`. You can create a new file with the information downloaded from the Google Developer Console. The file can be named any way you like. The code below is an example of how you can create this file:
 
 ```sh
 mkdir ~/datacrossways/secrets
@@ -153,7 +159,7 @@ This script relies in a config file `~/datacommons/secrets/aws_config_<project_n
 
 ![image](https://user-images.githubusercontent.com/32603869/181263067-4b8a7159-4fe8-4f19-9ee3-6653da20e266.png)
 
-### Remove manually
+### Remove Manually
 
 In case of an error (e.g. the aws_config_<project_name>-dxw.json) gets lost the resources can easily be removed manually. The resources will be in `RDS`, `IAM`, and `S3`. To delete:
 
@@ -208,16 +214,11 @@ The following command will stop the docker containers
 Removing the docker containers will not remove any of the persisted data in the database or the S3 bucket. If you want to permanently delete the project first run 
 
 ```
+cd ~/datacrossways
 docker compose down
 ```
 
 And then remove all the cloud resources following the steps described [here](#remove-aws-resources).
-
-### Make datacrossways accessible via domain
-
-First, you need to register a domain name that is available. There are several ways of doing this. In this example, we will go through the process using an AWS service `Route53`. First, register a new domain in `Route53` under `Hosted zones`. Now you need to link the IP address of the AWS instance to the zone. Select your new zone/domain and select `Create record`. Select `A-Routes ...` as the record type and paste the IP address into the value field. Then select `Create records`. Now your instance should be linked to the domain.
-
----
 
 ## Local deployment
 
@@ -225,7 +226,7 @@ Even though the API and React frontend are running locally, the cloud resources 
 
 ### Deploy API locally
 
-First get the API code usig git:
+First get the API code using git:
 ```sh
 git clone https://github.com/MaayanLab/datacrossways_api
 ```
