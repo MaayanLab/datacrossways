@@ -156,19 +156,22 @@ else:
     def get_instance_id():
         url = "http://169.254.169.254/latest/meta-data/instance-id"
         response = requests.get(url)
-        if response.status_code == 200:
-            return response.text
-        else:
-            return None
+        ip = response.text
+        url = "http://169.254.169.254/latest/meta-data/placement/availability-zone"
+        response = requests.get(url)
+        aws_region = response.text[:-1]
+        return (ip, aws_region)
 
-    def get_instance_ips(ec2, instance_id: str):
-        data = ec2.describe_instances(Filters=[{"Name": "instance-id", "Values": [instance_id]}])
+    def get_instance_ips(instance_id: str, instance_region):
+        ec2_temp = boto3.client("ec2", region_name=instance_region)
+        data = ec2_temp.describe_instances(Filters=[{"Name": "instance-id", "Values": [instance_id]}])
         private_ip = data["Reservations"][0]["Instances"][0]["PrivateIpAddress"]
         public_ip = data["Reservations"][0]["Instances"][0]["PublicIpAddress"]
         return (private_ip, public_ip)
-
+    
     def create_security_group(ec2, group_name, description):
-        public_ip, private_ip = get_instance_ips(ec2, get_instance_id())
+        instance_id, availability_zone = get_instance_id()
+        public_ip, private_ip = get_instance_ips(instance_id, availability_zone)
         response = ec2.create_security_group(
             GroupName=group_name,
             Description=description
