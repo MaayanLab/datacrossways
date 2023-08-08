@@ -190,8 +190,7 @@ In case of an error (e.g. the aws_config_<project_name>-dxw.json) gets lost the 
     -  The security group can only be deleted once the RDS instance is completely shut down. This process can take more than a minute.
 
 ## Local deployment
-The `backend API` and `React fronend` can be deployed on a local computer, mainly for development purposes. They still require the AWS resources like the `database` and `S3 bucket` configuration. The setup is described in details [here](#aws-resource-configuration).
-
+The `backend API` and `React fronend` can be deployed on a local computer, mainly for development purposes. They still require the AWS resources like the `database` and `S3 bucket` configuration. The setup is described in detail [here](#aws-resource-configuration).
 
 
 ## Cloud deployment
@@ -200,11 +199,11 @@ Most of the work is done when the AWS resources were created. The remaining step
 
 ### Deploy Datacrossways for development
 
-For development, the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user. To modify the behavior edit `~datacrossways/secrets/config.json` and set the field `development` to be either `true` or `false`. By default the development status is `false`.
+For development, the Oauth authentification might be problematic, especially when the font end is developed on a different server. For this reason there The developer flag has to be added in the config file. This will then bypass any authentification requirements and assume a generic admin user. To modify the behavior edit `~datacrossways/secrets/config.json` and set the field `development` to be either `true` or `false`. By default, the development status is `false`.
 
 #### Start Services
 
-To start the datacrossway service run the command below. It will ask for some additional information. Namely for the domain name and an email required for Let's Encrypt notifications. The domain should be entered in this format without protocol prefix e.g. `datacrossways.org`.
+`Before you continue make sure you log out and back in after running setup.sh.` To start the datacrossway service run the command below. It will ask for some additional information. Namely for the domain name and an email required for Let's Encrypt notifications. The domain should be entered in this format without protocol prefix e.g. `datacrossways.org`.
 ```
 ~/datacrossways/start.sh
 ```
@@ -225,6 +224,13 @@ docker compose down
 ```
 
 And then remove all the cloud resources following the steps described [here](#remove-aws-resources).
+
+### Common errors when deploying Datacrossways
+
+There are a lot of steps to deploy Datacrossways and some will cause problems down the road and prevent successful deployment. this section collects common issues that are encountered:
+
+- `AWS instance is not an Ubuntu instance.` Make sure you select the Ubuntu option when launching an instance.
+- `OAuth does not work (redirect not valid).` Make sure the URL uses `https`.
 
 ## Local deployment
 
