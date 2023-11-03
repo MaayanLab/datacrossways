@@ -54,7 +54,7 @@ The newly created entry should appear under `OAuth 2.0 Client IDs`. Click `Downl
 
 ### Orcid OAuth
 
-Datacrossways also supports Orcid. To enable Orcid add the Orcid account information to the `config.json` in the oauth section, once it is created during the setup process. It should look something like:
+Datacrossways also supports Orcid. Log into Orcid and then under `Profile View` select `Developer Tools`. Here you can configure the required information. The redirect URI should be base_url+`/api/user/authorize?provider=orcid` (Example: https://datacrossways.org/api/user/authorize?provider=orcid). To enable Orcid add the Orcid account information to the `config.json` in the OAuth section, once it is created during the setup process. It should look something like:
 ```
 "oauth":{
     "orcid": {
