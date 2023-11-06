@@ -52,6 +52,18 @@ Click on `+ CREATE CREDENTIALS` and select `OAuth client ID`. There, create a ne
 
 The newly created entry should appear under `OAuth 2.0 Client IDs`. Click `Download OAuth client` and save `Your Client ID` and `Your Client Secret` as a JSON. This file can later be used when deploying the Datacrossways instance, so keep it handy.
 
+### Orcid OAuth
+
+Datacrossways also supports Orcid. Log into Orcid and then under `Profile View` select `Developer Tools`. Here you can configure the required information. The redirect URI should be base_url+`/api/user/authorize?provider=orcid` (Example: https://datacrossways.org/api/user/authorize?provider=orcid). To enable Orcid add the Orcid account information to the `config.json` in the OAuth section, once it is created during the setup process. It should look something like:
+```
+"oauth":{
+    "orcid": {
+        "client_id": "APP-B2KWOS2DS3DSJJH",
+        "client_secret": "32120d-0981-7453e-lk982-okas908ahjk23"
+    },
+    "google": { ... }
+}
+```
 
 ## AWS/cloud configuration
 
