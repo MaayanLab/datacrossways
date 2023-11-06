@@ -154,11 +154,15 @@ else:
         return(response)
     
     def get_instance_id():
+        url = "http://169.254.169.254/latest/api/token"
+        headers = {"X-aws-ec2-metadata-token-ttl-seconds": "21600"}
+        TOKEN = requests.put(url, headers=headers).text
+        headers = {"X-aws-ec2-metadata-token": TOKEN}
         url = "http://169.254.169.254/latest/meta-data/instance-id"
-        response = requests.get(url)
+        response = requests.get(url, headers=headers)
         ip = response.text
         url = "http://169.254.169.254/latest/meta-data/placement/availability-zone"
-        response = requests.get(url)
+        response = requests.get(url, headers=headers)
         aws_region = response.text[:-1]
         return (ip, aws_region)
 
