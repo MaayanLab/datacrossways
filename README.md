@@ -115,7 +115,8 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - Under `Key pair` either use an existing `key pair` or generate a new one
           - Enter key pair name and download `.pem` if working on UNIX or `.ppk` when working with Windows and Putty. The `pem/ppk` file is used to log into the instance once created. Under UNIX the key should be placed into a folder with limited user rights (chmod 700) and the key (chmod 600) 
     -  Under `Configure Storage` set to at least `20GB`. Space is mainly needed to build Docker images. If disk space is too small it can result in some minor issues.
-    -  Optional: Under `Network settings` restrict SSH traffic to `My IP`
+    -  After selecting storage space change from `Not encrypted` to `Encrypted`. Then select the `(default) aws/ebs` key under `KMS key` to encrypt the hard drive
+    -  Optional but highly recommended: Under `Network settings` restrict SSH traffic to `My IP`
     -  Select `Allow HTTPS traffic from internet`
     -  Select `Allow HTTP traffic from internet`
     -  Under `Advanced details` select IAM instance profile and select the role created before
