@@ -134,7 +134,6 @@ else:
             DBInstanceClass='db.t3.micro',
             DBInstanceIdentifier=project_name+"-db",
             Engine='Postgres',
-            EngineVersion='15.3',
             MasterUserPassword=db_password,
             MasterUsername=db_user.replace("-", "_"),
             VpcSecurityGroupIds=[security_group_id])
