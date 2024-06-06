@@ -203,7 +203,7 @@ else:
         )
         return security_group_id
 
-    def create_checksum_lambda_function(iam, s3, lambda_client, project_name, aws_resources):
+    def create_checksum_lambda_function(iam, s3, lambda_client, project_name, path, aws_resources):
         aws_resources["lambda"] = {}
         assume_role_policy_document = {
             "Version": "2012-10-17",
@@ -264,7 +264,7 @@ else:
         )
 
         with zipfile.ZipFile('/tmp/lambda_function.zip', 'w') as z:
-            z.write('checksum.py', compress_type=zipfile.ZIP_DEFLATED)
+            z.write(path+'/checksum.py', compress_type=zipfile.ZIP_DEFLATED)
 
         # Read the zipped code
         with open('/tmp/lambda_function.zip', 'rb') as f:
@@ -363,7 +363,7 @@ else:
         print(err.args[0])
     
     try:
-        create_checksum_lambda_function(iam, s3, lambda_client, project_name, aws_resources)
+        create_checksum_lambda_function(iam, s3, lambda_client, project_name, path, aws_resources)
         console.print(" :thumbs_up: checksum lambda function created", style="green")
     except Exception as err:
         console.print(" :x: Checksum lambda function could not be created", style="bold red")
