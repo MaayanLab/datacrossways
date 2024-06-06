@@ -363,7 +363,7 @@ else:
         print(err.args[0])
     
     try:
-        create_checksum_lambda_function(s3, lambda_client, project_name)
+        create_checksum_lambda_function(iam, s3, lambda_client, project_name, aws_resources)
         console.print(" :thumbs_up: checksum lambda function created", style="green")
     except Exception as err:
         console.print(" :x: Checksum lambda function could not be created", style="bold red")
