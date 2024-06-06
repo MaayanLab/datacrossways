@@ -12,6 +12,8 @@ echo 'y' | ~/datacrossways/stop.sh
 export BASE_URL=$domain
 export LETS_ENCRYPT_EMAIL=$email
 
+export BASE_URL LETS_ENCRYPT_EMAIL
+
 # check Docker version and use the correct command
 if docker -v | grep -q "Docker version 2"; then
     docker compose up

@@ -49,7 +49,7 @@ def delete_database(rds, aws_del):
         SkipFinalSnapshot=True,
         DeleteAutomatedBackups=True)
 
-def delete_all(iam, ec2, s3, rds, aws_del):
+def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
     counter = 0
     error_counter = 0
     try:
@@ -130,6 +130,27 @@ def delete_all(iam, ec2, s3, rds, aws_del):
         print(err.args[0]) 
         error_counter = error_counter+1
     
+    role_name = f'{project_name}-checksum-role'
+    
+    try:
+        lambda_client.delete_function(FunctionName=aws_del["lambda"]["function"])
+        console.print(" :thumbs_up: Deleted lambda function", style="green")
+    except Exception as e:
+        console.print(" :x: Failed to delete lambda function", style="bold red")
+
+    try:
+        # Detach policy from the role
+        iam.detach_role_policy(RoleName=role_name, PolicyArn=aws_del["lambda"]["policy"])
+        iam.delete_policy(PolicyArn=aws_del["lambda"]["policy"])
+        console.print(" :thumbs_up: Deleted lambda function policy", style="green")
+    except Exception as e:
+        console.print(" :x: Failed to delete lambda function policy", style="bold red")
+
+    try:
+        iam.delete_role(RoleName=role_name)
+        console.print(" :thumbs_up: Deleted lambda function role", style="green")
+    except Exception as e:
+        console.print(" :x: Failed to delete lambda function role", style="bold red")
     
     print("\nScript completed")
     if error_counter > 0:
@@ -160,5 +181,6 @@ if val == "Y":
         iam = boto3.client("iam", region_name=aws_del["aws_region"])
         ec2 = boto3.client("ec2", region_name=aws_del["aws_region"])
         s3 = boto3.client("s3", region_name=aws_del["aws_region"])
+        lambda_client = boto3.client("lambda", region_name=aws_del["aws_region"])
         rds = boto3.client("rds", region_name=aws_del["aws_region"])       
-        delete_all(iam, ec2, s3, rds, aws_del)
+        delete_all(iam, ec2, s3, lambda_client, rds, aws_del)

@@ -11,6 +11,7 @@ import time
 from rich.console import Console
 import traceback
 import requests
+import zipfile
 
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
@@ -49,6 +50,8 @@ else:
     s3 = boto3.client("s3", region_name=aws_region)
 
     rds = boto3.client('rds', region_name=aws_region)
+
+    lambda_client = boto3.client('lambda', region_name=aws_region)
     
     def colored(r, g, b, text):
         return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
@@ -200,6 +203,112 @@ else:
         )
         return security_group_id
 
+    def create_checksum_lambda_function(iam, s3, lambda_client, project_name, aws_resources):
+        aws_resources["lambda"] = {}
+        assume_role_policy_document = {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {"Service": "lambda.amazonaws.com"},
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        }
+        role_response = iam.create_role(
+            RoleName=f'{project_name}-checksum-role',
+            AssumeRolePolicyDocument=json.dumps(assume_role_policy_document)
+        )
+        role_arn = role_response['Role']['Arn']
+        aws_resources["lambda"]["role"] = role_arn
+
+        # Define the policy JSON
+        policy_document = {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "s3:PutObject",
+                        "s3:GetObject",
+                        "s3:PutObjectTagging"
+                    ],
+                    "Resource": f"arn:aws:s3:::{project_name}-vault/*"
+                },
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "logs:CreateLogGroup",
+                        "logs:CreateLogStream",
+                        "logs:PutLogEvents"
+                    ],
+                    "Resource": "*"
+                }
+            ]
+        }
+
+        # Create the policy
+        policy_response = iam.create_policy(
+            PolicyName=f'{project_name}-checksum-policy',
+            PolicyDocument=json.dumps(policy_document)
+        )
+
+        # Get the ARN of the new policy
+        policy_arn = policy_response['Policy']['Arn']
+        aws_resources["lambda"]["policy"] = policy_arn
+
+        # Attach the policy to the role
+        attachment_response = iam.attach_role_policy(
+            RoleName=f'{project_name}-checksum-role',
+            PolicyArn=policy_arn
+        )
+
+        with zipfile.ZipFile('/tmp/lambda_function.zip', 'w') as z:
+            z.write('checksum.py', compress_type=zipfile.ZIP_DEFLATED)
+
+        # Read the zipped code
+        with open('/tmp/lambda_function.zip', 'rb') as f:
+            zipped_code = f.read()
+
+        # Create the Lambda function
+        response = lambda_client.create_function(
+            FunctionName=f'{project_name}-checksum-function',
+            Runtime='python3.11',
+            Role=role_arn,
+            Handler='checksum.lambda_handler',
+            Code={
+                'ZipFile': zipped_code
+            },
+            Description=f'A lambda function triggered by S3 bucket {project_name}-vault to compute checksum once file is created',
+            Timeout=15,
+            MemorySize=128
+        )
+        lambda_arn = response['FunctionArn']
+        aws_resources["lambda"]["function"] = lambda_arn
+
+        # Grant permission to S3 to invoke the Lambda function
+        lambda_client.add_permission(
+            FunctionName='ihdh-checksum-function',
+            StatementId='AllowS3Invoke',
+            Action='lambda:InvokeFunction',
+            Principal='s3.amazonaws.com',
+            SourceArn=f'arn:aws:s3:::{project_name}-vault'
+        )
+
+        # Add S3 trigger to Lambda function
+        s3.put_bucket_notification_configuration(
+            Bucket=f"{project_name}-vault",
+            NotificationConfiguration={
+                'LambdaFunctionConfigurations': [
+                    {
+                        'LambdaFunctionArn': lambda_arn,
+                        'Events': ['s3:ObjectCreated:*']
+                    }
+                ]
+            }
+        )
+        return 1
+
     try:
         user = create_user(iam, project_name)
         aws_resources["user"] = user["User"]
@@ -251,6 +360,13 @@ else:
         console.print(" :thumbs_up: S3 bucket privacy enhanced", style="green")
     except Exception as err:
         console.print(" :x: S3 bucket privacy could not be enhanced", style="bold red")
+        print(err.args[0])
+    
+    try:
+        create_checksum_lambda_function(s3, lambda_client, project_name)
+        console.print(" :thumbs_up: checksum lambda function created", style="green")
+    except Exception as err:
+        console.print(" :x: Checksum lambda function could not be created", style="bold red")
         print(err.args[0])
     
     try:

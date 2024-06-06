@@ -2,4 +2,5 @@ secrets/*
 config.json
 aws/aws_config_*
 test/*
+testlambda*
 .DS_Store
