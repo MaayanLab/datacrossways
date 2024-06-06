@@ -367,7 +367,7 @@ else:
         console.print(" :thumbs_up: checksum lambda function created", style="green")
     except Exception as err:
         console.print(" :x: Checksum lambda function could not be created", style="bold red")
-        print(err.args[0])
+        print(err)
     
     try:
         security_group = create_security_group(ec2, project_name, project_name)

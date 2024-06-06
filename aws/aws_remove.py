@@ -58,12 +58,12 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
             PolicyArn=aws_del["policy"]["Arn"]
         )
         counter = counter+1
-        console.print(" :thumbs_up: user access key created", style="green")
+        console.print(" :thumbs_up: user access key detached", style="green")
     except Exception as err:
         console.print(" :x: policy could not be detached", style="bold red")
         print(err.args[0])
         error_counter = error_counter+1
-
+    
     try:
         respsone = iam.delete_policy(PolicyArn=aws_del["policy"]["Arn"])
         counter = counter+1
