@@ -206,83 +206,83 @@ else:
     def create_checksum_lambda_function(iam, s3, lambda_client, project_name, path, aws_resources):
         aws_resources["lambda"] = {}
 
+        role_name = f"{project_name}-checksum-role"
+        trusted_entities = [
+            "lambda.amazonaws.com"
+        ]
+
+        # Define the trust policy document for the role
+        trust_policy = {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": trusted_entities
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        }
+
+        # Create the role
         try:
-            assume_role_policy_document = {
-                "Version": "2012-10-17",
-                "Statement": [
-                    {
-                        "Effect": "Allow",
-                        "Principal": {"Service": "lambda.amazonaws.com"},
-                        "Action": "sts:AssumeRole"
-                    }
-                ]
-            }
-            role_response = iam.create_role(
-                RoleName=f'{project_name}-checksum-role',
-                AssumeRolePolicyDocument=json.dumps(assume_role_policy_document)
+            create_role_response = iam.create_role(
+                RoleName=role_name,
+                AssumeRolePolicyDocument=json.dumps(trust_policy),
+                Description='Role for checksum_sha256 with Lambda and S3 specific bucket access policies'
             )
-            
-            role_arn = role_response['Role']['Arn']
+            role_arn = create_role_response['Role']['Arn']
+            print(f"Created role: {create_role_response['Role']['Arn']}")
             aws_resources["lambda"]["role"] = role_arn
-        except Exception as err:
-            print(err.args[0]) 
-        
-        time.sleep(10)
+        except Exception as e:
+            print(f"Error creating role: {e}")
+
+        # Policies to be attached to the role
+        managed_policies = [
+            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        ]
+
+        # Attach managed policies to the role
+        for policy_arn in managed_policies:
+            try:
+                iam.attach_role_policy(
+                    RoleName=role_name,
+                    PolicyArn=policy_arn
+                )
+                print(f"Attached managed policy {policy_arn} to role {role_name}")
+            except Exception as e:
+                print(f"Error attaching managed policy {policy_arn} to role {role_name}: {e}")
+
+        # Define the inline policy for S3 bucket access limitation
+        s3_bucket_policy = {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "s3:*",
+                        "s3-object-lambda:*"
+                    ],
+                    "Resource": [
+                        f"arn:aws:s3:::{project_name}-vault",
+                        f"arn:aws:s3:::{project_name}-vault/*"
+                    ]
+                }
+            ]
+        }
 
         try:
-            # Define the policy JSON
-            policy_document = {
-                "Version": "2012-10-17",
-                "Statement": [
-                    {
-                        "Effect": "Allow",
-                        "Action": [
-                            "s3:PutObject",
-                            "s3:GetObject",
-                            "s3:PutObjectTagging"
-                        ],
-                        "Resource": f"arn:aws:s3:::{project_name}-vault/*"
-                    },
-                    {
-                        "Effect": "Allow",
-                        "Action": [
-                            "logs:CreateLogGroup",
-                            "logs:CreateLogStream",
-                            "logs:PutLogEvents"
-                        ],
-                        "Resource": "*"
-                    },
-                    {
-                        "Effect": "Allow",
-                        "Action": [
-                            "s3-object-lambda:*"
-                        ],
-                        "Resource": f"arn:aws:s3:::{project_name}-vault/*"
-                    }
-                ]
-            }
-
-            # Create the policy
-            policy_response = iam.create_policy(
-                PolicyName=f'{project_name}-checksum-policy',
-                PolicyDocument=json.dumps(policy_document)
+            iam.put_role_policy(
+                RoleName=role_name,
+                PolicyName="S3BucketAccessPolicy",
+                PolicyDocument=json.dumps(s3_bucket_policy)
             )
-
-            # Get the ARN of the new policy
-            policy_arn = policy_response['Policy']['Arn']
-            aws_resources["lambda"]["policy"] = policy_arn
-        except Exception as err:
-            print(err.args[0])
-
-        time.sleep(10)
+            print(f"Attached inline policy to role {role_name}")
+        except Exception as e:
+            print(f"Error attaching inline policy to role {role_name}: {e}")
 
         try:
-            # Attach the policy to the role
-            attachment_response = iam.attach_role_policy(
-                RoleName=f'{project_name}-checksum-role',
-                PolicyArn=policy_arn
-            )
-
             with zipfile.ZipFile('/tmp/lambda_function.zip', 'w') as z:
                 z.write(path+'/checksum.py', compress_type=zipfile.ZIP_DEFLATED)
 
@@ -308,6 +308,8 @@ else:
         except Exception as err:
             print(err.args[0]) 
         
+
+
         time.sleep(10)
 
         # Grant permission to S3 to invoke the Lambda function
