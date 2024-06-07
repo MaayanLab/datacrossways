@@ -205,87 +205,97 @@ else:
 
     def create_checksum_lambda_function(iam, s3, lambda_client, project_name, path, aws_resources):
         aws_resources["lambda"] = {}
-        assume_role_policy_document = {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Effect": "Allow",
-                    "Principal": {"Service": "lambda.amazonaws.com"},
-                    "Action": "sts:AssumeRole"
-                }
-            ]
-        }
-        role_response = iam.create_role(
-            RoleName=f'{project_name}-checksum-role',
-            AssumeRolePolicyDocument=json.dumps(assume_role_policy_document)
-        )
-        role_arn = role_response['Role']['Arn']
-        aws_resources["lambda"]["role"] = role_arn
 
-        # Define the policy JSON
-        policy_document = {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Effect": "Allow",
-                    "Action": [
-                        "s3:PutObject",
-                        "s3:GetObject",
-                        "s3:PutObjectTagging"
-                    ],
-                    "Resource": f"arn:aws:s3:::{project_name}-vault/*"
+        try:
+            assume_role_policy_document = {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {"Service": "lambda.amazonaws.com"},
+                        "Action": "sts:AssumeRole"
+                    }
+                ]
+            }
+            role_response = iam.create_role(
+                RoleName=f'{project_name}-checksum-role',
+                AssumeRolePolicyDocument=json.dumps(assume_role_policy_document)
+            )
+            role_arn = role_response['Role']['Arn']
+            aws_resources["lambda"]["role"] = role_arn
+        except Exception:
+            xx = 0
+        
+        try:
+            # Define the policy JSON
+            policy_document = {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Action": [
+                            "s3:PutObject",
+                            "s3:GetObject",
+                            "s3:PutObjectTagging"
+                        ],
+                        "Resource": f"arn:aws:s3:::{project_name}-vault/*"
+                    },
+                    {
+                        "Effect": "Allow",
+                        "Action": [
+                            "logs:CreateLogGroup",
+                            "logs:CreateLogStream",
+                            "logs:PutLogEvents"
+                        ],
+                        "Resource": "*"
+                    }
+                ]
+            }
+
+            # Create the policy
+            policy_response = iam.create_policy(
+                PolicyName=f'{project_name}-checksum-policy',
+                PolicyDocument=json.dumps(policy_document)
+            )
+
+            # Get the ARN of the new policy
+            policy_arn = policy_response['Policy']['Arn']
+            aws_resources["lambda"]["policy"] = policy_arn
+        except Exception:
+            xx = 0
+
+        try:
+            # Attach the policy to the role
+            attachment_response = iam.attach_role_policy(
+                RoleName=f'{project_name}-checksum-role',
+                PolicyArn=policy_arn
+            )
+
+            with zipfile.ZipFile('/tmp/lambda_function.zip', 'w') as z:
+                z.write(path+'/checksum.py', compress_type=zipfile.ZIP_DEFLATED)
+
+            # Read the zipped code
+            with open('/tmp/lambda_function.zip', 'rb') as f:
+                zipped_code = f.read()
+
+            # Create the Lambda function
+            response = lambda_client.create_function(
+                FunctionName=f'{project_name}-checksum-function',
+                Runtime='python3.11',
+                Role=role_arn,
+                Handler='checksum.lambda_handler',
+                Code={
+                    'ZipFile': zipped_code
                 },
-                {
-                    "Effect": "Allow",
-                    "Action": [
-                        "logs:CreateLogGroup",
-                        "logs:CreateLogStream",
-                        "logs:PutLogEvents"
-                    ],
-                    "Resource": "*"
-                }
-            ]
-        }
-
-        # Create the policy
-        policy_response = iam.create_policy(
-            PolicyName=f'{project_name}-checksum-policy',
-            PolicyDocument=json.dumps(policy_document)
-        )
-
-        # Get the ARN of the new policy
-        policy_arn = policy_response['Policy']['Arn']
-        aws_resources["lambda"]["policy"] = policy_arn
-
-        # Attach the policy to the role
-        attachment_response = iam.attach_role_policy(
-            RoleName=f'{project_name}-checksum-role',
-            PolicyArn=policy_arn
-        )
-
-        with zipfile.ZipFile('/tmp/lambda_function.zip', 'w') as z:
-            z.write(path+'/checksum.py', compress_type=zipfile.ZIP_DEFLATED)
-
-        # Read the zipped code
-        with open('/tmp/lambda_function.zip', 'rb') as f:
-            zipped_code = f.read()
-
-        # Create the Lambda function
-        response = lambda_client.create_function(
-            FunctionName=f'{project_name}-checksum-function',
-            Runtime='python3.11',
-            Role=role_arn,
-            Handler='checksum.lambda_handler',
-            Code={
-                'ZipFile': zipped_code
-            },
-            Description=f'A lambda function triggered by S3 bucket {project_name}-vault to compute checksum once file is created',
-            Timeout=15,
-            MemorySize=128
-        )
-        lambda_arn = response['FunctionArn']
-        aws_resources["lambda"]["function"] = lambda_arn
-
+                Description=f'A lambda function triggered by S3 bucket {project_name}-vault to compute checksum once file is created',
+                Timeout=15,
+                MemorySize=128
+            )
+            lambda_arn = response['FunctionArn']
+            aws_resources["lambda"]["function"] = lambda_arn
+        except Exception:
+            xx = 0
+        
         # Grant permission to S3 to invoke the Lambda function
         lambda_client.add_permission(
             FunctionName='ihdh-checksum-function',
