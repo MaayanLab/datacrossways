@@ -305,7 +305,7 @@ else:
 
         # Grant permission to S3 to invoke the Lambda function
         lambda_client.add_permission(
-            FunctionName='ihdh-checksum-function',
+            FunctionName=f'{project_name}-checksum-function',
             StatementId='AllowS3Invoke',
             Action='lambda:InvokeFunction',
             Principal='s3.amazonaws.com',
