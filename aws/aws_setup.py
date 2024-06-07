@@ -221,6 +221,7 @@ else:
                 RoleName=f'{project_name}-checksum-role',
                 AssumeRolePolicyDocument=json.dumps(assume_role_policy_document)
             )
+            
             role_arn = role_response['Role']['Arn']
             aws_resources["lambda"]["role"] = role_arn
         except Exception as err:
@@ -301,7 +302,7 @@ else:
             print(err.args[0]) 
         
         time.sleep(10)
-        
+
         # Grant permission to S3 to invoke the Lambda function
         lambda_client.add_permission(
             FunctionName='ihdh-checksum-function',
