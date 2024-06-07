@@ -223,8 +223,8 @@ else:
             )
             role_arn = role_response['Role']['Arn']
             aws_resources["lambda"]["role"] = role_arn
-        except Exception:
-            xx = 0
+        except Exception as err:
+            print(err.args[0]) 
         
         try:
             # Define the policy JSON
@@ -261,9 +261,9 @@ else:
             # Get the ARN of the new policy
             policy_arn = policy_response['Policy']['Arn']
             aws_resources["lambda"]["policy"] = policy_arn
-        except Exception:
-            xx = 0
-
+        except Exception as err:
+            print(err.args[0]) 
+        time.sleep(5)
         try:
             # Attach the policy to the role
             attachment_response = iam.attach_role_policy(
@@ -293,8 +293,8 @@ else:
             )
             lambda_arn = response['FunctionArn']
             aws_resources["lambda"]["function"] = lambda_arn
-        except Exception:
-            xx = 0
+        except Exception as err:
+            print(err.args[0]) 
         
         # Grant permission to S3 to invoke the Lambda function
         lambda_client.add_permission(
