@@ -121,7 +121,7 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
             DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'],
             VpcSecurityGroupIds=[default_security_group]
         )
-        time.sleep(10)
+        time.sleep(20)
         console.print(" :thumbs_up: Detach security group.", style="green")
     except Exception as err:
         console.print(" :x: Security group could not be detached", style="bold red")
