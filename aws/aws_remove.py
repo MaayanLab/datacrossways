@@ -126,7 +126,14 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
             VpcSecurityGroupIds=[aws_del["security_group"], default_security_group]
         )
 
-        time.sleep(20)
+        start_time = time.time()
+        while time.time() - start_time < 1200:
+            response = rds.describe_db_instances(DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'])
+            db_instance_status = response['DBInstances'][0]['DBInstanceStatus']
+            if db_instance_status == 'available':
+                break
+            print(f"Waiting for RDS instance to be available (current status: {db_instance_status})...")
+            time.sleep(5)
 
         response = rds.modify_db_instance(
             DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'],
@@ -160,27 +167,37 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         error_counter = error_counter+1
     
     try:
+        # Delete the Lambda function
         lambda_client.delete_function(FunctionName=aws_del["lambda"]["function"])
         console.print(" :thumbs_up: Deleted lambda function", style="green")
     except Exception as e:
         console.print(" :x: Failed to delete lambda function", style="bold red")
-        error_counter = error_counter+1
+        error_counter += 1
 
+    role_name = f'{project_name}-dxw-checksum-role'
+
+    # Detach managed policies and delete inline policies from the role
     try:
-        role_name = f'{project_name}-dxw-checksum-role'
-
+        # List and detach all managed policies
         response = iam.list_attached_role_policies(RoleName=role_name)
         for policy in response['AttachedPolicies']:
             policy_arn = policy['PolicyArn']
-            # Detach managed policy
             iam.detach_role_policy(RoleName=role_name, PolicyArn=policy_arn)
+            console.print(f" :thumbs_up: Detached managed policy {policy_arn} from role {role_name}", style="green")
 
+        # List and delete all inline policies
+        response = iam.list_role_policies(RoleName=role_name)
+        for policy_name in response['PolicyNames']:
+            iam.delete_role_policy(RoleName=role_name, PolicyName=policy_name)
+            console.print(f" :thumbs_up: Deleted inline policy {policy_name} from role {role_name}", style="green")
+
+        # Now delete the role
         iam.delete_role(RoleName=role_name)
         console.print(" :thumbs_up: Deleted lambda function role", style="green")
     except Exception as e:
         console.print(" :x: Failed to delete lambda function role", style="bold red")
         print(e)
-        error_counter = error_counter+1
+        error_counter += 1
 
     print("\nScript completed")
     if error_counter > 0:
