@@ -119,14 +119,23 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
 
         response = rds.modify_db_instance(
             DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'],
+            VpcSecurityGroupIds=[aws_del["security_group"], default_security_group]
+        )
+
+        time.sleep(10)
+
+        response = rds.modify_db_instance(
+            DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'],
             VpcSecurityGroupIds=[default_security_group]
         )
-        time.sleep(20)
+
         console.print(" :thumbs_up: Detach security group.", style="green")
     except Exception as err:
         console.print(" :x: Security group could not be detached", style="bold red")
         print(err.args[0]) 
         error_counter = error_counter+1
+
+    time.sleep(5)
 
     try:
         ec2.delete_security_group(GroupId=aws_del["security_group"])
@@ -159,6 +168,7 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         console.print(" :thumbs_up: Deleted lambda function policy", style="green")
     except Exception as e:
         console.print(" :x: Failed to delete lambda function policy", style="bold red")
+        print(e)
         error_counter = error_counter+1
 
     try:
@@ -166,6 +176,7 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         console.print(" :thumbs_up: Deleted lambda function role", style="green")
     except Exception as e:
         console.print(" :x: Failed to delete lambda function role", style="bold red")
+        print(e)
         error_counter = error_counter+1
 
     print("\nScript completed")
