@@ -226,6 +226,8 @@ else:
         except Exception as err:
             print(err.args[0]) 
         
+        time.sleep(10)
+
         try:
             # Define the policy JSON
             policy_document = {
@@ -262,8 +264,10 @@ else:
             policy_arn = policy_response['Policy']['Arn']
             aws_resources["lambda"]["policy"] = policy_arn
         except Exception as err:
-            print(err.args[0]) 
-        time.sleep(5)
+            print(err.args[0])
+
+        time.sleep(10)
+
         try:
             # Attach the policy to the role
             attachment_response = iam.attach_role_policy(
@@ -295,6 +299,8 @@ else:
             aws_resources["lambda"]["function"] = lambda_arn
         except Exception as err:
             print(err.args[0]) 
+        
+        time.sleep(10)
         
         # Grant permission to S3 to invoke the Lambda function
         lambda_client.add_permission(
