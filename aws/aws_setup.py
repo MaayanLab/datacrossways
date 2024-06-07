@@ -251,6 +251,13 @@ else:
                             "logs:PutLogEvents"
                         ],
                         "Resource": "*"
+                    },
+                    {
+                        "Effect": "Allow",
+                        "Action": [
+                            "s3-object-lambda:*"
+                        ],
+                        "Resource": f"arn:aws:s3:::{project_name}-vault/*"
                     }
                 ]
             }
