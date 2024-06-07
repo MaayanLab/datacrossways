@@ -205,20 +205,17 @@ else:
 
     def create_checksum_lambda_function(iam, s3, lambda_client, project_name, path, aws_resources):
         aws_resources["lambda"] = {}
-
+        
         role_name = f"{project_name}-checksum-role"
-        trusted_entities = [
-            "lambda.amazonaws.com"
-        ]
 
-        # Define the trust policy document for the role
+        # Assume role trust policy
         trust_policy = {
             "Version": "2012-10-17",
             "Statement": [
                 {
                     "Effect": "Allow",
                     "Principal": {
-                        "Service": trusted_entities
+                        "Service": "lambda.amazonaws.com"
                     },
                     "Action": "sts:AssumeRole"
                 }
@@ -234,16 +231,14 @@ else:
             )
             role_arn = create_role_response['Role']['Arn']
             print(f"Created role: {create_role_response['Role']['Arn']}")
-            aws_resources["lambda"]["role"] = role_arn
         except Exception as e:
             print(f"Error creating role: {e}")
 
-        # Policies to be attached to the role
+        # Attach managed policy to the role
         managed_policies = [
             "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
         ]
 
-        # Attach managed policies to the role
         for policy_arn in managed_policies:
             try:
                 iam.attach_role_policy(
@@ -254,7 +249,7 @@ else:
             except Exception as e:
                 print(f"Error attaching managed policy {policy_arn} to role {role_name}: {e}")
 
-        # Define the inline policy for S3 bucket access limitation
+        # Define the inline policy for S3 bucket access
         s3_bucket_policy = {
             "Version": "2012-10-17",
             "Statement": [
@@ -282,9 +277,12 @@ else:
         except Exception as e:
             print(f"Error attaching inline policy to role {role_name}: {e}")
 
+        # Wait to ensure role and policies are fully propagated
+        time.sleep(10)
+
         try:
             with zipfile.ZipFile('/tmp/lambda_function.zip', 'w') as z:
-                z.write(path+'/checksum.py', compress_type=zipfile.ZIP_DEFLATED)
+                z.write(os.path.join(path, 'checksum.py'), arcname='checksum.py', compress_type=zipfile.ZIP_DEFLATED)
 
             # Read the zipped code
             with open('/tmp/lambda_function.zip', 'rb') as f:
@@ -304,11 +302,10 @@ else:
                 MemorySize=128
             )
             lambda_arn = response['FunctionArn']
-            aws_resources["lambda"]["function"] = lambda_arn
+            print(f"Created Lambda function with ARN: {lambda_arn}")
         except Exception as err:
-            print(err.args[0]) 
-        
-
+            print("Failed to create Lambda function")
+            print(err)
 
         time.sleep(10)
 
