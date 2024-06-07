@@ -63,7 +63,7 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         console.print(" :x: policy could not be detached", style="bold red")
         print(err.args[0])
         error_counter = error_counter+1
-    
+
     try:
         respsone = iam.delete_policy(PolicyArn=aws_del["policy"]["Arn"])
         counter = counter+1
@@ -104,9 +104,22 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         error_counter = error_counter+1
 
     try:
+        response = rds.describe_db_instances(DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'])
+        db_instance = response['DBInstances'][0]
+        vpc_id = db_instance['DBSubnetGroup']['VpcId']
+
+        # Retrieve the default security group for the VPC
+        response = ec2.describe_security_groups(
+            Filters=[
+                {'Name': 'vpc-id', 'Values': [vpc_id]},
+                {'Name': 'group-name', 'Values': ['default']}
+            ]
+        )
+        default_security_group = response['SecurityGroups'][0]['GroupId']
+
         response = rds.modify_db_instance(
             DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'],
-            VpcSecurityGroupIds=[]
+            VpcSecurityGroupIds=[default_security_group]
         )
         console.print(" :thumbs_up: Detach security group.", style="green")
     except Exception as err:
