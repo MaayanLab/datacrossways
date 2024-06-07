@@ -161,7 +161,7 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         error_counter = error_counter+1
 
     try:
-        role_name = f'{project_name}-checksum-role'
+        role_name = f'{project_name}-dxw-checksum-role'
         # Detach policy from the role
         iam.detach_role_policy(RoleName=role_name, PolicyArn=aws_del["lambda"]["policy"])
         iam.delete_policy(PolicyArn=aws_del["lambda"]["policy"])
