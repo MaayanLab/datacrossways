@@ -108,6 +108,8 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         db_instance = response['DBInstances'][0]
         vpc_id = db_instance['DBSubnetGroup']['VpcId']
 
+        time.sleep(10)
+
         # Retrieve the default security group for the VPC
         response = ec2.describe_security_groups(
             Filters=[
@@ -117,12 +119,14 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         )
         default_security_group = response['SecurityGroups'][0]['GroupId']
 
+        time.sleep(10)
+
         response = rds.modify_db_instance(
             DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'],
             VpcSecurityGroupIds=[aws_del["security_group"], default_security_group]
         )
 
-        time.sleep(10)
+        time.sleep(20)
 
         response = rds.modify_db_instance(
             DBInstanceIdentifier=aws_del['database']['DBInstanceIdentifier'],
@@ -145,6 +149,8 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         print(err.args[0]) 
         error_counter = error_counter+1
 
+    time.sleep(5)
+    
     try:
         response = delete_database(rds, aws_del)
         console.print(" :thumbs_up: RDS database instance deletion started. Takes time to complete.", style="green")
@@ -162,6 +168,13 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
 
     try:
         role_name = f'{project_name}-dxw-checksum-role'
+
+        response = iam.list_attached_role_policies(RoleName=role_name)
+        for policy in response['AttachedPolicies']:
+            policy_arn = policy['PolicyArn']
+            # Detach managed policy
+            iam.detach_role_policy(RoleName=role_name, PolicyArn=policy_arn)
+
         iam.delete_role(RoleName=role_name)
         console.print(" :thumbs_up: Deleted lambda function role", style="green")
     except Exception as e:
