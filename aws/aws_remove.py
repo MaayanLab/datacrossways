@@ -172,6 +172,7 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         console.print(" :thumbs_up: Deleted lambda function", style="green")
     except Exception as e:
         console.print(" :x: Failed to delete lambda function", style="bold red")
+        print(e)
         error_counter += 1
 
     role_name = f'{project_name}-dxw-checksum-role'
