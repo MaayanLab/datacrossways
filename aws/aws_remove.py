@@ -146,7 +146,7 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
         print(err.args[0]) 
         error_counter = error_counter+1
 
-    time.sleep(5)
+    time.sleep(60)
 
     try:
         ec2.delete_security_group(GroupId=aws_del["security_group"])
