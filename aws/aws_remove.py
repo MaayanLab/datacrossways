@@ -168,7 +168,7 @@ def delete_all(iam, ec2, s3, lambda_client, rds, aws_del):
     
     try:
         # Delete the Lambda function
-        lambda_client.delete_function(FunctionName=f"{project_name}-dxw-function")
+        lambda_client.delete_function(FunctionName=f"{project_name}-dxw-checksum-function")
         console.print(" :thumbs_up: Deleted lambda function", style="green")
     except Exception as e:
         console.print(" :x: Failed to delete lambda function", style="bold red")
