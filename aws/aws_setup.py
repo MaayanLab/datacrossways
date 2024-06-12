@@ -325,7 +325,7 @@ else:
                 'LambdaFunctionConfigurations': [
                     {
                         'LambdaFunctionArn': lambda_arn,
-                        'Events': ['s3:ObjectCreated:*']
+                        'Events': ['s3:ObjectCreated:Put', 's3:ObjectCreated:Post', 's3:ObjectCreated:CompleteMultipartUpload']
                     }
                 ]
             }
