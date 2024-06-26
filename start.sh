@@ -12,7 +12,8 @@ echo 'y' | ~/datacrossways/stop.sh
 export BASE_URL=$domain
 export LETS_ENCRYPT_EMAIL=$email
 
-export BASE_URL LETS_ENCRYPT_EMAIL
+echo "BASE_URL=$BASE_URL" > .env
+echo "LETS_ENCRYPT_EMAIL=$LETS_ENCRYPT_EMAIL" >> .env
 
 # check Docker version and use the correct command
 if docker -v | grep -q "Docker version 2"; then
