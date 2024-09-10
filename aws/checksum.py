@@ -7,6 +7,7 @@ checksum.
 
 import boto3
 import hashlib
+import urllib.parse
 
 s3 = boto3.client('s3')
 
@@ -28,9 +29,12 @@ def lambda_handler(event, context):
     
     # Calculate checksum
     checksum = calculate_sha256(streaming_body)
+
+    # URL-encode the key for CopySource
+    encoded_key = urllib.parse.quote(key)
     
     # Add the checksum as metadata to the S3 object
-    s3.copy_object(Bucket=bucket_name, CopySource={'Bucket': bucket_name, 'Key': key}, Key=key, 
+    s3.copy_object(Bucket=bucket_name, CopySource={'Bucket': bucket_name, 'Key': encoded_key}, Key=key, 
                    Metadata={'checksum': checksum}, MetadataDirective='REPLACE')
    
     return {
