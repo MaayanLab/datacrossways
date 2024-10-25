@@ -87,6 +87,7 @@ Log into the AWS dashboard at https://aws.amazon.com.
     - In `filter policies` type `IAMFullAccess` press `enter` and check box
     - In `filter policies` type `AmazonS3FullAccess` press `enter` and check box
     - In `filter policies` type `AmazonRDSFullAccess` press `enter` and check box
+    - - In `filter policies` type `AWSLambda_FullAccess` press `enter` and check box
     - Select `Next` button
  - Add name and description
     - Choose a unique role name
