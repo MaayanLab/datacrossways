@@ -12,11 +12,11 @@ RUN apk --no-cache add python3-dev \
 RUN pip install --upgrade pip
 RUN pip install cffi
 
-RUN git clone -b ihdh https://github.com/MaayanLab/datacrossways_api.git
+RUN git clone https://github.com/MaayanLab/datacrosswaysarchs4.git
 
 WORKDIR /app
-RUN cp -a /datacrossways_api/. /app/
-RUN rm -r /datacrossways_api
+RUN cp -a /datacrosswaysarchs4/. /app/
+RUN rm -r /datacrosswaysarchs4
 
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 

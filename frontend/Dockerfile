@@ -6,20 +6,19 @@ RUN apk update && apk add vim curl git sed
 
 
 WORKDIR /
-RUN git clone -b main https://github.com/MaayanLab/ihdh_frontend.git
-WORKDIR /app
-RUN cp -a /ihdh_frontend/. /app/
-RUN rm -r /ihdh_frontend
+RUN git clone https://github.com/MaayanLab/archs4dx.git datacrossways_frontend
 
-RUN sed -i "s|BASE_URL|$BASE_URL|g" /app/src/data/config.json
-RUN sed -i "s|BASE_URL|$BASE_URL|g" /app/.env
+WORKDIR /datacrossways_frontend
+RUN sed -i "s|BASE_URL|$BASE_URL|g" /datacrossways_frontend/src/data/config.json
+RUN sed -i "s|BASE_URL|$BASE_URL|g" /datacrossways_frontend/.env
+
 
 RUN npm install --legacy-peer-deps
 
 RUN npm run build
 
 FROM nginx
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=builder /datacrossways_frontend/build /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf  # <= This line solved my issue
 COPY nginx.conf /etc/nginx/conf.d
 EXPOSE 80
