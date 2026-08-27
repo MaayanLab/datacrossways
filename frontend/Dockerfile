@@ -7,17 +7,19 @@ RUN apk update && apk add vim curl git sed
 
 WORKDIR /
 RUN git clone https://github.com/MaayanLab/ihdh_frontend.git
+WORKDIR /app
+RUN cp -a /ihdh_frontend/. /app/
+RUN rm -r /ihdh_frontend
 
-WORKDIR /ihdh_frontend
-RUN sed -i "s|BASE_URL|$BASE_URL|g" /ihdh_frontend/src/data/config.json
-RUN sed -i "s|BASE_URL|$BASE_URL|g" /ihdh_frontend/.env
+RUN sed -i "s|BASE_URL|$BASE_URL|g" /app/src/data/config.json
+RUN sed -i "s|BASE_URL|$BASE_URL|g" /app/.env
 
 RUN npm install --legacy-peer-deps
 
 RUN npm run build
 
 FROM nginx
-COPY --from=builder /ihdh_frontend/build /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf  # <= This line solved my issue
 COPY nginx.conf /etc/nginx/conf.d
 EXPOSE 80
