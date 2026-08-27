@@ -6,7 +6,7 @@ RUN apk update && apk add vim curl git sed
 
 
 WORKDIR /
-RUN git clone https://github.com/MaayanLab/ihdh_frontend.git
+RUN git clone -b main https://github.com/MaayanLab/ihdh_frontend.git
 WORKDIR /app
 RUN cp -a /ihdh_frontend/. /app/
 RUN rm -r /ihdh_frontend
