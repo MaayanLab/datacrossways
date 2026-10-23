@@ -3,7 +3,7 @@ name: datacrossways
 services:
   frontend:
     build:
-      context: ../ihdh_frontend
+      context: ./ihdh_frontend
       args:
         VITE_BASE_API_URL: /api
         PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost}
@@ -25,7 +25,7 @@ services:
 
   api:
     build:
-      context: ../datacrossways_api
+      context: ./datacrossways_api
     environment:
       DB_HOST: postgres
       DB_PORT: "5432"

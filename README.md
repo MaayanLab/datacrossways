@@ -2,16 +2,30 @@
 
 ## Hardened local deployment
 
-Check out `datacrossways`, `datacrossways_api`, and `ihdh_frontend` as sibling
-directories, then create the runtime secrets and configuration:
+Clone the API and frontend into the deployment repository. These working copies
+are ignored by Git; they are build contexts, not vendored source:
 
 ```sh
+git clone -b hardenning https://github.com/MaayanLab/datacrossways.git
+cd datacrossways
+git clone -b hardenning https://github.com/MaayanLab/datacrossways_api.git datacrossways_api
+git clone -b hardenning https://github.com/MaayanLab/ihdh_frontend.git ihdh_frontend
+
 cp .env.example .env
 mkdir -p secrets
 openssl rand -base64 32 > secrets/postgres_password
 openssl rand -base64 48 > secrets/flask_secret_key
 docker compose up --build -d
 docker compose ps
+```
+
+The resulting layout is:
+
+```text
+datacrossways/
+├── docker-compose.yaml
+├── datacrossways_api/
+└── ihdh_frontend/
 ```
 
 The frontend is the only service published to the host. The API and PostgreSQL

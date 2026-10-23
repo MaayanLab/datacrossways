@@ -2,3 +2,5 @@
 secrets/
 *.log
 .DS_Store
+datacrossways_api/
+ihdh_frontend/
