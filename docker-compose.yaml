@@ -27,10 +27,11 @@ services:
     build:
       context: ./datacrossways_api
     environment:
-      DB_HOST: postgres
-      DB_PORT: "5432"
-      DB_NAME: ${POSTGRES_DB:-datacrossways}
-      DB_USER: ${POSTGRES_USER:-datacrossways}
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_NAME: ${DB_NAME:-datacrossways}
+      DB_USER: ${DB_USER:-datacrossways}
+      DB_SSLMODE: ${DB_SSLMODE:-prefer}
       DB_PASSWORD_FILE: /run/secrets/postgres_password
       FLASK_SECRET_KEY_FILE: /run/secrets/flask_secret_key
       PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost}
@@ -39,6 +40,8 @@ services:
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
       AWS_REGION: ${AWS_REGION:-us-east-1}
       S3_BUCKET: ${S3_BUCKET:-}
+      S3_ENDPOINT_URL: ${S3_ENDPOINT_URL:-}
+      S3_ADDRESSING_STYLE: ${S3_ADDRESSING_STYLE:-auto}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       GOOGLE_AUTH_URI: ${GOOGLE_AUTH_URI:-https://accounts.google.com/o/oauth2/auth}
@@ -49,6 +52,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+        required: false
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/stats', timeout=5)"]
       interval: 15s
@@ -66,6 +70,7 @@ services:
 
   postgres:
     image: postgres:16-alpine
+    profiles: [local-db]
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-datacrossways}
       POSTGRES_USER: ${POSTGRES_USER:-datacrossways}
@@ -92,6 +97,6 @@ networks:
 
 secrets:
   postgres_password:
-    file: ${POSTGRES_PASSWORD_FILE:-./secrets/postgres_password}
+    file: ${DB_PASSWORD_FILE:-./secrets/postgres_password}
   flask_secret_key:
     file: ${FLASK_SECRET_KEY_FILE:-./secrets/flask_secret_key}
