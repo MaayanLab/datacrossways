@@ -18,10 +18,10 @@ datacrossways/
 ## Install
 
 ```sh
-git clone -b hardenning https://github.com/MaayanLab/datacrossways.git
+git clone -b hardening https://github.com/MaayanLab/datacrossways.git
 cd datacrossways
-git clone -b hardenning https://github.com/MaayanLab/datacrossways_api.git datacrossways_api
-git clone -b hardenning https://github.com/MaayanLab/ihdh_frontend.git ihdh_frontend
+git clone -b hardening https://github.com/MaayanLab/datacrossways_api.git datacrossways_api
+git clone -b hardening https://github.com/MaayanLab/ihdh_frontend.git ihdh_frontend
 
 cp .env.example .env
 mkdir -p secrets
