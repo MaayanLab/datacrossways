@@ -1,63 +1,97 @@
-version: "3.8"
+name: datacrossways
+
 services:
-  traefik:
-    image: "traefik:v2.6"
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.letsencrypt-prod.acme.email=${LETS_ENCRYPT_EMAIL}"
-      - "--certificatesresolvers.letsencrypt-prod.acme.storage=/data/acme.json"
-      - "--certificatesresolvers.letsencrypt-prod.acme.tlschallenge=true"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./data/ingress:/data"
   frontend:
-    container_name: datacrossways_frontend
     build:
-      context: ./frontend
+      context: ../ihdh_frontend
       args:
-        BASE_URL: ${BASE_URL}
+        VITE_BASE_API_URL: /api
+        PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost}
     ports:
-      - 3000:80
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`${BASE_URL}`) && !PathPrefix(`/api`)"
-      - "traefik.http.services.frontend.loadbalancer.server.port=80"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls=true"
-      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt-prod"
-      - "traefik.http.routers.frontend.tls.domains[0].main=${BASE_URL}"
-    environment:
-      - REACT_APP_BASE_API_URL=https://${BASE_URL}/api
+      - "${HTTP_PORT:-80}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx:uid=101,gid=101,mode=0700
+      - /var/run:uid=101,gid=101,mode=0700
+      - /tmp:uid=101,gid=101,mode=0700
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    networks: [frontend]
+
   api:
-    container_name: datacrossways_api
-    build: ./api
-    ports:
-      - 5000:5000
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-    volumes:
-      - ./secrets:/app/secrets
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`${BASE_URL}`) && PathPrefix(`/api`)"
-      - "traefik.http.services.api.loadbalancer.server.port=5000"
-      - "traefik.http.routers.api.tls=true"
-      - "traefik.http.routers.api.tls.certresolver=letsencrypt-prod"
-      - "traefik.http.routers.api.tls.domains[0].main=${BASE_URL}"
+    build:
+      context: ../datacrossways_api
     environment:
-      - PORT=5000
-      - APP_MODULE=app:app
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: ${POSTGRES_DB:-datacrossways}
+      DB_USER: ${POSTGRES_USER:-datacrossways}
+      DB_PASSWORD_FILE: /run/secrets/postgres_password
+      FLASK_SECRET_KEY_FILE: /run/secrets/flask_secret_key
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost}
+      DEVELOPMENT: ${DEVELOPMENT:-false}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      S3_BUCKET: ${S3_BUCKET:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_AUTH_URI: ${GOOGLE_AUTH_URI:-https://accounts.google.com/o/oauth2/auth}
+      GOOGLE_TOKEN_URI: ${GOOGLE_TOKEN_URI:-https://oauth2.googleapis.com/token}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_FIRST_NAME: ${ADMIN_FIRST_NAME:-Admin}
+      ADMIN_LAST_NAME: ${ADMIN_LAST_NAME:-User}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/stats', timeout=5)"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /app/secrets:uid=10001,gid=10001,mode=0700
+    security_opt: [no-new-privileges:true]
+    secrets: [postgres_password, flask_secret_key]
+    networks: [frontend, backend]
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-datacrossways}
+      POSTGRES_USER: ${POSTGRES_USER:-datacrossways}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    secrets: [postgres_password]
+    networks: [backend]
+
+volumes:
+  postgres_data:
+
+networks:
+  frontend:
+  backend:
+    internal: true
+
+secrets:
+  postgres_password:
+    file: ${POSTGRES_PASSWORD_FILE:-./secrets/postgres_password}
+  flask_secret_key:
+    file: ${FLASK_SECRET_KEY_FILE:-./secrets/flask_secret_key}

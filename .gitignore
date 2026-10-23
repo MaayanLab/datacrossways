@@ -1,6 +1,4 @@
-secrets/*
-config.json
-aws/aws_config_*
-test/*
-testlambda*
+.env
+secrets/
+*.log
 .DS_Store

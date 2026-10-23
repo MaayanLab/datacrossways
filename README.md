@@ -1,5 +1,25 @@
 # DataCrossways
 
+## Hardened local deployment
+
+Check out `datacrossways`, `datacrossways_api`, and `ihdh_frontend` as sibling
+directories, then create the runtime secrets and configuration:
+
+```sh
+cp .env.example .env
+mkdir -p secrets
+openssl rand -base64 32 > secrets/postgres_password
+openssl rand -base64 48 > secrets/flask_secret_key
+docker compose up --build -d
+docker compose ps
+```
+
+The frontend is the only service published to the host. The API and PostgreSQL
+use private Compose networking, secret files, read-only filesystems, health
+checks, and non-root application containers. Set `PUBLIC_BASE_URL` to the
+external HTTPS origin before configuring OAuth. Existing API keys from versions
+that stored plaintext keys are intentionally invalidated by the hardened API.
+
 Datacrossways is a lightweight, cloud based data management service. The service supports data upload, storage, data sharing, and fine grained data access control. It was designed to be easily deployed on Amazon AWS.
 
 Launcher of data portal using the Flask API and React fronted. Datacrossways is meant for deployment on Amazon AWS. It allows users to connect to a React frontend or access resources programmatically, by directly interacting with the Datacrossways API. The frontend receives all information from the Datacrossways API.
