@@ -2,6 +2,8 @@ name: datacrossways
 
 services:
   frontend:
+    image: maayanlab/datacrossways-frontend:1.0.0-hardened
+    platform: linux/amd64
     build:
       context: ./ihdh_frontend
       args:
@@ -24,6 +26,8 @@ services:
     networks: [frontend]
 
   api:
+    image: maayanlab/datacrossways-api:1.0.0-hardened
+    platform: linux/amd64
     build:
       context: ./datacrossways_api
     environment:
