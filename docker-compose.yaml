@@ -55,6 +55,7 @@ services:
       ADMIN_EMAIL: ${ADMIN_EMAIL:-}
       ADMIN_FIRST_NAME: ${ADMIN_FIRST_NAME:-Admin}
       ADMIN_LAST_NAME: ${ADMIN_LAST_NAME:-User}
+      COLLECTION_IMAGE_HOSTS: ${COLLECTION_IMAGE_HOSTS:-datacrosswayspublic.s3.amazonaws.com}
     depends_on:
       postgres:
         condition: service_healthy
@@ -71,6 +72,9 @@ services:
       - /tmp
       - /app/secrets:uid=10001,gid=10001,mode=0700
     security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    mem_limit: ${API_MEMORY_LIMIT:-1g}
+    pids_limit: 256
     secrets: [postgres_password, flask_secret_key]
     networks: [frontend, backend]
 

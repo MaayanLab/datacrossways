@@ -105,9 +105,12 @@ through Compose networks.
 Place a TLS load balancer or reverse proxy in front of the configured HTTP port
 for production. `PUBLIC_BASE_URL` must use the resulting HTTPS origin.
 Set `BIND_ADDRESS=0.0.0.0` only when non-loopback clients must connect. When an
-edge proxy supplies `X-Forwarded-For`, set `TRUSTED_EDGE_PROXY_CIDR` to that
-proxy's source CIDR so rate limiting uses the browser address without trusting
-headers from arbitrary clients.
+edge proxy supplies `X-Forwarded-For`, set `TRUSTED_EDGE_PROXY_CIDR` to the
+address nginx sees for that proxy so rate limiting uses the browser address
+without trusting headers from arbitrary clients. A proxy on the Docker host
+reaches the container through the Compose network gateway (for example
+`172.18.0.1/32`), not `127.0.0.1`; if this is wrong every user shares a single
+rate limit. The frontend image must be rebuilt after changing it.
 
 ## Operate
 
@@ -148,3 +151,19 @@ Back up the `postgres_data` volume and the configured S3 bucket before upgrades.
 - Existing API keys created by versions that stored plaintext keys are not
   accepted. Create replacement keys after upgrading.
 - Rotate `flask_secret_key` to invalidate all browser sessions.
+- Only administrators can change a user's email or ORCID iD (login matches
+  accounts on these). Only uploaders and administrators can make a collection
+  visible or link it to a project; non-admins can only use collection images
+  hosted on `COLLECTION_IMAGE_HOSTS`.
+- Only a file's owner or an administrator can change its visibility,
+  accessibility, status or collection; collaborators with write access can edit
+  its name and metadata.
+- API keys authenticate API calls but cannot create further keys.
+- Deleting a user removes their files and keys; other users' files inside their
+  collections are moved to the root collection. The last administrator and the
+  root collection's owner cannot be deleted.
+- Use `DB_SSLMODE=verify-full` for external PostgreSQL; the API warns at start-up
+  otherwise. `DEVELOPMENT=true` is refused when `PUBLIC_BASE_URL` is https.
+- Two AWS access key IDs from 2023 remain in the API repository's git history
+  (inside expired presigned URLs). They are IDs, not secrets; confirm those keys
+  are deactivated in IAM.
