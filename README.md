@@ -27,6 +27,8 @@ cp .env.example .env
 mkdir -p secrets
 openssl rand -base64 32 > secrets/postgres_password
 openssl rand -base64 48 > secrets/flask_secret_key
+chmod 600 .env
+chmod 700 secrets
 ```
 
 Edit `.env` before deployment. At minimum, set:
@@ -102,6 +104,10 @@ through Compose networks.
 
 Place a TLS load balancer or reverse proxy in front of the configured HTTP port
 for production. `PUBLIC_BASE_URL` must use the resulting HTTPS origin.
+Set `BIND_ADDRESS=0.0.0.0` only when non-loopback clients must connect. When an
+edge proxy supplies `X-Forwarded-For`, set `TRUSTED_EDGE_PROXY_CIDR` to that
+proxy's source CIDR so rate limiting uses the browser address without trusting
+headers from arbitrary clients.
 
 ## Operate
 

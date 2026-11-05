@@ -9,8 +9,9 @@ services:
       args:
         VITE_BASE_API_URL: /api
         PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost}
+        TRUSTED_EDGE_PROXY_CIDR: ${TRUSTED_EDGE_PROXY_CIDR:-127.0.0.1/32}
     ports:
-      - "${HTTP_PORT:-80}:80"
+      - "${BIND_ADDRESS:-127.0.0.1}:${HTTP_PORT:-80}:80"
     depends_on:
       api:
         condition: service_healthy
@@ -46,6 +47,7 @@ services:
       S3_BUCKET: ${S3_BUCKET:-}
       S3_ENDPOINT_URL: ${S3_ENDPOINT_URL:-}
       S3_ADDRESSING_STYLE: ${S3_ADDRESSING_STYLE:-auto}
+      MULTIPART_MAX_AGE_HOURS: ${MULTIPART_MAX_AGE_HOURS:-24}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       GOOGLE_AUTH_URI: ${GOOGLE_AUTH_URI:-https://accounts.google.com/o/oauth2/auth}
